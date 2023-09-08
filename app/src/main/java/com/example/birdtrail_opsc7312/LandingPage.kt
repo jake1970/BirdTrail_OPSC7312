@@ -1,20 +1,19 @@
 package com.example.birdtrail_opsc7312
 
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import com.example.birdtrail_opsc7312.databinding.ActivityMainBinding
+import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
 
-class MainActivity : AppCompatActivity() {
+class LandingPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.landing_page)
 
         //---------------------------------------------------------------------------------------//
         //initial view config
         //---------------------------------------------------------------------------------------//
-        var binding = ActivityMainBinding.inflate(layoutInflater)
+        var binding = LandingPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //Hide the action bar
@@ -23,5 +22,9 @@ class MainActivity : AppCompatActivity() {
         //set status bar color
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
         //---------------------------------------------------------------------------------------//
+
+
+
+
     }
 }
