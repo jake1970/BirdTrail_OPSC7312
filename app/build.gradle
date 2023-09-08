@@ -6,7 +6,11 @@ plugins {
 android {
     namespace 'com.example.birdtrail_opsc7312'
     compileSdk 33
-    viewBinding.enabled = true
+
+
+    buildFeatures{
+        viewBinding true
+    }
 
     defaultConfig {
         applicationId "com.example.birdtrail_opsc7312"
