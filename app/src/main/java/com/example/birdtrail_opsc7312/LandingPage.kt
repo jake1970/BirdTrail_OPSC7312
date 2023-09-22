@@ -22,9 +22,7 @@ class LandingPage : AppCompatActivity() {
         //set status bar color
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
-        //navigation bar
-        binding.bottomNavigationView.background = null
-        binding.bottomNavigationView.menu.getItem(2).isEnabled = false
+
         //---------------------------------------------------------------------------------------//
 
 
