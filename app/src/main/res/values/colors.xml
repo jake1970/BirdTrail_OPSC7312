@@ -13,4 +13,5 @@
     <color name="baby_blue">#DAF2FF</color>
     <color name="sub_grey">#5A5A5A</color>
     <color name="confirmation_green">#318A2F</color>
+    <color name="semi_transparent_white">#10FFFFFF</color>
 </resources>

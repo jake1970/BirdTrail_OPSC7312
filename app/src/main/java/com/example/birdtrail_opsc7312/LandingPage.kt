@@ -20,7 +20,7 @@ class LandingPage : AppCompatActivity() {
         supportActionBar?.hide()
 
         //set status bar color
-        window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
 
 
         //---------------------------------------------------------------------------------------//

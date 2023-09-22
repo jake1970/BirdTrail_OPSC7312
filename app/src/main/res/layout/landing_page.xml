@@ -12,10 +12,10 @@
 
     <ImageView
         android:id="@+id/imgLogo"
-        android:layout_width="182dp"
-        android:layout_height="270dp"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="70dp"
         app:srcCompat="@drawable/imgglobebird" />
 
     <TextView
@@ -40,15 +40,42 @@
         android:textSize="14dp"
         android:layout_marginTop="4dp"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignIn"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="315dp"
+        android:layout_height="58dp"
         android:layout_below="@id/tvAppPurpose"
-        android:layout_marginTop="50dp"
-        android:backgroundTint="@color/white"
-        android:text="Sign In" />
+        android:layout_marginTop="54dp"
+        app:cornerRadius="12dp"
+        android:text="@string/signIn"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/light_blue"
+        android:stateListAnimator="@null"
+        app:strokeColor="@color/light_blue"
+        app:strokeWidth="2dp"
+        android:textSize="24dp"
+        android:letterSpacing="0"
+        android:textAllCaps="false"
+        />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignUp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="315dp"
+        android:layout_height="58dp"
+        android:layout_below="@id/btnSignIn"
+        android:layout_marginTop="10dp"
+        app:cornerRadius="12dp"
+        android:text="@string/signUp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/semi_transparent_white"
+        android:stateListAnimator="@null"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"
+        android:textSize="24dp"
+        android:letterSpacing="0"
+        android:textAllCaps="false"
+        />
 
 </RelativeLayout>
