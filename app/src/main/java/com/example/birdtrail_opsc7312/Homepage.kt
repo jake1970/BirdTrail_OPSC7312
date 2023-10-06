@@ -15,8 +15,10 @@ class Homepage : AppCompatActivity() {
         var binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.bottomNavigationView.background = null
-        binding.bottomNavigationView.menu.getItem(2).isEnabled = false
+
+
+
+
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {

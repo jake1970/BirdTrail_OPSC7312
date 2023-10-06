@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".Homepage">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.example.birdtrail_opsc7312.HomeFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
