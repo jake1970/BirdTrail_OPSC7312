@@ -7,4 +7,5 @@
     <string name="backText">&lt; Back</string>
     <string name="CreateYourAccount">Create your account</string>
     <string name="Register">Register</string>
+    <string name="SettingsLine">----------------------------------------</string>
 </resources>
