@@ -10,7 +10,8 @@
         android:id="@+id/fragmentContainerView"
         android:name="com.example.birdtrail_opsc7312.HomeFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:layout="@layout/fragment_home" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
