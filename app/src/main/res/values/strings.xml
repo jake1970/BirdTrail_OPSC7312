@@ -5,4 +5,11 @@
     <string name="signIn">Sign In</string>
     <string name="signUp">Sign Up</string>
     <string name="backText">&lt; Back</string>
+    <string name="welcomeBackText">Welcome Back</string>
+    <string name="signInInstructions">Login to your account</string>
+    <string name="usernameText">Username</string>
+    <string name="passwordText">Password</string>
+    <string name="rememberMeText">Remember Me</string>
+    <string name="forgotPasswordText">Forgot Password?</string>
+    <string name="noAccountText">Don\'t have an account?</string>
 </resources>

@@ -13,10 +13,166 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/backText"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="6dp"
         android:textColor="@color/white"
         android:textSize="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/tvBack"
+        android:layout_marginTop="100dp">
+
+        <TextView
+            android:id="@+id/tvWelcomeBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcomeBackText"
+            android:textColor="@color/white"
+            android:textSize="40dp" />
+
+        <TextView
+            android:id="@+id/tvInstructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signInInstructions"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:layout_marginTop="6dp"/>
+
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="80dp">
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/usernameText"
+                android:textColor="@color/white"
+                android:textSize="16dp"/>
+
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/palette_full_10"
+                android:backgroundTint="@color/white"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text=""
+                android:padding="4dp"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/passwordText"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/palette_full_10"
+                android:backgroundTint="@color/white"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:padding="4dp"
+                android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/rememberMeText"
+                android:buttonTint="@color/white"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forgotPasswordText"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_marginTop="80dp"
+            android:id="@+id/imgWalking"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:srcCompat="@drawable/imgbird" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignIn"
+            android:layout_centerHorizontal="true"
+            android:layout_width="315dp"
+            android:layout_height="58dp"
+            android:layout_below="@id/tvAppPurpose"
+            android:layout_marginTop="-8dp"
+            app:cornerRadius="12dp"
+            android:text="@string/signIn"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/light_blue"
+            android:stateListAnimator="@null"
+            app:strokeColor="@color/light_blue"
+            app:strokeWidth="2dp"
+            android:textSize="24dp"
+            android:letterSpacing="0"
+            android:textAllCaps="false"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+           >
+
+            <TextView
+                android:id="@+id/tvNoAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/noAccountText"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tvSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signUp"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
 
 
 </RelativeLayout>
