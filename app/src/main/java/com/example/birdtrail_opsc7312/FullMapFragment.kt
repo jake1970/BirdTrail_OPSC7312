@@ -5,6 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.birdtrail_opsc7312.databinding.FragmentFullMapBinding
+import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.locationcomponent.location
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -12,6 +17,9 @@ import android.view.ViewGroup
 
 
 class FullMapFragment : Fragment(R.layout.fragment_full_map) {
+
+    private var _binding: FragmentFullMapBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +32,62 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_full_map, container, false)
+        _binding = FragmentFullMapBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+
+        // Get reference to MapView
+        val mapView = binding.mapView
+        mapView?.getMapboxMap()?.loadStyleUri(Style.MAPBOX_STREETS)
+        // Get reference to MapboxMap
+        val mapboxMap = mapView.getMapboxMap()
+
+        // After setting up the map
+        val locationComponentPlugin = mapView.location
+        locationComponentPlugin.updateSettings {
+            this.enabled = true
+            this.locationPuck = LocationPuck2D() // Use the default user location puck
+        }
+
+
+
+
+
+        return view
     }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView?.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapView?.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView?.onLowMemory()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        binding.mapView?.onDestroy()
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    companion object {
 //        /**
