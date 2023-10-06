@@ -18,5 +18,10 @@
     <string name="securityQuestionText">Security Question</string>
     <string name="securityAnswerText">Security Answer</string>
     <string name="existingAccountText">Already have an account?</string>
-
+    <string-array name="securityQuestions">
+        <item>In what city or town did your parents meet?</item>
+        <item>What city were you born in?</item>
+        <item>What was the first concert you attended?</item>
+        <item>What is your mothers maiden name?</item>
+    </string-array>
 </resources>

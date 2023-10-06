@@ -32,5 +32,11 @@ class LandingPage : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.btnSignUp.setOnClickListener()
+        {
+            var intent = Intent(this, SignUp::class.java)
+            startActivity(intent)
+        }
+
     }
 }

@@ -44,11 +44,20 @@
         android:textSize="16dp"
         android:layout_marginTop="6dp"/>
 
+        <ImageView
+            android:layout_marginTop="0dp"
+            android:id="@+id/imgWalking"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/imgbird"
+            android:layout_marginBottom="-26dp"
+            android:layout_marginRight="-146dp"/>
+
         <LinearLayout
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="30dp">
+            >
 
             <TextView
                 android:id="@+id/tvUsername"
@@ -115,29 +124,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="@string/confirmPasswordText"
+                android:text="@string/securityQuestionText"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
 
-            <Spinner
-                android:id="@+id/spnSecurityQuestion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:backgroundTint="@color/light_blue"
-                android:layout_weight="1"
-                android:spinnerMode="dropdown"/>
-
-            <EditText
-                android:id="@+id/etSecurityQuestion"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/palette_full_10"
                 android:backgroundTint="@color/white"
-                android:ems="10"
-                android:inputType="text"
-                android:padding="4dp"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp"
+                android:padding="4dp">
+                <Spinner
+                    android:id="@+id/spnSecurityQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/securityQuestions"
+                    />
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/tvSecurityAnswer"

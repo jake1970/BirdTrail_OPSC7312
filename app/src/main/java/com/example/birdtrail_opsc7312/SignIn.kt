@@ -32,5 +32,10 @@ class SignIn : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.tvBack.setOnClickListener()
+        {
+            finish()
+        }
+
     }
 }
