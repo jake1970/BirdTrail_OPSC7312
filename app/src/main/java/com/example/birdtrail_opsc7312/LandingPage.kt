@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -22,11 +23,14 @@ class LandingPage : AppCompatActivity() {
         //set status bar color
         window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
 
-
         //---------------------------------------------------------------------------------------//
 
 
-
+        binding.btnSignIn.setOnClickListener()
+        {
+            var intent = Intent(this, SignIn::class.java)
+            startActivity(intent)
+        }
 
     }
 }
