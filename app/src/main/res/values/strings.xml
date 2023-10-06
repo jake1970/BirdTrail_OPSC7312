@@ -4,4 +4,5 @@
     <string name="appPurpose">A bird tracking app</string>
     <string name="signIn">Sign In</string>
     <string name="signUp">Sign Up</string>
+    <string name="backText">&lt; Back</string>
 </resources>
