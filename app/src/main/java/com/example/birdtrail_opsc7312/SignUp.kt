@@ -1,9 +1,11 @@
 package com.example.birdtrail_opsc7312
 
-import android.R.layout
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import android.view.View
+import android.widget.AdapterView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.ActivitySignUpBinding
@@ -30,8 +32,6 @@ class SignUp : AppCompatActivity() {
         //---------------------------------------------------------------------------------------//
 
 
-
-
         binding.btnSignUp.setOnClickListener()
         {
             var intent = Intent(this, Homepage::class.java)
@@ -43,5 +43,20 @@ class SignUp : AppCompatActivity() {
             finish()
         }
 
+        binding.spnSecurityQuestion.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                (view as TextView).setTextColor(Color.BLACK) //Change selected text color
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
+
+
     }
+
 }
