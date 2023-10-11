@@ -29,11 +29,13 @@
             android:textSize="25dp"/>
 
         <View
-            android:layout_width="260dp"
+            android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:background="#ECE6E6"
             android:layout_marginTop="50dp"
-            android:layout_marginLeft="120dp"/>
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/tvSettings"/>
 
         <TextView
             android:id="@+id/tvUnitsType"
@@ -89,11 +91,12 @@
 
         <com.google.android.material.slider.Slider
             android:id="@+id/slider"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tvDefaultDistance"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
             app:cornerRadius="12dp"
             android:contentDescription="Default Distance"
             android:value="50.0"
@@ -118,67 +121,83 @@
             android:background="#ECE6E6"
             android:layout_below="@id/slider"
             android:layout_marginTop="40dp"
-            android:layout_marginLeft="110dp"/>
+            android:layout_toRightOf="@id/tvOptions"
+            android:layout_marginLeft="10dp"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChangeProfilePicture"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+        <LinearLayout
+            android:id = "@+id/llButtons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_below="@id/tvOptions"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/white"
-            android:letterSpacing="0"
-            android:stateListAnimator="@null"
-            android:text="Change Profile Picture"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="15dp"
-            app:cornerRadius="12dp"
-            tools:ignore="TextSizeCheck" />
+            android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChangePassword"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/btnChangeProfilePicture"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/white"
-            android:letterSpacing="0"
-            android:stateListAnimator="@null"
-            android:text="Change Password"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="15dp"
-            app:cornerRadius="12dp"
-            tools:ignore="TextSizeCheck,DuplicateClickableBoundsCheck" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnChangeProfilePicture"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/tvOptions"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/white"
+                android:letterSpacing="0"
+                android:stateListAnimator="@null"
+                android:text="Change Profile Picture"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                app:cornerRadius="12dp"
+                tools:ignore="TextSizeCheck" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogOut"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/btnChangePassword"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/white"
-            android:letterSpacing="0"
-            android:stateListAnimator="@null"
-            android:text="Log Out"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="15dp"
-            app:cornerRadius="12dp"
-            tools:ignore="TextSizeCheck" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnChangePassword"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/btnChangeProfilePicture"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
+                android:letterSpacing="0"
+                android:stateListAnimator="@null"
+                android:text="Change Password"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                app:cornerRadius="12dp"
+                tools:ignore="TextSizeCheck,DuplicateClickableBoundsCheck" />
 
-        <ImageView
-            android:id="@+id/imgBirdLogo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@id/btnLogOut"
-            android:layout_marginLeft="310dp"
-            android:layout_marginTop="0dp"
-            app:srcCompat="@drawable/imgbird" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogOut"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/btnChangePassword"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
+                android:letterSpacing="0"
+                android:stateListAnimator="@null"
+                android:text="Log Out"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                app:cornerRadius="12dp"
+                tools:ignore="TextSizeCheck" />
+
+            <ImageView
+                android:id="@+id/imgBirdLogo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@id/btnLogOut"
+                android:layout_marginLeft="310dp"
+                android:layout_marginTop="0dp"
+                app:srcCompat="@drawable/imgbird" />
+
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 

@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextView
             android:id="@+id/tvRankings"
             android:layout_width="wrap_content"
@@ -33,7 +34,8 @@
             android:layout_height="3dp"
             android:background="#ECE6E6"
             android:layout_marginTop="50dp"
-            android:layout_marginLeft="125dp"/>
+            android:layout_toRightOf="@id/tvRankings"
+            android:layout_marginLeft="10dp"/>
 
         <TextView
             android:id="@+id/tvLeaderboard"
