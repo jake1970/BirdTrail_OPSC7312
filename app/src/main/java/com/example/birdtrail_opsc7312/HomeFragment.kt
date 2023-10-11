@@ -29,12 +29,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        /*
         binding.btnMap.setOnClickListener(){
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentContainerView, FullMapFragment())
             transaction.addToBackStack(null)
             transaction.commit()
         }
+        */
+
         return view
     }
 
