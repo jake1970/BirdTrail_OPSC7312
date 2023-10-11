@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,6 +15,15 @@
         android:theme="@style/Theme.BirdTrail_OPSC7312"
         tools:targetApi="31">
         <activity
+            android:name=".Card_SpeciesSelector"
+            android:exported="false" />
+        <activity
+            android:name=".Card_Achievement"
+            android:exported="false" />
+        <activity
+            android:name=".Card_Leaderboard"
+            android:exported="false" />
+        <activity
             android:name=".SettingsPage"
             android:exported="false" />
         <activity
@@ -23,7 +31,7 @@
             android:exported="false" />
         <activity
             android:name=".Homepage"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".SignIn"
             android:exported="false" />

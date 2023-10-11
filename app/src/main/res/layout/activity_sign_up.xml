@@ -49,7 +49,7 @@
             android:id="@+id/imgWalking"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/imgbird"
+            app:srcCompat="@drawable/imgbirdlogo"
             android:layout_marginBottom="-26dp"
             android:layout_marginRight="-146dp"/>
 

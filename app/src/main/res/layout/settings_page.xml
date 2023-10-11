@@ -162,5 +162,5 @@
         android:layout_height="100dp"
         android:layout_marginLeft="310dp"
         android:layout_marginTop="550dp"
-        app:srcCompat="@drawable/imgbird" />
+        app:srcCompat="@drawable/imgbirdlogo" />
 </RelativeLayout>

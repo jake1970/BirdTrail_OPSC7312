@@ -123,7 +123,7 @@
             android:id="@+id/imgWalking"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:srcCompat="@drawable/imgbird" />
+            app:srcCompat="@drawable/imgbirdlogo" />
 
 
         <com.google.android.material.button.MaterialButton

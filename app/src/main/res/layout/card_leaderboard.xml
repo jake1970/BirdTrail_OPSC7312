@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    tools:context=".Card_Leaderboard"
+    android:background="@drawable/palette_full_12"
+    android:backgroundTint="@color/white">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+       >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/palette_half_12"
+            android:backgroundTint="@color/medium_blue"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingLeft="6dp"
+          >
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_gravity="center"
+                android:id="@+id/imgMyProfileImage"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:srcCompat="@color/white"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0"
+                />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_gravity="center"
+                android:id="@+id/imgBadge"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                android:layout_marginTop="30dp"
+                app:srcCompat="@color/sub_grey"
+                android:layout_weight="0"
+                />
+
+            <TextView
+                android:id="@+id/tvRankingPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="{n}"
+                android:textSize="10dp"
+                android:textColor="@color/white"
+                android:layout_toRightOf="@id/imgMyProfileImage"
+                android:layout_marginTop="40dp"
+                android:paddingRight="4dp"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:drawableLeft="@drawable/imgperson"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/tvBadges"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/imgmedal"
+                    android:paddingLeft="1dp"
+                    android:text="TextView" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvScore"
+                android:layout_weight="0"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/imgleaderboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
