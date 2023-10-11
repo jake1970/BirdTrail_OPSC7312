@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/leaderboard"
+        android:id="@+id/ranking"
         android:icon="@drawable/imgleaderboard"
         android:enabled="true"
-        android:title="Leaderboard" />
+        android:title="@string/rankingText" />
 
     <item
         android:id="@+id/home"
         android:icon="@drawable/imghome"
         android:enabled="true"
-        android:title="Home" />
+        android:title="@string/homeText" />
 
 
     <item
@@ -25,12 +25,12 @@
         android:id="@+id/observations"
         android:icon="@drawable/imgsearch"
         android:enabled="true"
-        android:title="Observations" />
+        android:title="@string/observationsText" />
 
     <item
         android:id="@+id/settings"
         android:icon="@drawable/imgsettings"
         android:enabled="true"
-        android:title="Settings"/>
+        android:title="@string/settingsText"/>
 
 </menu>

@@ -37,7 +37,7 @@ class Homepage : AppCompatActivity() {
             when(it.itemId)
             {
 
-                R.id.leaderboard -> fragmentControl.replaceFragment(Ranking(), R.id.flContent, supportFragmentManager)
+                R.id.ranking -> fragmentControl.replaceFragment(Ranking(), R.id.flContent, supportFragmentManager)
                 R.id.home -> fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, supportFragmentManager)
                 R.id.observations -> {}//fragmentControl.replaceFragment(contacts(), R.id.clContent, supportFragmentManager)
                 R.id.settings -> fragmentControl.replaceFragment(AppSettings(), R.id.flContent, supportFragmentManager)
