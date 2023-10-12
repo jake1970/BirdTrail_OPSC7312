@@ -7,13 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AppSettings">
 
-    <!-- TODO: Update blank fragment layout -->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:text="@string/hello_blank_fragment" />-->
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -50,32 +43,34 @@
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_below="@id/tvUnitsType"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btnMetric"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="175dp"
-                android:layout_height="50dp"
-                android:text="Metric"
-                app:cornerRadius="12dp"
-                android:textColor="@color/white"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="400dp"
                 android:backgroundTint="@color/light_blue"
-                />
+                android:text="Metric"
+                android:textColor="@color/white"
+                app:cornerRadius="12dp" />
+
             <Button
-                style="?attr/materialButtonOutlinedStyle"
                 android:id="@+id/btnImperial"
-                android:layout_width="175dp"
-                android:layout_height="50dp"
-                app:cornerRadius="12dp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
                 android:text="Imperial"
                 android:textColor="@color/black"
-                android:backgroundTint="@color/white"
-                />
+                app:cornerRadius="12dp"
+                tools:ignore="TouchTargetSizeCheck" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <TextView
@@ -116,12 +111,13 @@
             android:textSize="18dp"/>
 
         <View
-            android:layout_width="275dp"
+            android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:background="#ECE6E6"
             android:layout_below="@id/slider"
             android:layout_marginTop="40dp"
             android:layout_toRightOf="@id/tvOptions"
+            android:layout_marginRight="35dp"
             android:layout_marginLeft="10dp"/>
 
         <LinearLayout
@@ -134,11 +130,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChangeProfilePicture"
-                android:layout_width="350dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvOptions"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/white"
                 android:letterSpacing="0"
@@ -152,11 +149,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChangePassword"
-                android:layout_width="350dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/btnChangeProfilePicture"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/white"
                 android:letterSpacing="0"
@@ -170,11 +168,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogOut"
-                android:layout_width="350dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/btnChangePassword"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/white"
                 android:letterSpacing="0"
@@ -188,11 +187,13 @@
 
             <ImageView
                 android:id="@+id/imgBirdLogo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/btnLogOut"
-                android:layout_marginLeft="310dp"
+                android:layout_marginLeft="295dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="0dp"
+                android:layout_marginBottom="40dp"
                 app:srcCompat="@drawable/imgbird" />
 
         </LinearLayout>
