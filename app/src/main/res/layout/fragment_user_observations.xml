@@ -30,18 +30,24 @@
             android:layout_marginRight="30dp"
             android:layout_marginLeft="10dp"/>
 
-        <TextView
-            android:id="@+id/tvSearch"
+        <EditText
+            android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tvObservations"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"
-            android:layout_below = "@id/tvObservations"
             android:layout_marginRight="55dp"
+            android:layout_weight="1"
             android:background="@drawable/palette_full_12"
-            android:text="Search"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/imgsearch"
+            android:hint="Search"
+            android:inputType="text"
+            android:padding="4dp"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            tools:ignore="TouchTargetSizeCheck" />
 
         <View
             android:layout_width="wrap_content"
@@ -56,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id = "@+id/llSightings"
-            android:layout_below="@id/tvSearch"
+            android:layout_below="@id/etSearch"
             android:layout_marginBottom="565dp"
             android:orientation="horizontal">
 
@@ -86,7 +92,7 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tvSearch"
+            android:layout_toRightOf="@id/etSearch"
             android:layout_marginLeft="-50dp"
             android:layout_marginTop="85dp"
             android:backgroundTint ="@color/white"
