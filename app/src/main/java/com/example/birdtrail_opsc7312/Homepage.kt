@@ -32,6 +32,10 @@ class Homepage : AppCompatActivity() {
         // replaceFragment(home())
         binding.bottomNavigationView.selectedItemId = R.id.home
 
+        binding.fab.setOnClickListener(){
+            fragmentControl.replaceFragment(Add_Observation(), R.id.flContent, supportFragmentManager)
+            binding.bottomNavigationView.selectedItemId = R.id.placeholder
+        }
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId)
