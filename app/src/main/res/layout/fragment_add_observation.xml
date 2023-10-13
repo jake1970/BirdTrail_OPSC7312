@@ -226,25 +226,38 @@
 
         </LinearLayout>
 
+
+        <View
+            android:id="@+id/vwDivLine"
+            android:layout_below="@id/llDisplaySub"
+            android:layout_width="wrap_content"
+            android:background="@color/white"
+            android:layout_marginTop="8dp"
+            android:layout_height="4dp" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/svBirdList"
-            android:layout_below="@id/llDisplaySub"
-            android:layout_marginTop="6dp"
+            android:layout_below="@id/vwDivLine"
+            android:paddingTop="6dp"
             android:requiresFadingEdge="vertical"
             android:background="@color/light_blue"
+            android:paddingBottom="94dp"
             android:fadingEdgeLength="1dp">
 
             <LinearLayout
                 android:id="@+id/llBirdList"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginHorizontal="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                />
+
         </ScrollView>
+
+
 
     </RelativeLayout>
 

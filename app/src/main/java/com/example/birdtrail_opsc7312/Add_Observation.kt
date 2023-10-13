@@ -1,13 +1,15 @@
 package com.example.birdtrail_opsc7312
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.Space
+import androidx.core.view.children
+import androidx.core.view.forEach
+import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
-import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -39,18 +41,37 @@ class Add_Observation : Fragment() {
         //---------------------------------------------------------------------------------------------
         //test code for custom components
         //---------------------------------------------------------------------------------------------
-        for (i in 1..2) {
+
+
+        for (i in 1..20) {
 
             val activityLayout = binding.llBirdList;
+
             var birdOption = Card_SpeciesSelector(activity)
 
+
+            birdOption.binding.rlSelector.visibility = View.INVISIBLE
            // birdOption.binding.tvContactName.text = "Jake Young"
             //birdOption.binding.tvContactRole.text = "Senior Member"
 
-
-
             //add the new view
             activityLayout.addView(birdOption)
+
+            birdOption.setOnClickListener()
+            {
+
+                activityLayout.forEach{ childView ->
+                    // do something with this childView
+
+                    if (childView is Card_SpeciesSelector)
+                    {
+                        childView.binding.rlSelector.visibility = View.INVISIBLE
+                    }
+
+                }
+
+                birdOption.binding.rlSelector.visibility = View.VISIBLE
+            }
 
 
             val scale = requireActivity().resources.displayMetrics.density
@@ -61,6 +82,7 @@ class Add_Observation : Fragment() {
             activityLayout.addView(spacer)
 
         }
+
         //---------------------------------------------------------------------------------------------
 
 
