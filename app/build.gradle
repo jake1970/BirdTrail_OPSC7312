@@ -52,8 +52,9 @@ dependencies {
 
     //mapbox
     implementation 'com.mapbox.maps:android:10.16.1'
+    implementation "com.mapbox.navigation:copilot:2.10.1"
+    implementation "com.mapbox.navigation:android:2.10.1"
 
     //play services
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-
 }
