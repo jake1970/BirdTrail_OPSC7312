@@ -246,8 +246,22 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                         }
                         pointAnnotationManager?.addClickListener { pointAnnotation ->
                             // Show a Toast message with the location name of the clicked annotation
-                            val clickedHotspot = GlobalClass.hotspots.find { it.lng == pointAnnotation.point.longitude() && it.lat == pointAnnotation.point.latitude() }
-                            Toast.makeText(requireContext(), clickedHotspot?.comName, Toast.LENGTH_SHORT).show()
+
+                            val clickedHotspotIndex = GlobalClass.hotspots.indexOfFirst { it.lng == pointAnnotation.point.longitude() && it.lat == pointAnnotation.point.latitude() }
+
+                            val mapHotspotView = MapHotspot()
+                            val args = Bundle()
+
+                            args.putInt("hotspotIndex", clickedHotspotIndex)
+
+                            mapHotspotView.arguments = args
+
+
+                            val transaction = parentFragmentManager.beginTransaction()
+                            transaction.replace(R.id.flContent, mapHotspotView)
+                            transaction.addToBackStack(null)
+                            transaction.commit()
+
                             false
                         }
                     }
