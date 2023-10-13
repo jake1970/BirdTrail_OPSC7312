@@ -7,19 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
+import kotlinx.coroutines.GlobalScope
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,36 +23,30 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //create local fragment controller
+        val fragmentControl = FragmentHandler()
 
-        binding.btnMap.setOnClickListener(){
+        var fullMapView = FullMapFragment()
+        fullMapView.openInFullView = true
+        fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
+        //fragmentControl.replaceFragment(FullMapFragment(), R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
+
+
+
+        binding.btnNav.setOnClickListener(){
             val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.flContent, FullMapFragment())
+            transaction.replace(R.id.flContent, MapDirections())
             transaction.addToBackStack(null)
             transaction.commit()
         }
 
 
 
+
+
+
+
         return view
     }
 
-//    companion object {
-//        /**
-//         * Use this factory method to create a new instance of
-//         * this fragment using the provided parameters.
-//         *
-//         * @param param1 Parameter 1.
-//         * @param param2 Parameter 2.
-//         * @return A new instance of fragment HomeFragment.
-//         */
-//        // TODO: Rename and change types and number of parameters
-//        @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            HomeFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
-//    }
 }

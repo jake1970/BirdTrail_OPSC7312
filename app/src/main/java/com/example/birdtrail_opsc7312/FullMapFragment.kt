@@ -3,18 +3,13 @@ package com.example.birdtrail_opsc7312
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,11 +17,9 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentFullMapBinding
 import com.google.android.gms.location.LocationServices
-import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -46,7 +39,7 @@ import java.lang.ref.WeakReference
 import java.util.*
 
 
-class FullMapFragment : Fragment(R.layout.fragment_full_map) {
+class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
     private lateinit var locationPermissionHelper: LocationPermissionHelper
 
@@ -69,6 +62,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         }
 
         override fun onMoveEnd(detector: MoveGestureDetector) {}
+
     }
 
     private lateinit var mapView: MapView
@@ -90,6 +84,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         _binding = FragmentFullMapBinding.inflate(inflater, container, false)
         val view = binding.root
 
+
         mapView = MapView(requireContext())
         view.addView(mapView) // Add the MapView to your layout
 
@@ -104,6 +99,13 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
             addAnnotationsToMap()
         }
         onMapReady()
+
+
+        //----------------------------------------------------------------------------------------------------------------------------
+        binding.rlTopBar.bringToFront()
+        //----------------------------------------------------------------------------------------------------------------------------
+
+
         return view
     }
 
@@ -123,8 +125,28 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         }
     }
 
+    //----------------------------------------------------------------------------------------------------------------------------
+    var openInFullView = false
+    //----------------------------------------------------------------------------------------------------------------------------
+
     private fun setupGesturesListener() {
         mapView.gestures.addOnMoveListener(onMoveListener)
+
+        //----------------------------------------------------------------------------------------------------------------------------
+        mapView.gestures.addOnMapClickListener{ point ->
+
+
+            if (openInFullView)
+            {
+                openInFullView = false
+                //create local fragment controller
+                val fragmentControl = FragmentHandler()
+                fragmentControl.replaceFragment(FullMapFragment(), R.id.flContent, parentFragmentManager)
+            }
+
+            true
+        }
+        //----------------------------------------------------------------------------------------------------------------------------
     }
 
     private fun initLocationComponent() {
@@ -332,6 +354,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
             bitmap
         }
     }
+
 
 
 }
