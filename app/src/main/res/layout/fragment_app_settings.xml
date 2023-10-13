@@ -15,7 +15,7 @@
             android:id="@+id/tvSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="@string/SettingsLabel"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="15dp"
             android:textColor="@color/white"
@@ -34,7 +34,7 @@
             android:id="@+id/tvUnitsType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Units Type"
+            android:text="@string/SettingsUnitsType"
             android:layout_below="@id/tvSettings"
             android:layout_marginTop="60dp"
             android:layout_marginLeft="35dp"
@@ -57,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="400dp"
                 android:backgroundTint="@color/light_blue"
-                android:text="Metric"
+                android:text="@string/SettingsMetric"
                 android:textColor="@color/white"
                 app:cornerRadius="12dp" />
 
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/white"
-                android:text="Imperial"
+                android:text="@string/SettingsImperial"
                 android:textColor="@color/black"
                 app:cornerRadius="12dp"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -77,7 +77,7 @@
             android:id="@+id/tvDefaultDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Default Distance"
+            android:text="@string/SettingsDefualtDistance"
             android:layout_below="@id/toggleButton"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="35dp"
@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/slider"
-            android:text="Options"
+            android:text="@string/SettingsOptions"
             android:layout_marginTop="28dp"
             android:layout_marginLeft="37dp"
             android:textColor="@color/white"
@@ -137,10 +137,11 @@
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"
                 android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/imgperson"
                 android:backgroundTint="@color/white"
                 android:letterSpacing="0"
                 android:stateListAnimator="@null"
-                android:text="Change Profile Picture"
+                android:text="@string/SettingsChangeProfilePicture"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="15dp"
@@ -158,8 +159,9 @@
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/white"
                 android:letterSpacing="0"
+                android:drawableLeft="@drawable/imgperson"
                 android:stateListAnimator="@null"
-                android:text="Change Password"
+                android:text="@string/SettingsPassword"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="15dp"
@@ -173,32 +175,20 @@
                 android:layout_below="@id/btnChangePassword"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="35dp"
+                android:drawableLeft="@drawable/imgperson"
                 android:layout_marginRight="35dp"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/white"
                 android:letterSpacing="0"
                 android:stateListAnimator="@null"
-                android:text="Log Out"
+                android:text="@string/SettingsLogOut"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="15dp"
                 app:cornerRadius="12dp"
                 tools:ignore="TextSizeCheck" />
 
-            <ImageView
-                android:id="@+id/imgBirdLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnLogOut"
-                android:layout_marginLeft="295dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="40dp"
-                app:srcCompat="@drawable/imgbird" />
-
         </LinearLayout>
-
-
 
     </RelativeLayout>
 

@@ -36,8 +36,16 @@
 
     <string name="allSightingsText">All Sightings</string>
     <string name="speciesText">Species</string>
-
-
+    <string name="SettingsLabel">Settings</string>
+    <string name="SettingsUnitsType">Units Type</string>
+    <string name="SettingsMetric">Metric</string>
+    <string name="SettingsImperial">Imperial</string>
+    <string name="SettingsDefualtDistance">Default Distance</string>
+    <string name="SettingsOptions">Options</string>
+    <string name="SettingsChangeProfilePicture">Change Profile Picture</string>
+    <string name="SettingsPassword">Change Password</string>
+    <string name="SettingsLogOut">Log Out</string>
+    <string name="ObservationLabel">Observations</string>
     <string name="hotspotText">Hotspot</string>
 
 
