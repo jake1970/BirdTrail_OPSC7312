@@ -3,9 +3,14 @@ package com.example.birdtrail_opsc7312
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Homepage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?)
@@ -15,6 +20,16 @@ class Homepage : AppCompatActivity() {
 
         var binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        GlobalScope.launch {
+            //get bird observations
+            var eBirdHandler = eBirdAPIHandler()
+            eBirdHandler.getRecentObservations("ZA")
+            withContext(Dispatchers.Main) {
+            }
+        }
+
 
 
         //Hide the action bar
@@ -84,8 +99,6 @@ class Homepage : AppCompatActivity() {
             }
         }
          */
-
-
 
 
     }
