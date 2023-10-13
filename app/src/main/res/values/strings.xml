@@ -32,7 +32,10 @@
     <string name="addObservationText">Add Observation</string>
     <string name="numberOfSightingsText">Number of sightings:</string>
     <string name="enterText">Enter</string>
-    <string name="searchText">Enter</string>
+    <string name="searchText">Search</string>
+
+    <string name="allSightingsText">All Sightings</string>
+    <string name="speciesText">Species</string>
 
 
     <string name="hotspotText">Hotspot</string>

@@ -32,7 +32,7 @@
                 android:text="@string/addObservationText" />
 
             <View
-                android:id="@+id/view"
+                android:id="@+id/vwTitleDivLine"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="14dp"
@@ -208,7 +208,7 @@
                />
 
             <EditText
-                android:id="@+id/etUsername"
+                android:id="@+id/etSearch"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -218,7 +218,7 @@
                 android:text=""
                 android:layout_marginLeft="6dp"
                 android:layout_marginBottom="6dp"
-                android:hint="Search"
+                android:hint="@string/searchText"
                 android:drawableLeft="@drawable/imgsearch"
                 android:padding="4dp"
                 android:textColor="@color/black"

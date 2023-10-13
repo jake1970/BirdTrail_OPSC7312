@@ -18,10 +18,11 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/palette_half_12"
             android:backgroundTint="@color/medium_blue"
             android:layout_centerVertical="true"
+            android:paddingVertical="12dp"
             android:layout_weight="0"
             android:gravity="center"
             android:paddingLeft="6dp"
@@ -56,6 +57,7 @@
                     android:id="@+id/tvSpecies"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/imgbird"
                     android:text="TextView" />
@@ -65,6 +67,7 @@
                 android:layout_weight="0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="TextView" />
 
             </LinearLayout>

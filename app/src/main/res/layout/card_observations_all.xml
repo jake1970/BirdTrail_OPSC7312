@@ -17,7 +17,8 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
             android:background="@drawable/palette_half_12"
             android:backgroundTint="@color/medium_blue"
             android:layout_centerVertical="true"
@@ -62,6 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
+                    android:textColor="@color/black"
                     android:drawableLeft="@drawable/imgbird"
                     android:text="TextView" />
 
@@ -69,6 +71,7 @@
                     android:id="@+id/tvDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:drawableLeft="@drawable/imgcalendar"
                     android:paddingLeft="1dp"
                     android:text="TextView" />
@@ -79,6 +82,7 @@
                 android:id="@+id/tvSighted"
                 android:layout_weight="0"
                 android:layout_marginRight="10dp"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
