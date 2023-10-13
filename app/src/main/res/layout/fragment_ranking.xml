@@ -96,6 +96,28 @@
             android:src="@drawable/imgleaderboard"
             tools:ignore="UseAppTint" />
 
+        <ImageView
+            android:id="@+id/imgMedal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgLeaderboard"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:tint="@android:color/white"
+            android:src="@drawable/imgmedal"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:id="@+id/tvMedals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="{n/tn}"
+            android:layout_below="@id/tvScore"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
+            android:textColor="@color/white"
+            android:textSize="18dp"/>
+
         <TextView
             android:id="@+id/tvScore"
             android:layout_width="wrap_content"
@@ -108,7 +130,7 @@
             android:textSize="18dp"/>
 
         <ScrollView
-            android:id="@+id/svBirdList"
+            android:id="@+id/svRankings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/vLine"
@@ -119,7 +141,7 @@
             tools:ignore="SpeakableTextPresentCheck">
 
             <LinearLayout
-                android:id="@+id/llBirdList"
+                android:id="@+id/llRankingsList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"

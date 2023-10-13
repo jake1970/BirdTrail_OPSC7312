@@ -96,11 +96,11 @@
             android:layout_toRightOf="@id/etSearch"
             android:layout_marginLeft="-50dp"
             android:layout_marginTop="85dp"
-            android:backgroundTint ="@color/white"
-            android:src="@drawable/imgfilter" />
+            android:src="@drawable/imgfilter"
+            app:tint="@android:color/white" />
 
         <ScrollView
-            android:id="@+id/svBirdList"
+            android:id="@+id/svUserObservations"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/vLine"
@@ -111,7 +111,7 @@
             tools:ignore="SpeakableTextPresentCheck">
 
             <LinearLayout
-                android:id="@+id/llBirdList"
+                android:id="@+id/llUserObservationsList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
