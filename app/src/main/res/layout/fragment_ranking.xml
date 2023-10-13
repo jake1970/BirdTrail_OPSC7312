@@ -44,6 +44,7 @@
 
         <View
             android:layout_width="200dp"
+            android:id="@+id/vLine"
             android:layout_height="2dp"
             android:background="#ECE6E6"
             android:layout_marginTop="222dp"
@@ -55,19 +56,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ivMyProfileImage"
             android:text="Achievements"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="8dp"
             android:layout_marginLeft="255dp"
             android:textColor="@color/white"
             android:textSize="18dp"/>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivMyProfileImage"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_gravity="center"
             android:layout_marginLeft="260dp"
             android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_below="@id/vRankingsLine"
             android:layout_weight="0"
             app:shapeAppearanceOverlay="@style/circleImageView"
@@ -106,6 +106,28 @@
             android:layout_marginLeft="50dp"
             android:textColor="@color/white"
             android:textSize="18dp"/>
+
+        <ScrollView
+            android:id="@+id/svBirdList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/vLine"
+            android:layout_marginTop="0dp"
+            android:background="@color/light_blue"
+            android:fadingEdgeLength="1dp"
+            android:requiresFadingEdge="vertical"
+            tools:ignore="SpeakableTextPresentCheck">
+
+            <LinearLayout
+                android:id="@+id/llBirdList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical" />
+        </ScrollView>
+
 
 
     </RelativeLayout>

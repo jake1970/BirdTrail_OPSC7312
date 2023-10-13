@@ -53,7 +53,7 @@
             <Button
                 android:id="@+id/btnMetric"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="170dp"
+                android:layout_width="165dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="400dp"
                 android:backgroundTint="@color/light_blue"

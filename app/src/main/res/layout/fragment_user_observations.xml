@@ -52,6 +52,7 @@
         <View
             android:layout_width="wrap_content"
             android:layout_height="2dp"
+            android:id = "@+id/vLine"
             android:background="#ECE6E6"
             android:layout_marginTop="-565dp"
             android:layout_below="@id/llSightings"
@@ -97,6 +98,29 @@
             android:layout_marginTop="85dp"
             android:backgroundTint ="@color/white"
             android:src="@drawable/imgfilter" />
+
+        <ScrollView
+            android:id="@+id/svBirdList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/vLine"
+            android:layout_marginTop="0dp"
+            android:background="@color/light_blue"
+            android:fadingEdgeLength="1dp"
+            android:requiresFadingEdge="vertical"
+            tools:ignore="SpeakableTextPresentCheck">
+
+            <LinearLayout
+                android:id="@+id/llBirdList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical" />
+        </ScrollView>
+
+
     </RelativeLayout>
 
 </FrameLayout>
