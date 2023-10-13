@@ -47,6 +47,12 @@
     <string name="SettingsLogOut">Log Out</string>
     <string name="ObservationLabel">Observations</string>
     <string name="hotspotText">Hotspot</string>
+    <string name="RankingLabel">Ranking</string>
+    <string name="RankingScore">{score}</string>
+    <string name="RankingMedal">{n/tn}</string>
+    <string name="RankingLeaderboard">Leaderboard</string>
+    <string name="RankingAchievements">Achievements</string>
+
 
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic3QxMDA4MTgzOSIsImEiOiJjbG5lank2cmIwZHlyMmp0Y2h1c2VmZ2lkIn0.AU-LAXgDH6jTS1vHM9pfhw</string>
