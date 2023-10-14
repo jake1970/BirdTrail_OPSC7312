@@ -40,7 +40,12 @@ class MapHotspot : Fragment() {
 
         val hotspotIndex = arguments?.getInt("hotspotIndex")
 
-        binding.tvHotspotDate.text = GlobalClass.hotspots[hotspotIndex!!].obsDt
+        var hotpost = GlobalClass.hotspots[hotspotIndex!!]
+
+        binding.tvHotspotDate.text = hotpost.obsDt.toString()
+        binding.tvBirdName.text = hotpost.comName
+        binding.tvBirdCount.text = hotpost.howMany.toString()
+        binding.tvBirdLocation.text = hotpost.locName
 
 
         // Inflate the layout for this fragment
