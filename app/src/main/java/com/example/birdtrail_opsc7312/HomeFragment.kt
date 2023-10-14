@@ -26,19 +26,37 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         //create local fragment controller
         val fragmentControl = FragmentHandler()
 
+
+
+        /*
         var fullMapView = FullMapFragment()
         fullMapView.openInFullView = true
         fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
+
+         */
         //fragmentControl.replaceFragment(FullMapFragment(), R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
 
+        var fullMapView = FullMapFragment()
+        fullMapView.openInFullView = true
+        fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
 
-
-        binding.btnNav.setOnClickListener(){
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.flContent, MapDirections())
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
+//        binding.btnNav.setOnClickListener(){
+//            /*
+//            val transaction = parentFragmentManager.beginTransaction()
+//            transaction.replace(R.id.flContent, MapDirections())
+//            transaction.addToBackStack(null)
+//            transaction.commit()
+//
+//             */
+//
+//
+//            var fullMapView = FullMapFragment()
+//            fragmentControl.replaceFragment(fullMapView,R.id.flContent, requireActivity().supportFragmentManager)
+//
+//
+//
+//
+//        }
 
 
 
