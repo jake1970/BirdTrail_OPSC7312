@@ -7,6 +7,7 @@ class GlobalClass: Application()
     companion object
     {
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
+        var userObservations = arrayListOf<UserObservationDataClass>()
 
     }
 }
