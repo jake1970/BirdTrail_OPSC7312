@@ -13,5 +13,5 @@ data class UserDataClass(
     var isMetric: Boolean = true,
     var defaultdistance : Int = 0,
     var score : Int = 0,
-    var profilepicture : Bitmap
+    var profilepicture : Bitmap? = null
 )
