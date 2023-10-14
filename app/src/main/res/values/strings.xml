@@ -33,7 +33,13 @@
     <string name="numberOfSightingsText">Number of sightings:</string>
     <string name="enterText">Enter</string>
     <string name="searchText">Search</string>
-
+    <string name="timeframeText">Timeframe</string>
+    <string name="distanceText">Distance</string>
+    <string-array name="timeFilterOptions">
+        <item>1 Week</item>
+        <item>2 Weeks</item>
+        <item>3 Weeks</item>
+    </string-array>
     <string name="allSightingsText">All Sightings</string>
     <string name="speciesText">Species</string>
     <string name="SettingsLabel">Settings</string>

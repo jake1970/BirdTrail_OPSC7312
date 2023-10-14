@@ -8,7 +8,9 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.icu.text.Transliterator.Position
 import android.location.Location
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +32,7 @@ import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
@@ -88,6 +91,15 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         mapView = MapView(requireContext())
         view.addView(mapView) // Add the MapView to your layout
 
+
+        //---------------------------------------------------------
+        //Hide the compass
+        //---------------------------------------------------------
+        mapView.compass.visibility = false
+        //---------------------------------------------------------
+
+
+
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) { style ->
             // Map is set up and the style has loaded. Now you can add data or make other map adjustments.
         }
@@ -100,10 +112,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
         onMapReady()
 
-
-        //----------------------------------------------------------------------------------------------------------------------------
-        binding.rlTopBar.bringToFront()
-        //----------------------------------------------------------------------------------------------------------------------------
 
 
         return view
@@ -141,7 +149,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                 openInFullView = false
                 //create local fragment controller
                 val fragmentControl = FragmentHandler()
-                fragmentControl.replaceFragment(FullMapFragment(), R.id.flContent, parentFragmentManager)
+                fragmentControl.replaceFragment(UserFullMapView(), R.id.flContent, parentFragmentManager)
             }
 
             true

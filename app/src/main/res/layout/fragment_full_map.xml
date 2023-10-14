@@ -10,29 +10,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <com.mapbox.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             mapbox:mapbox_cameraTargetLat="40.7128"
             mapbox:mapbox_cameraTargetLng="-74.0060"
-            mapbox:mapbox_cameraZoom="9.0">
+            mapbox:mapbox_cameraZoom="9.0"
+            android:elevation="1dp">
+
 
         </com.mapbox.maps.MapView>
 
-
-
         <RelativeLayout
             android:id="@+id/rlTopBar"
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="34dp"
             android:layout_marginHorizontal="20dp"
             android:background="@drawable/palette_full_10"
             android:backgroundTint="@color/dark_blue"
-            android:paddingVertical="4dp"
+            android:paddingVertical="6dp"
             android:paddingHorizontal="12dp"
+            android:elevation="2dp"
             android:orientation="horizontal">
 
 
@@ -58,6 +59,7 @@
 
 
         </RelativeLayout>
+
 
 
 
