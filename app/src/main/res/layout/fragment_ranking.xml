@@ -65,6 +65,7 @@
             android:id="@+id/ivMyProfileImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="260dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="15dp"
