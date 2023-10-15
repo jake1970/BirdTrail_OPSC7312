@@ -58,21 +58,45 @@
             android:textColor="@color/white"
             android:textSize="14dp" />
 
-        <ImageView
-            android:id="@+id/imgMap"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tvHotspotDate"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/palette_full_12"
+            android:id="@+id/rlMapFragment"
             android:padding="4dp"
-            android:src="@drawable/ic_launcher_background" />
+            android:background="@drawable/palette_full_12"
+            android:backgroundTint="@color/white"
+            android:layout_marginHorizontal="10dp"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvHotspotMapFragmentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:background="@drawable/palette_full_12"
+                android:padding="4dp"
+                app:cardCornerRadius="12dp" />
+
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/imgFragmentOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/tvHotspotDate"
+            android:layout_marginHorizontal="10dp"
+            android:elevation="2dp"
+            android:src="@drawable/palette_full_12"
+            android:clickable="true"
+            app:tint="@android:color/transparent" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imgMap"
+            android:layout_below="@id/rlMapFragment"
             android:orientation="horizontal"
             android:layout_marginHorizontal="10dp"
             android:id="@+id/llButtonDisplay"

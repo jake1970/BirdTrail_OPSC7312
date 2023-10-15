@@ -39,6 +39,25 @@ class MapHotspot : Fragment() {
 
         var hotspot = GlobalClass.hotspots[hotspotIndex!!]
 
+        //create local fragment controller
+        val fragmentControl = FragmentHandler()
+
+        var fullMapView = FullMapFragment()
+        fullMapView.openInFullView = false
+        fullMapView.centerOnHotspot = true
+
+        val args = Bundle()
+
+        hotspot.lng?.let { args.putDouble("hotspotLong", it) }
+        hotspot.lat?.let { args.putDouble("hotspotLat", it) }
+
+        fullMapView.arguments = args
+
+
+        fragmentControl.replaceFragment(fullMapView, R.id.cvHotspotMapFragmentContainer, requireActivity().supportFragmentManager)
+
+
+
         binding.tvHotspotDate.text = hotspot.obsDt.toString()
         binding.tvBirdName.text = hotspot.comName
         binding.tvBirdCount.text = hotspot.howMany.toString()
