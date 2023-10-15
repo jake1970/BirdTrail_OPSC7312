@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentMapDirectionsBinding
 import com.mapbox.api.directions.v5.models.Bearing
 import com.mapbox.api.directions.v5.models.RouteOptions
@@ -78,7 +79,10 @@ class MapDirections : Fragment()
 {
     //private var _binding: FragmentMapDirectionsBinding? = null
     //private val binding get() = _binding!!
-    private lateinit var binding: FragmentMapDirectionsBinding
+   // private lateinit var binding: FragmentMapDirectionsBinding
+
+    private var _binding: FragmentMapDirectionsBinding? = null
+    private val binding get() = _binding!!
 
     var long: Double = 0.0
     var lat: Double = 0.0
@@ -324,7 +328,8 @@ class MapDirections : Fragment()
     ): View?
     {
         // Inflate the layout for this fragment
-        binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+       // binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+        _binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
         val view = binding.root
 
         lat = arguments?.getDouble("lat")!!

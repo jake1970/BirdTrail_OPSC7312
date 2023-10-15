@@ -50,6 +50,8 @@ class MapHotspot : Fragment() {
         binding.btnDirections.setOnClickListener(){
 
             val mapDirectionsView = MapDirections()
+
+
             val args = Bundle()
 
             hotpost.lat?.let { it1 -> args.putDouble("lat", it1) }
@@ -58,9 +60,16 @@ class MapHotspot : Fragment() {
             mapDirectionsView.arguments = args
 
 
+            //create local fragment controller
+            val fragmentControl = FragmentHandler()
+            fragmentControl.replaceFragment(mapDirectionsView, R.id.flContent, parentFragmentManager)
+
+            /*
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.flContent, mapDirectionsView)
             transaction.addToBackStack(null)
+
+             */
         }
 
         // Inflate the layout for this fragment
