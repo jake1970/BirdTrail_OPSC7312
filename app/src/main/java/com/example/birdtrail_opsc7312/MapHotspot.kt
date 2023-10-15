@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentMapHotspotBinding
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,12 +22,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MapHotspot : Fragment() {
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let {
-//        }
-//    }
 
     private var _binding: FragmentMapHotspotBinding? = null
     private val binding get() = _binding!!
@@ -47,6 +43,12 @@ class MapHotspot : Fragment() {
         binding.tvBirdName.text = hotspot.comName
         binding.tvBirdCount.text = hotspot.howMany.toString()
         binding.tvBirdLocation.text = hotspot.locName
+
+        lifecycleScope.launch {
+            var imageHandler = ImageHandler()
+            var image = imageHandler.GetImage(hotspot.comName.toString())
+            binding.imgBird.setImageBitmap(image)
+        }
 
         binding.btnDirections.setOnClickListener(){
 

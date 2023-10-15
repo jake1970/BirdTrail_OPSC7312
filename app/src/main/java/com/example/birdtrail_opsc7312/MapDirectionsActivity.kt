@@ -524,6 +524,8 @@ class MapDirectionsActivity : AppCompatActivity()
 
         // set initial sounds button state
         binding.soundButton.unmute()
+
+        findRoute()
     }
 
     override fun onDestroy() {
