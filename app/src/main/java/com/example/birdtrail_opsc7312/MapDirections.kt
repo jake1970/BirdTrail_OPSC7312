@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentMapDirectionsBinding
+import com.example.birdtrail_opsc7312.databinding.FragmentMapHotspotBinding
 import com.mapbox.api.directions.v5.models.Bearing
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.bindgen.Expected
@@ -21,6 +22,7 @@ import com.mapbox.common.location.Location
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.camera
@@ -75,14 +77,20 @@ import com.mapbox.navigation.ui.voice.model.SpeechVolume
 import java.util.*
 
 
-class MapDirections : Fragment()
+class MapDirections : Fragment(R.layout.fragment_map_directions)
 {
     //private var _binding: FragmentMapDirectionsBinding? = null
     //private val binding get() = _binding!!
    // private lateinit var binding: FragmentMapDirectionsBinding
 
-    private var _binding: FragmentMapDirectionsBinding? = null
-    private val binding get() = _binding!!
+
+   // private var _binding: FragmentMapDirectionsBinding? = null
+   // private var binding get() = _binding!!
+
+    private lateinit var binding: FragmentMapDirectionsBinding
+
+
+    //private lateinit var binding: FragmentMapDirectionsBinding
 
     var long: Double = 0.0
     var lat: Double = 0.0
@@ -92,6 +100,8 @@ class MapDirections : Fragment()
     private companion object {
         private const val BUTTON_ANIMATION_DURATION = 1500L
     }
+
+
 
     private val mapboxReplayer = MapboxReplayer()
 
@@ -149,6 +159,8 @@ class MapDirections : Fragment()
 
     private lateinit var routeArrowView: MapboxRouteArrowView
 
+
+    //***************************************************************************************************************
     private var isVoiceInstructionsMuted = false
         set(value) {
             field = value
@@ -160,15 +172,25 @@ class MapDirections : Fragment()
                 voiceInstructionsPlayer.volume(SpeechVolume(1f))
             }
         }
+    //***************************************************************************************************************
 
+    //***************************************************************************************************************
     private lateinit var speechApi: MapboxSpeechApi
+    //***************************************************************************************************************
 
+
+    //***************************************************************************************************************
     private lateinit var voiceInstructionsPlayer: MapboxVoiceInstructionsPlayer
+    //***************************************************************************************************************
 
+
+    //***************************************************************************************************************
     private val voiceInstructionsObserver = VoiceInstructionsObserver { voiceInstructions ->
         speechApi.generate(voiceInstructions, speechCallback)
     }
+    //***************************************************************************************************************
 
+    //***************************************************************************************************************
     private val speechCallback =
         MapboxNavigationConsumer<Expected<SpeechError, SpeechValue>> { expected ->
             expected.fold(
@@ -188,15 +210,21 @@ class MapDirections : Fragment()
                 }
             )
         }
+    //***************************************************************************************************************
 
+    //***************************************************************************************************************
     private val voiceInstructionsPlayerCallback =
         MapboxNavigationConsumer<SpeechAnnouncement> { value ->
             // remove already consumed file to free-up space
             speechApi.clean(value)
         }
+    //***************************************************************************************************************
 
+    //***************************************************************************************************************
     private val navigationLocationProvider = NavigationLocationProvider()
+    //***************************************************************************************************************
 
+    //***************************************************************************************************************
     private val locationObserver = object : LocationObserver {
         var firstLocationUpdateReceived = false
 
@@ -227,8 +255,11 @@ class MapDirections : Fragment()
                 )
             }
         }
-    }
 
+    }
+    //***************************************************************************************************************
+
+    //***************************************************************************************************************
     private val routeProgressObserver = RouteProgressObserver { routeProgress ->
     // update the camera position to account for the progressed fragment of the route
         viewportDataSource.onRouteProgressChanged(routeProgress)
@@ -262,7 +293,9 @@ class MapDirections : Fragment()
             tripProgressApi.getTripProgress(routeProgress)
         )
     }
+    //***************************************************************************************************************
 
+    //***************************************************************************************************************
     private val routesObserver = RoutesObserver { routeUpdateResult ->
         if (routeUpdateResult.navigationRoutes.isNotEmpty()) {
             // generate route geometries asynchronously and render them
@@ -295,7 +328,10 @@ class MapDirections : Fragment()
             viewportDataSource.evaluate()
         }
     }
+    //***************************************************************************************************************
 
+//***************************************************************************************************************
+    /*
     private val mapboxNavigation: MapboxNavigation by requireMapboxNavigation(
         onResumedObserver = object : MapboxNavigationObserver {
             @SuppressLint("MissingPermission")
@@ -322,6 +358,175 @@ class MapDirections : Fragment()
     )
 
 
+
+     */
+
+
+    private val mapboxNavigation: MapboxNavigation by requireMapboxNavigation(
+        onResumedObserver = object : MapboxNavigationObserver {
+            @SuppressLint("MissingPermission")
+            override fun onAttached(mapboxNavigation: MapboxNavigation) {
+                mapboxNavigation.registerRoutesObserver(routesObserver)
+                mapboxNavigation.registerLocationObserver(locationObserver)
+                mapboxNavigation.registerRouteProgressObserver(routeProgressObserver)
+                mapboxNavigation.registerRouteProgressObserver(replayProgressObserver)
+                mapboxNavigation.registerVoiceInstructionsObserver(voiceInstructionsObserver)
+                // start the trip session to being receiving location updates in free drive
+                // and later when a route is set also receiving route progress updates
+                mapboxNavigation.startTripSession()
+            }
+
+            override fun onDetached(mapboxNavigation: MapboxNavigation) {
+                mapboxNavigation.unregisterRoutesObserver(routesObserver)
+                mapboxNavigation.unregisterLocationObserver(locationObserver)
+                mapboxNavigation.unregisterRouteProgressObserver(routeProgressObserver)
+                mapboxNavigation.unregisterRouteProgressObserver(replayProgressObserver)
+                mapboxNavigation.unregisterVoiceInstructionsObserver(voiceInstructionsObserver)
+            }
+        },
+        onInitialize = this::initNavigation
+
+    )
+    //onInitialize = this::initNavigation
+   // onInitialize = this::initNavigation
+    //{ MapDirections().initNavigation() }
+
+    //***************************************************************************************************************
+
+
+
+
+//    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+
+    @SuppressLint("MissingPermission")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Inflate the layout for this fragment
+        // binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+        // _binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+        // val view = binding.root
+
+
+
+        // binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+        binding = FragmentMapDirectionsBinding.inflate(layoutInflater)
+       // _binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        lat = arguments?.getDouble("lat")!!
+        long = arguments?.getDouble("long")!!
+
+
+
+        viewportDataSource = MapboxNavigationViewportDataSource(binding.mapView.getMapboxMap())
+        navigationCamera = NavigationCamera(
+            binding.mapView.getMapboxMap(),
+            binding.mapView.camera,
+            viewportDataSource
+        )
+
+        binding.mapView.camera.addCameraAnimationsLifecycleListener(
+            NavigationBasicGesturesHandler(navigationCamera)
+        )
+        navigationCamera.registerNavigationCameraStateChangeObserver { navigationCameraState ->
+            when (navigationCameraState) {
+                NavigationCameraState.TRANSITION_TO_FOLLOWING,
+                NavigationCameraState.FOLLOWING -> binding.recenter.visibility = View.INVISIBLE
+                NavigationCameraState.TRANSITION_TO_OVERVIEW,
+                NavigationCameraState.OVERVIEW,
+                NavigationCameraState.IDLE -> binding.recenter.visibility = View.VISIBLE
+            }
+        }
+
+
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            viewportDataSource.overviewPadding = landscapeOverviewPadding
+        } else {
+            viewportDataSource.overviewPadding = overviewPadding
+        }
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            viewportDataSource.followingPadding = landscapeFollowingPadding
+        } else {
+            viewportDataSource.followingPadding = followingPadding
+        }
+
+
+
+        val distanceFormatterOptions = DistanceFormatterOptions.Builder(requireContext()).build()
+
+        maneuverApi = MapboxManeuverApi(
+            MapboxDistanceFormatter(distanceFormatterOptions)
+        )
+
+        tripProgressApi = MapboxTripProgressApi(
+            TripProgressUpdateFormatter.Builder(requireContext())
+                .distanceRemainingFormatter(
+                    DistanceRemainingFormatter(distanceFormatterOptions)
+                )
+                .timeRemainingFormatter(
+                    TimeRemainingFormatter(requireContext())
+                )
+                .percentRouteTraveledFormatter(
+                    PercentDistanceTraveledFormatter()
+                )
+                .estimatedTimeToArrivalFormatter(
+                    EstimatedTimeToArrivalFormatter(requireContext(), TimeFormat.NONE_SPECIFIED)
+                )
+                .build()
+        )
+
+        speechApi = MapboxSpeechApi(
+            requireContext(),
+            getString(R.string.mapbox_access_token),
+            Locale.US.language
+        )
+        voiceInstructionsPlayer = MapboxVoiceInstructionsPlayer(
+            requireContext(),
+            getString(R.string.mapbox_access_token),
+            Locale.US.language
+        )
+
+        val mapboxRouteLineOptions = MapboxRouteLineOptions.Builder(requireContext())
+            .withRouteLineBelowLayerId("road-label-navigation")
+            .build()
+        routeLineApi = MapboxRouteLineApi(mapboxRouteLineOptions)
+        routeLineView = MapboxRouteLineView(mapboxRouteLineOptions)
+
+        val routeArrowOptions = RouteArrowOptions.Builder(requireContext()).build()
+        routeArrowView = MapboxRouteArrowView(routeArrowOptions)
+
+        binding.mapView.getMapboxMap().loadStyleUri(NavigationStyles.NAVIGATION_DAY_STYLE) {
+            binding.mapView.gestures.addOnMapLongClickListener { point ->
+                findRoute(point)
+                true
+            }
+        }
+
+        binding.stop.setOnClickListener {
+            clearRouteAndStopNavigation()
+        }
+        binding.recenter.setOnClickListener {
+            navigationCamera.requestNavigationCameraToFollowing()
+            binding.routeOverview.showTextAndExtend(BUTTON_ANIMATION_DURATION)
+        }
+        binding.routeOverview.setOnClickListener {
+            navigationCamera.requestNavigationCameraToOverview()
+            binding.recenter.showTextAndExtend(BUTTON_ANIMATION_DURATION)
+        }
+        binding.soundButton.setOnClickListener {
+            isVoiceInstructionsMuted = !isVoiceInstructionsMuted
+        }
+
+
+
+        binding.soundButton.unmute()
+
+       // return view//binding.root //view
+    }
+
+/*
+
     override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
@@ -329,6 +534,13 @@ class MapDirections : Fragment()
     {
         // Inflate the layout for this fragment
        // binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+       // _binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+       // val view = binding.root
+
+
+
+       // binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
+
         _binding = FragmentMapDirectionsBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -336,6 +548,7 @@ class MapDirections : Fragment()
         long = arguments?.getDouble("long")!!
 
 
+        /*
         viewportDataSource = MapboxNavigationViewportDataSource(binding.mapView.getMapboxMap())
         navigationCamera = NavigationCamera(
             binding.mapView.getMapboxMap(),
@@ -432,10 +645,16 @@ class MapDirections : Fragment()
             isVoiceInstructionsMuted = !isVoiceInstructionsMuted
         }
 
+
+         */
         binding.soundButton.unmute()
 
-        return view
+        return view//binding.root //view
     }
+
+ */
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -447,6 +666,32 @@ class MapDirections : Fragment()
         voiceInstructionsPlayer.shutdown()
     }
 
+    private fun initNavigation() {
+        MapboxNavigationApp.setup(
+            NavigationOptions.Builder(requireContext())
+                .accessToken(getString(R.string.mapbox_access_token))
+                // comment out the location engine setting block to disable simulation
+                //.locationEngine(replayLocationEngine)
+                .build()
+        )
+
+        // initialize location puck
+        var textView = findViewById<MapView>(R.id.mapViewT)
+
+        binding.mapView.location.apply {
+            setLocationProvider(navigationLocationProvider)
+            this.locationPuck = LocationPuck2D(
+                bearingImage = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.imguser_location
+                )
+            )
+            enabled = true
+        }
+
+        replayOriginLocation()
+    }
+    /*
     private fun initNavigation() {
         MapboxNavigationApp.setup(
             NavigationOptions.Builder(requireContext())
@@ -471,89 +716,103 @@ class MapDirections : Fragment()
         replayOriginLocation()
     }
 
-    private fun replayOriginLocation() {
-        mapboxReplayer.pushEvents(
-            listOf(
-                ReplayRouteMapper.mapToUpdateLocation(
-                    Date().time.toDouble(),
-                    Point.fromLngLat(userLocation.longitude(), userLocation.latitude())
+     */
+
+
+  private fun replayOriginLocation() {
+      mapboxReplayer.pushEvents(
+          listOf(
+              ReplayRouteMapper.mapToUpdateLocation(
+                  Date().time.toDouble(),
+                  Point.fromLngLat(userLocation.longitude(), userLocation.latitude())
+              )
+          )
+      )
+      mapboxReplayer.playFirstLocation()
+      mapboxReplayer.playbackSpeed(3.0)
+  }
+
+
+
+
+
+private fun findRoute(destination: Point) {
+    val originLocation = navigationLocationProvider.lastLocation
+    val originPoint = originLocation?.let {
+        Point.fromLngLat(it.longitude, it.latitude)
+    } ?: return
+
+    val destination = Point.fromLngLat(long, lat)
+
+    mapboxNavigation.requestRoutes(
+        RouteOptions.builder()
+            .applyDefaultNavigationOptions()
+            .applyLanguageAndVoiceUnitOptions(requireContext())
+            .coordinatesList(listOf(originPoint, destination))
+            // provide the bearing for the origin of the request to ensure
+            // that the returned route faces in the direction of the current user movement
+            .bearingsList(
+                listOf(
+                    Bearing.builder()
+                        .angle(originLocation.bearing.toDouble())
+                        .degrees(45.0)
+                        .build(),
+                    null
                 )
             )
-        )
-        mapboxReplayer.playFirstLocation()
-        mapboxReplayer.playbackSpeed(3.0)
-    }
-
-    private fun findRoute(destination: Point) {
-        val originLocation = navigationLocationProvider.lastLocation
-        val originPoint = originLocation?.let {
-            Point.fromLngLat(it.longitude, it.latitude)
-        } ?: return
-
-        val destination = Point.fromLngLat(long, lat)
-
-        mapboxNavigation.requestRoutes(
-            RouteOptions.builder()
-                .applyDefaultNavigationOptions()
-                .applyLanguageAndVoiceUnitOptions(requireContext())
-                .coordinatesList(listOf(originPoint, destination))
-                // provide the bearing for the origin of the request to ensure
-                // that the returned route faces in the direction of the current user movement
-                .bearingsList(
-                    listOf(
-                        Bearing.builder()
-                            .angle(originLocation.bearing.toDouble())
-                            .degrees(45.0)
-                            .build(),
-                        null
-                    )
-                )
-                .layersList(listOf(mapboxNavigation.getZLevel(), null))
-                .build(),
-            object : NavigationRouterCallback {
-                override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {
-                // no impl
-                }
-
-                override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {
-                // no impl
-                }
-
-                override fun onRoutesReady(
-                    routes: List<NavigationRoute>,
-                    routerOrigin: RouterOrigin
-                ) {
-                    setRouteAndStartNavigation(routes)
-                }
+            .layersList(listOf(mapboxNavigation.getZLevel(), null))
+            .build(),
+        object : NavigationRouterCallback {
+            override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {
+            // no impl
             }
-        )
-    }
 
-    private fun setRouteAndStartNavigation(routes: List<NavigationRoute>) {
-        // set routes, where the first route in the list is the primary route that
-        // will be used for active guidance
-        mapboxNavigation.setNavigationRoutes(routes)
+            override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {
+            // no impl
+            }
 
-        // show UI elements
-        binding.soundButton.visibility = View.VISIBLE
-        binding.routeOverview.visibility = View.VISIBLE
-        binding.tripProgressCard.visibility = View.VISIBLE
-
-        // move the camera to overview when new route is available
-        navigationCamera.requestNavigationCameraToOverview()
-    }
-
-    private fun clearRouteAndStopNavigation() {
-        // clear
-        mapboxNavigation.setNavigationRoutes(listOf())
-
-        // stop simulation
-        mapboxReplayer.stop()
-
-        // hide UI elements
-        binding.soundButton.visibility = View.INVISIBLE
-        binding.maneuverView.visibility = View.INVISIBLE
-        binding.routeOverview.visibility = View.INVISIBLE
-        binding.tripProgressCard.visibility = View.INVISIBLE
-    }
+            override fun onRoutesReady(
+                routes: List<NavigationRoute>,
+                routerOrigin: RouterOrigin
+            ) {
+                setRouteAndStartNavigation(routes)
+            }
+        }
+    )
 }
+
+private fun setRouteAndStartNavigation(routes: List<NavigationRoute>) {
+    // set routes, where the first route in the list is the primary route that
+    // will be used for active guidance
+    mapboxNavigation.setNavigationRoutes(routes)
+
+    // show UI elements
+    binding.soundButton.visibility = View.VISIBLE
+    binding.routeOverview.visibility = View.VISIBLE
+    binding.tripProgressCard.visibility = View.VISIBLE
+
+    // move the camera to overview when new route is available
+    navigationCamera.requestNavigationCameraToOverview()
+}
+
+private fun clearRouteAndStopNavigation() {
+    // clear
+    mapboxNavigation.setNavigationRoutes(listOf())
+
+    // stop simulation
+    mapboxReplayer.stop()
+
+    // hide UI elements
+    binding.soundButton.visibility = View.INVISIBLE
+    binding.maneuverView.visibility = View.INVISIBLE
+    binding.routeOverview.visibility = View.INVISIBLE
+    binding.tripProgressCard.visibility = View.INVISIBLE
+}
+
+
+}
+
+
+
+
+
