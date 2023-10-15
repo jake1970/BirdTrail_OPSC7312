@@ -1,6 +1,7 @@
 package com.example.birdtrail_opsc7312
 
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Space
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserObservationsBinding
 
@@ -34,6 +37,27 @@ class UserObservations : Fragment() {
         //New Animation Handler Object
         val animationManager = AnimationHandler()
 
+        binding.imgFilter.setOnClickListener()
+        {
+
+
+            Toast.makeText(requireContext(), binding.imgFilter.rotation.toString(), Toast.LENGTH_SHORT)
+
+
+            if (binding.imgFilter.rotation.toDouble() == 0.0)
+            {
+                binding.imgFilter.rotation = (180).toFloat()
+
+
+
+            }
+            else
+            {
+                binding.imgFilter.rotation = (0.0).toFloat()
+
+
+            }
+        }
 
         //---------------------------------------------------------------------------------------------
         //Swap User Observation Views
