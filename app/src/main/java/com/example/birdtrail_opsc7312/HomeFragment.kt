@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
 import kotlinx.coroutines.GlobalScope
@@ -13,6 +14,8 @@ import kotlinx.coroutines.GlobalScope
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val spacerSize = 20
 
 
     override fun onCreateView(
@@ -27,7 +30,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val fragmentControl = FragmentHandler()
 
 
-
+        //new scroll view handler object
+        val scrollViewTools = ScrollViewHandler()
 
 
 
@@ -36,28 +40,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
 
 
+        val activityLayout = binding.llBirdSummaryInfo
 
+        val latestGeneralSighting = Card_Observations_Species(activity)
+        val latestUserSighting = Card_Observations_Species(activity)
 
-//        binding.btnNav.setOnClickListener(){
-//            /*
-//            val transaction = parentFragmentManager.beginTransaction()
-//            transaction.replace(R.id.flContent, MapDirections())
-//            transaction.addToBackStack(null)
-//            transaction.commit()
-//
-//             */
-//
-//
-//            var fullMapView = FullMapFragment()
-//            fragmentControl.replaceFragment(fullMapView,R.id.flContent, requireActivity().supportFragmentManager)
-//
-//
-//
-//
-//        }
+        activityLayout.addView(latestGeneralSighting)
+
+        //call method to generate a space under the dynamic component
+        scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
+
+       activityLayout.addView(latestUserSighting)
 
 
 
+        //MostRecentGeneralSighting
+        //NearestToUserSighting/Hotspot
 
 
 

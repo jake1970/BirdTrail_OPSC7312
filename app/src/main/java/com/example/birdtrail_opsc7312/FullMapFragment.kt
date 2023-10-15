@@ -2,6 +2,7 @@ package com.example.birdtrail_opsc7312
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -119,11 +120,75 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
 
     private fun onMapReady() {
+/*
         mapView.getMapboxMap().setCamera(
             CameraOptions.Builder()
                 .zoom(14.0)
                 .build()
         )
+
+ */
+
+        //---------------------------------------------------------------------------
+
+        if (centerOnHotspot == true)
+        {
+
+
+
+            val hotspotLong = arguments?.getDouble("hotspotLong")
+            val hotspotLat = arguments?.getDouble("hotspotLat")
+
+
+/*
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Androidly Alert")
+                builder.setMessage(hotspotLong.toString() + " " + hotspotLat.toString())
+                builder.show()
+
+ */
+
+
+            val hotspotPoint = hotspotLong?.let { hotspotLat?.let { it1 -> Point.fromLngLat(it, it1) } }
+
+            val cameraPosition = CameraOptions.Builder()
+                .zoom(14.0)
+                .center(hotspotPoint)
+                .build()
+            // set camera position
+            mapView.getMapboxMap().setCamera(cameraPosition)
+
+                        /*
+            mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .center(hotspotLong?.let {
+                        hotspotLat?.let { it1 ->
+                            Point.fromLngLat(
+                                it, it1
+                            )
+                        }
+                    }
+                    )
+                    .zoom(14.0)
+                    .build()
+            )
+
+                         */
+        }
+        else
+        {
+            mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(14.0)
+                    .build()
+            )
+        }
+
+
+        //---------------------------------------------------------------------------
+
+
+
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS
         ) {
@@ -135,6 +200,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
     //----------------------------------------------------------------------------------------------------------------------------
     var openInFullView = false
+    var centerOnHotspot = false
     //----------------------------------------------------------------------------------------------------------------------------
 
     private fun setupGesturesListener() {

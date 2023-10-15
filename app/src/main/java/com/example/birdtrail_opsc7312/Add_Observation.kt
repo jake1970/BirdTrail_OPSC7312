@@ -12,6 +12,7 @@ import android.widget.Space
 import androidx.core.view.forEach
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
@@ -128,6 +129,17 @@ class Add_Observation : Fragment() {
 
                     birdOption.binding.rlSelector.visibility = View.VISIBLE
                     binding.tvSpeciesName.text = birdOption.binding.tvSpecies.text
+
+
+                    //load the image
+                    lifecycleScope.launch {
+                        var imageHandler = ImageHandler()
+                        var image = imageHandler.GetImage(
+                            birdOption.binding.tvSpecies.text.toString()
+                        )
+                        binding.imgBirdImageExpanded.setImageBitmap(image)
+                    }
+
                 }
 
 
