@@ -15,3 +15,10 @@ data class UserDataClass(
     var score : Int = 0,
     var profilepicture : Bitmap? = null
 )
+
+
+
+
+
+
+

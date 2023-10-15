@@ -14,3 +14,4 @@ data class UserObservationDataClass (
     var date: LocalDate = LocalDate.now(),
     var count: Int = 0
 )
+
