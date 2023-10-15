@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <com.mapbox.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
@@ -23,7 +24,8 @@
             android:layout_height="wrap_content"
             android:visibility="invisible"
             app:cardElevation="8dp"
-            app:cardUseCompatPadding="false">
+            app:cardUseCompatPadding="false"
+            android:layout_alignParentBottom="true">
 
             <com.mapbox.navigation.ui.tripprogress.view.MapboxTripProgressView
                 android:id="@+id/tripProgressView"
@@ -71,6 +73,9 @@
             android:layout_marginEnd="16dp"
             app:srcCompat="@android:drawable/ic_delete"
             android:layout_below="@id/routeOverview"/>
+
+
+
     </RelativeLayout>
 
 

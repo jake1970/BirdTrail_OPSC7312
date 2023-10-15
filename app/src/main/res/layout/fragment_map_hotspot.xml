@@ -113,18 +113,17 @@
                 android:id="@+id/btnDirections"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:layout_gravity="center"
+                android:layout_weight="3"
                 android:backgroundTint="@color/white"
                 android:insetTop="0dp"
                 android:insetBottom="6dp"
                 android:letterSpacing="0"
                 android:stateListAnimator="@null"
-                android:text="@string/backText"
+                android:text="Directions"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                app:cornerRadius="14dp"
-                />
+                app:cornerRadius="14dp" />
 
         </LinearLayout>
 

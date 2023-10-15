@@ -47,6 +47,21 @@ class MapHotspot : Fragment() {
         binding.tvBirdCount.text = hotpost.howMany.toString()
         binding.tvBirdLocation.text = hotpost.locName
 
+        binding.btnDirections.setOnClickListener(){
+
+            val mapDirectionsView = MapDirections()
+            val args = Bundle()
+
+            hotpost.lat?.let { it1 -> args.putDouble("lat", it1) }
+            hotpost.lng?.let { it1 -> args.putDouble("long", it1) }
+
+            mapDirectionsView.arguments = args
+
+
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.flContent, mapDirectionsView)
+            transaction.addToBackStack(null)
+        }
 
         // Inflate the layout for this fragment
         return view
