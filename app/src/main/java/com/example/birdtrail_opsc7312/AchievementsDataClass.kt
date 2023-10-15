@@ -7,3 +7,6 @@ data class AchievementsDataClass(
     var badgeID : Int = 0,
     var points : Int = 0
 )
+
+
+

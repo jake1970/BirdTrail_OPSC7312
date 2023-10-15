@@ -8,3 +8,5 @@ data class UserAchievementsDataClass(
     var userID : Int = 0,
     var date : LocalDate,
 )
+
+
