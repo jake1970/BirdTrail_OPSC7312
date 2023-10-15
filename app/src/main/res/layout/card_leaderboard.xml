@@ -17,7 +17,8 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
             android:background="@drawable/palette_half_12"
             android:backgroundTint="@color/medium_blue"
             android:layout_centerVertical="true"
@@ -83,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:drawableLeft="@drawable/imgperson"
+                    android:textColor="@color/black"
                     android:text="TextView" />
 
                 <TextView
@@ -91,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/imgmedal"
                     android:paddingLeft="1dp"
+                    android:textColor="@color/black"
                     android:text="TextView" />
             </LinearLayout>
 
@@ -102,6 +105,7 @@
                 android:drawableLeft="@drawable/imgleaderboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="TextView" />
 
 

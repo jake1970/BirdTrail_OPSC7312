@@ -53,9 +53,6 @@
     <string name="SettingsLogOut">Log Out</string>
     <string name="ObservationLabel">Observations</string>
     <string name="hotspotText">Hotspot</string>
-    <string name="RankingLabel">Ranking</string>
-    <string name="RankingScore">{score}</string>
-    <string name="RankingMedal">{n/tn}</string>
     <string name="RankingLeaderboard">Leaderboard</string>
     <string name="RankingAchievements">Achievements</string>
 

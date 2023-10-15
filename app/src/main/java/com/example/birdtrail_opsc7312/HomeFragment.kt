@@ -28,17 +28,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
 
-        /*
-        var fullMapView = FullMapFragment()
-        fullMapView.openInFullView = true
-        fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
 
-         */
-        //fragmentControl.replaceFragment(FullMapFragment(), R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
+
 
         var fullMapView = FullMapFragment()
         fullMapView.openInFullView = true
         fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
+
+
+
 
 //        binding.btnNav.setOnClickListener(){
 //            /*
