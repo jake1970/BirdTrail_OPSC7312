@@ -262,7 +262,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                             // Calculate the distance between the user's location and the hotspot.
                             val distanceInKm = calculateDistance(userLocation!!.latitude, userLocation!!.longitude, hotspot.lat!!, hotspot.lng!!)
                             // If the distance is less than or equal to 50km, add an annotation for this hotspot.
-                            if (distanceInKm <= 200) {
+                            if (distanceInKm <= 60) { //200
                                 // Set options for the resulting symbol layer.
                                 val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
                                     // Define a geographic coordinate from the hotspot's lat and lng.
@@ -320,7 +320,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
 
     // Function to calculate distance between two points in km using Haversine formula
-    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val earthRadiusKm = 6371.0
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)

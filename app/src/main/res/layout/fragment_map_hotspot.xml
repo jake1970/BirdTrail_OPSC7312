@@ -217,6 +217,7 @@
                 android:layout_height="35dp"
                 android:background="@drawable/palette_full_10"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:text="{location}"
                 android:drawableLeft="@drawable/imglocation_pin"/>
         </LinearLayout>

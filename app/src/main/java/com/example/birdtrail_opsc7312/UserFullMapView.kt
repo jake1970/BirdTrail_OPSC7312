@@ -53,27 +53,7 @@ class UserFullMapView : Fragment() {
 
         binding.tvFilter.setOnClickListener()
         {
-            /*
-            binding.rlTopBar.animate()
-                .scaleY(-10f)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(1000)
 
-             */
-
-            /*
-            ObjectAnimator.ofFloat(binding.rlTopBar, "translationY", 200f).apply {
-                duration = 500
-                start()
-            }
-
-             */
-
-           /*
-            val params = binding.rlTopBar.getLayoutParams()
-            params.height = 1000
-            binding.rlTopBar.setLayoutParams(params)
-             */
 
             if (initialHeight == 0)
             {
@@ -92,16 +72,8 @@ class UserFullMapView : Fragment() {
                 va.start()
 
 
-               // va.doOnEnd {
-                    //binding.llFilterOptions.isBaselineAligned
 
-                    /*
-                    val params = binding.llFilterOptions.layoutParams as RelativeLayout.LayoutParams
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-                    binding.llFilterOptions.layoutParams = params //causes layout update
-
-                     */
-                    binding.llFilterOptions.visibility = View.VISIBLE//}
+                binding.llFilterOptions.visibility = View.VISIBLE//}
 
 
                 binding.imgDarkenOverlay.visibility = View.VISIBLE
@@ -137,13 +109,7 @@ class UserFullMapView : Fragment() {
 
 
 
-            /*
-            binding.rlTopBar.setPivotY(0f);
-            val scaleY = ObjectAnimator.ofFloat(binding.rlTopBar, "scaleY", 10f)
-            scaleY.interpolator = DecelerateInterpolator()
-            scaleY.start()
 
-             */
 
             binding.spnTimeFrame.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
