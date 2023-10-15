@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -40,36 +41,20 @@ class MapHotspot : Fragment() {
 
         val hotspotIndex = arguments?.getInt("hotspotIndex")
 
-        var hotpost = GlobalClass.hotspots[hotspotIndex!!]
+        var hotspot = GlobalClass.hotspots[hotspotIndex!!]
 
-        binding.tvHotspotDate.text = hotpost.obsDt.toString()
-        binding.tvBirdName.text = hotpost.comName
-        binding.tvBirdCount.text = hotpost.howMany.toString()
-        binding.tvBirdLocation.text = hotpost.locName
+        binding.tvHotspotDate.text = hotspot.obsDt.toString()
+        binding.tvBirdName.text = hotspot.comName
+        binding.tvBirdCount.text = hotspot.howMany.toString()
+        binding.tvBirdLocation.text = hotspot.locName
 
         binding.btnDirections.setOnClickListener(){
 
-            val mapDirectionsView = MapDirections()
-
-
-            val args = Bundle()
-
-            hotpost.lat?.let { it1 -> args.putDouble("lat", it1) }
-            hotpost.lng?.let { it1 -> args.putDouble("long", it1) }
-
-            mapDirectionsView.arguments = args
-
-
-            //create local fragment controller
-            val fragmentControl = FragmentHandler()
-            fragmentControl.replaceFragment(mapDirectionsView, R.id.flContent, parentFragmentManager)
-
-            /*
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.flContent, mapDirectionsView)
-            transaction.addToBackStack(null)
-
-             */
+            val intent = Intent(requireContext(), MapDirectionsActivity::class.java).apply {
+                putExtra("long", hotspot.lng)
+                putExtra("lat", hotspot.lat)
+            }
+            startActivity(intent)
         }
 
         // Inflate the layout for this fragment
