@@ -163,10 +163,42 @@
 
         </LinearLayout>
 
-        <LinearLayout
+
+
+        <ScrollView
+            android:id="@+id/svBirdSummaryInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"></LinearLayout>
+            android:layout_below="@id/llMapContainer"
+            android:fadingEdgeLength="1dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="94dp"
+            android:requiresFadingEdge="vertical"
+            tools:ignore="SpeakableTextPresentCheck">
+
+            <LinearLayout
+                android:id="@+id/llBirdSummaryInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical" />
+
+        </ScrollView>
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/llBirdSummaryInfo"-->
+<!--            android:layout_below="@id/llMapContainer"-->
+<!--            android:layout_marginHorizontal="10dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical">-->
+
+
+
+
+<!--        </LinearLayout>-->
 
 
         <!--                <Button-->
@@ -185,3 +217,5 @@
 <!--        android:text="Navigation" />-->
 
 </FrameLayout>
+
+
