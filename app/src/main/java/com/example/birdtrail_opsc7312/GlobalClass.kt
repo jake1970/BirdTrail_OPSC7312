@@ -1,6 +1,9 @@
 package com.example.birdtrail_opsc7312
 
 import android.app.Application
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDate
@@ -15,8 +18,7 @@ class GlobalClass: Application()
         var questions = arrayListOf<QuestionsDataClass>()
         var userAchievements = arrayListOf<UserAchievementsDataClass>()
         var acheivements = arrayListOf<AchievementsDataClass>()
-        var badgeImages = arrayListOf<BadgeImagesDataClass>()
-
+        var badgeImages = arrayListOf<Bitmap>()
 
         fun User()
         {
@@ -90,36 +92,6 @@ class GlobalClass: Application()
             questions.add(SecurityQuestions2)
             questions.add(SecurityQuestions3)
             questions.add(SecurityQuestions4)
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun achievement()
-        {
-            val achievements1 = AchievementsDataClass(
-                achID = 1,
-                name = "50 Birds Sighted",
-                requirements = "First Achievement",
-                badgeID = 1,
-                points = 0,
-            )
-            val achievements2 = AchievementsDataClass(
-                achID = 2,
-                name = "30 Birds Sighted",
-                requirements = "First Achievement",
-                badgeID = 1,
-                points = 0,
-            )
-            val achievements3 = AchievementsDataClass(
-                achID = 3,
-                name = "20 Birds Sighted",
-                requirements = "First Achievement",
-                badgeID = 1,
-                points = 0,
-            )
-
-            acheivements.add(achievements1)
-            acheivements.add(achievements2)
-            acheivements.add(achievements3)
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -237,7 +209,91 @@ class GlobalClass: Application()
             userObservations.add(observations10)
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
+        fun AddAcheivements()
+        {
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 1,
+                    name = "First Flight",
+                    requirements = "Record your first observation",
+                    badgeIndex = 0,
+                    observationsRequired = 1,
+            ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 2,
+                    name = "Novice",
+                    requirements = "Record 5 observations",
+                    badgeIndex = 1,
+                    observationsRequired = 5,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 3,
+                    name = "Rookie",
+                    requirements = "Record 10 observations",
+                    badgeIndex = 2,
+                    observationsRequired = 10,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 4,
+                    name = "Beginner",
+                    requirements = "Record 15 observations",
+                    badgeIndex = 3,
+                    observationsRequired = 15,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 5,
+                    name = "Intermediate",
+                    requirements = "Record 20 observations",
+                    badgeIndex = 4,
+                    observationsRequired = 20,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 6,
+                    name = "Skilled",
+                    requirements = "Record 25 observations",
+                    badgeIndex = 5,
+                    observationsRequired = 25,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 7,
+                    name = "Advanced",
+                    requirements = "Record 30 observations",
+                    badgeIndex = 6,
+                    observationsRequired = 30,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 8,
+                    name = "Senior",
+                    requirements = "Record 35 observations",
+                    badgeIndex = 7,
+                    observationsRequired = 35,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 9,
+                    name = "Expert",
+                    requirements = "Record 40 observations",
+                    badgeIndex = 3,
+                    observationsRequired = 40,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
+                    achID = 10,
+                    name = "Master",
+                    requirements = "Record 45 observations",
+                    badgeIndex = 0,
+                    observationsRequired = 45,
+                ))
+
+        }
+
         fun userAchievement()
         {
             val userachievement1 = UserAchievementsDataClass(
@@ -245,23 +301,45 @@ class GlobalClass: Application()
                 achID = 1,
                 date = LocalDate.now()
             )
+            override fun onCreate()
+            {
+                super.onCreate()
 
-            val userachievement2 = UserAchievementsDataClass(
-                userID = 2,
-                achID = 2,
-                date = LocalDate.now()
-            )
-            val userachievement3 = UserAchievementsDataClass(
-                userID = 3,
-                achID = 3,
-                date = LocalDate.now()
-            )
+                val userachievement2 = UserAchievementsDataClass(
+                    userID = 2,
+                    achID = 2,
+                    date = LocalDate.now()
+                )
+                val userachievement3 = UserAchievementsDataClass(
+                    userID = 3,
+                    achID = 3,
+                    date = LocalDate.now()
+                )
 
-            userAchievements.add(userachievement1)
-            userAchievements.add(userachievement2)
-            userAchievements.add(userachievement3)
+                userAchievements.add(userachievement1)
+                userAchievements.add(userachievement2)
+                userAchievements.add(userachievement3)
 
+            }
         }
-}
+    }
+    override fun onCreate()
+    {
+        super.onCreate()
 
+        //add badges
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge1))
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge2))
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge3))
+
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgsilverbadge1))
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgsilverbadge2))
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgsilverbadge3))
+
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imggoldbadge1))
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imggoldbadge2))
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imggoldbadge3))
+
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbluebadge))
+    }
 }
