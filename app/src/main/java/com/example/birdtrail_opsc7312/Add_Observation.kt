@@ -343,21 +343,20 @@ class Add_Observation : Fragment() {
                 GlobalClass.userObservations.add(newSighting)
 
 
+
+
+                requireActivity().findViewById<View>(R.id.home).callOnClick()
+
+                /*
                 //create local fragment controller
                 val fragmentControl = FragmentHandler()
 
                 fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, requireActivity().supportFragmentManager)
-
-                /*
-                var observationID: Int = 0,
-                var userID: Int = 0,
-                var lat: Double = 0.0,
-                var long: Double = 0.0,
-                var birdName: String = "",
-                var eBirdCode: String = "",
-                var date: LocalDate = LocalDate.now(),
-                var count: Int = 0
                  */
+
+
+
+
             }
             catch (e: Error)
             {

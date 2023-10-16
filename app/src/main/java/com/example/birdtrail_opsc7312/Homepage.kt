@@ -3,6 +3,7 @@ package com.example.birdtrail_opsc7312
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
@@ -69,7 +70,7 @@ class Homepage : AppCompatActivity() {
             true
         }
 
-
+        findViewById<View>(R.id.placeholder).isClickable = false
 
 
         /*
