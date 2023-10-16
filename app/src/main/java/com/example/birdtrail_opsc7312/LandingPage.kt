@@ -29,14 +29,6 @@ class LandingPage : AppCompatActivity() {
 
         //---------------------------------------------------------------------------------------//
 
-        //Add Temp Data
-        GlobalClass.achievement()
-        GlobalClass.User()
-        GlobalClass.securityquestions()
-        GlobalClass.observations()
-        GlobalClass.userAchievement()
-
-
         binding.btnSignIn.setOnClickListener()
         {
             var intent = Intent(this, SignIn::class.java)

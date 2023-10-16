@@ -9,7 +9,7 @@ data class UserDataClass(
     var password: String = "",
     var questionID: Int = 0,
     var securityanswer: String = "",
-    var achID : Int = 0,
+    var badgeID : Int = 0,
     var isMetric: Boolean = true,
     var defaultdistance : Int = 0,
     var score : Int = 0,
