@@ -89,21 +89,21 @@ class GlobalClass: Application()
                 name = "50 Birds Sighted",
                 requirements = "First Achievement",
                 badgeID = 1,
-                points = 40,
+                points = 0,
             )
             val achievements2 = AchievementsDataClass(
                 achID = 2,
                 name = "30 Birds Sighted",
                 requirements = "First Achievement",
                 badgeID = 1,
-                points = 30,
+                points = 0,
             )
             val achievements3 = AchievementsDataClass(
                 achID = 3,
                 name = "20 Birds Sighted",
                 requirements = "First Achievement",
                 badgeID = 1,
-                points = 50,
+                points = 0,
             )
 
             acheivements.add(achievements1)
