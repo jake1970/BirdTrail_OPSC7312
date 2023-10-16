@@ -1,12 +1,16 @@
 package com.example.birdtrail_opsc7312
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings.Global
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
 
 class LandingPage : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.landing_page)
@@ -26,7 +30,12 @@ class LandingPage : AppCompatActivity() {
         //---------------------------------------------------------------------------------------//
 
         //Add Temp Data
-        GlobalClass.main()
+        GlobalClass.achievement()
+        GlobalClass.User()
+        GlobalClass.securityquestions()
+        GlobalClass.observations()
+        GlobalClass.userAchievement()
+
 
         binding.btnSignIn.setOnClickListener()
         {
