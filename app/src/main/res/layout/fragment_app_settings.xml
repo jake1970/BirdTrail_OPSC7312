@@ -97,7 +97,7 @@
             android:background="@drawable/palette_full_12"
             android:stepSize="1.0"
             android:value="50.0"
-            android:valueFrom="0.0"
+            android:valueFrom="1.0"
             android:valueTo="50.0"
             app:cornerRadius="12dp"
             app:labelBehavior="gone"
