@@ -12,12 +12,14 @@ import android.graphics.drawable.Drawable
 import android.icu.text.Transliterator.Position
 import android.location.Location
 import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -119,6 +121,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun onMapReady() {
 /*
         mapView.getMapboxMap().setCamera(
@@ -189,9 +192,15 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS
         ) {
+
+
+            addSightingAnnotationsToMap()
             initLocationComponent()
             setupGesturesListener()
             addAnnotationsToMap()
+
+
+
         }
     }
 
@@ -367,7 +376,55 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
+//8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    private fun addSightingAnnotationsToMap() {
+        //Toast.makeText(requireContext(), checkPermissions().toString(), Toast.LENGTH_SHORT).show()
+        if (checkPermissions())
+        {
+            // Create an instance of the Annotation API and get the PointAnnotationManager.
+            bitmapFromDrawableRes(
+                requireContext(),
+                R.drawable.imgbird
+            )?.let { bitmap ->
+                val annotationApi = mapView?.annotations
+                val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
+                // Get the user's current location.
+                var userLocation: Location? = null
+                var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                    userLocation = task.result
+                    if (userLocation != null) {
+                        // Iterate over each hotspot in the global list
+                        for (sighting in GlobalClass.userObservations) {
+                            if (sighting.userID == GlobalClass.currentUser.userID) {
+                                // Calculate the distance between the user's location and the hotspot.
+                                val pointAnnotationOptions: PointAnnotationOptions =
+                                    PointAnnotationOptions()
+                                        // Define a geographic coordinate from the hotspot's lat and lng.
+                                        .withPoint(
+                                            Point.fromLngLat(
+                                                sighting.long!!,
+                                                sighting.lat!!
+                                            )
+                                        )
+                                        // Specify the bitmap you assigned to the point annotation
+                                        // The bitmap will be added to map style automatically.
+                                        .withIconImage(bitmap)
+                                // Add the resulting pointAnnotation to the map.
+                                pointAnnotationManager?.create(pointAnnotationOptions)
+                            }
+                        }
 
+                    }
+                }
+            }
+        }
+    }
+
+
+//8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
