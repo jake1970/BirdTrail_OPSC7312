@@ -6,9 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.core.view.children
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.internal.wait
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -34,10 +39,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val scrollViewTools = ScrollViewHandler()
 
 
+        //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
         var fullMapView = FullMapFragment()
         fullMapView.openInFullView = true
         fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
+
+        //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
 
         val activityLayout = binding.llBirdSummaryInfo
@@ -62,5 +70,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         return view
     }
+
+
+
 
 }

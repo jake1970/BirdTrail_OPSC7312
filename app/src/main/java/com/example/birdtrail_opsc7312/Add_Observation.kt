@@ -258,12 +258,35 @@ class Add_Observation : Fragment() {
 
 
 
+        //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+
+
+        //if distance to closest hotspot is more than the max distance settable (60 km) then set the location as unknown
+
+        var userLocation: Location? = null
+        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+            userLocation = task.result
+            if (userLocation != null) {
+
+                populateBirdOptions(uniqueBirdList)
+
+                binding.llBirdList.children.first().callOnClick()
+
+                binding.tvCurrentLocation.text = " Lon: " + userLocation!!.longitude.toString() + " Lat: " + userLocation!!.latitude.toString()
+
+                loadingProgressBar.visibility = View.GONE
+
+            }
+        }
+        //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
         //---------------------------------------------------------------------------------------------
 
 
 
-
+/*
 
 
 
@@ -320,6 +343,8 @@ class Add_Observation : Fragment() {
             }
         }
 
+ */
+
         binding.btnEnter.setOnClickListener()
         {
 
@@ -332,8 +357,16 @@ class Add_Observation : Fragment() {
 
 
                 newSighting.userID = GlobalClass.currentUser.userID
+
+                //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+                newSighting.lat = userLocation!!.latitude
+                newSighting.long = userLocation!!.longitude
+                //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+                /*
                 newSighting.lat = pastHotspot.lat!!
                 newSighting.long = pastHotspot.lng!!
+
+                 */
                 newSighting.birdName = binding.tvSpeciesName.text.toString()
 
                 //date is set by default
