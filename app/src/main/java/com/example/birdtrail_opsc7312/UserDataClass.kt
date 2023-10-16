@@ -111,8 +111,56 @@ data class UserDataClass(
 
 
     }
+
+    fun validateUserUsername(attemptedUsername : String, context : Context): String
+    {
+
+        var validationErrors = ""
+
+        if (attemptedUsername.length < 8)
+        {
+            validationErrors += context.getString(R.string.usernameShort) + "\n"
+        }
+
+
+        if (attemptedUsername.any(Char::isLowerCase))
+        {
+
+        }
+        else
+        {
+            validationErrors+=(context.getString(R.string.usernameNeedsLowerCase))+ "\n"
+        }
+
+        if (attemptedUsername.any(Char::isUpperCase))
+        {
+
+        }
+        else
+        {
+            validationErrors+=(context.getString(R.string.usernameNeedsUpperCase))+ "\n"
+        }
+
+
+        if (attemptedUsername[0].isUpperCase())
+        {
+
+        }
+        else
+        {
+            validationErrors+=(context.getString(R.string.usernameNeedsToStartWithUpperCaseLetter))+ "\n"
+        }
+
+
+
+
+        return validationErrors
+
+
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun registerUser(userEmail: String, userPassword: String, userConfirmPassword: String, securityQuestion: Int, securityAnswer: String, context : Context): String
+    fun registerUser(userEmail: String, userUsername: String, userPassword: String, userConfirmPassword: String, securityQuestion: Int, securityAnswer: String, context : Context): String
     {
 
 
@@ -125,24 +173,43 @@ data class UserDataClass(
             if (userEmail == indexUser.email) {
 
                 //if user exists
-                GlobalClass.currentUser = indexUser
+                //GlobalClass.currentUser = indexUser
 
                 invalidEntries += context.getString(R.string.emailAlreadyExists) + "\n"
 
-                //exit loop
-                break
+
+            }
+
+            //if the entered email matches an existing email
+            if (userUsername == indexUser.username) {
+
+                //if user exists
+                //GlobalClass.currentUser = indexUser
+
+                invalidEntries += context.getString(R.string.usernameAlreadyExists) + "\n"
+
 
             }
         }
 
 
-        if (invalidEntries == "")
+        if (!invalidEntries.contains(context.getString(R.string.emailAlreadyExists)))
         {
             var evaluateEmail = validateUserEmail(userEmail)
 
             if (evaluateEmail == false)
             {
                 invalidEntries += context.getString(R.string.emailNotValid) + "\n"
+            }
+        }
+
+        if (!invalidEntries.contains(context.getString(R.string.usernameAlreadyExists)))
+        {
+            var evaluateUsername = validateUserUsername(userEmail, context)
+
+            if (evaluateUsername != "")
+            {
+                invalidEntries += evaluateUsername
             }
         }
 

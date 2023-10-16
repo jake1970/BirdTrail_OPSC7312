@@ -59,6 +59,7 @@ class SignUp : AppCompatActivity() {
             if (allFilled == true) {
                 val attemptRegister = UserDataClass().registerUser(
                     binding.etEmail.text.toString(),
+                    binding.etUsername.text.toString(),
                     binding.etPassword.text.toString(),
                     binding.etConfirmPassword.text.toString(),
                     (binding.spnSecurityQuestion.selectedItemPosition + 1),
