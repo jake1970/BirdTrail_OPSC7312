@@ -2,6 +2,7 @@ package com.example.birdtrail_opsc7312
 
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -132,10 +134,9 @@ class UserObservations : Fragment() {
     //---------------------------------------------------------------------------------------------
     //Swap User Observation Views
     //---------------------------------------------------------------------------------------------
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun populateViewContent(allSightings: Boolean, searchList: ArrayList<UserObservationDataClass>){
 
-        //loop iterations
-        val loopCount = 20
 
         //new scroll view handler object
         val scrollViewTools = ScrollViewHandler()
@@ -157,20 +158,22 @@ class UserObservations : Fragment() {
             //loop through the sightings
             for (sighting in searchList) {
 
-                //new dynamic component
-                var birdOption = Card_Observations_All(activity)
+                if (sighting.userID == GlobalClass.currentUser.userID)
+                {
+                    //new dynamic component
+                    var birdOption = Card_Observations_All(activity)
 
 
-                birdOption.binding.tvSpecies.text = sighting.birdName
-                birdOption.binding.tvDate.text = sighting.date.toString()
-                birdOption.binding.tvSighted.text = getString(R.string.sightingsAmountText) + " " + sighting.count.toString()
+                    birdOption.binding.tvSpecies.text = sighting.birdName
+                    birdOption.binding.tvDate.text = sighting.date.toString()
+                    birdOption.binding.tvSighted.text = getString(R.string.sightingsAmountText) + " " + sighting.count.toString()
 
-                //add the dynamic component to the container view
-                activityLayout.addView(birdOption)
+                    //add the dynamic component to the container view
+                    activityLayout.addView(birdOption)
 
-                //call method to generate a space under the dynamic component
-                scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
-
+                    //call method to generate a space under the dynamic component
+                    scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
+                }
 
             }
 
@@ -185,22 +188,24 @@ class UserObservations : Fragment() {
             for (sighting in searchList)
             {
 
+                if (sighting.userID == GlobalClass.currentUser.userID) {
 
-                var matchFound = false
-                for (species in speciesTotalList) {
+                    var matchFound = false
+                    for (species in speciesTotalList) {
 
-                    if (sighting.birdName == species.birdSpeciesName) {
-                        species.birdSpeciesTotalCount =
-                            species.birdSpeciesTotalCount + sighting.count
-                        matchFound = true
+                        if (sighting.birdName == species.birdSpeciesName) {
+                            species.birdSpeciesTotalCount =
+                                species.birdSpeciesTotalCount + sighting.count
+                            matchFound = true
+                        }
                     }
-                }
 
-                if (matchFound == false) {
-                    var newSpeciesEntry = BirdSpeciesSightingDataClass()
-                    newSpeciesEntry.birdSpeciesName = sighting.birdName
-                    newSpeciesEntry.birdSpeciesTotalCount = sighting.count
-                    speciesTotalList.add(newSpeciesEntry)
+                    if (matchFound == false) {
+                        var newSpeciesEntry = BirdSpeciesSightingDataClass()
+                        newSpeciesEntry.birdSpeciesName = sighting.birdName
+                        newSpeciesEntry.birdSpeciesTotalCount = sighting.count
+                        speciesTotalList.add(newSpeciesEntry)
+                    }
                 }
             }
 
