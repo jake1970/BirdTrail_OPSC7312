@@ -32,7 +32,7 @@ class SignIn : AppCompatActivity() {
 
         //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
 
-        binding.etEmail.setText("User1")
+        binding.etEmail.setText("user1@gmail.com")
         binding.etPassword.setText("Password1")
 
         //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//

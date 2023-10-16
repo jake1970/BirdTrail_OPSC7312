@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Space
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
 import androidx.core.view.forEach
@@ -148,13 +149,22 @@ class Add_Observation : Fragment() {
 
                         loadingProgressBar.visibility = View.VISIBLE
 
+
                         //load the image
                         lifecycleScope.launch {
-                            var imageHandler = ImageHandler()
-                            var image = imageHandler.GetImage(
-                                birdOption.binding.tvSpecies.text.toString()
-                            )
-                            binding.imgBirdImageExpanded.setImageBitmap(image)
+
+                            try {
+                                var imageHandler = ImageHandler()
+                                var image = imageHandler.GetImage(
+                                    birdOption.binding.tvSpecies.text.toString()
+                                )
+                                binding.imgBirdImageExpanded.setImageBitmap(image)
+                            }
+                            catch (e : Exception)
+                            {
+                                Toast.makeText(requireContext(), getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
+                            }
+
                             loadingProgressBar.visibility = View.GONE
                         }
                     }
@@ -391,7 +401,7 @@ class Add_Observation : Fragment() {
 
 
             }
-            catch (e: Error)
+            catch (e: Exception)
             {
                 GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
             }

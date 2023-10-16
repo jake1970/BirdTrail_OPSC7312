@@ -12,12 +12,14 @@ import android.graphics.drawable.Drawable
 import android.icu.text.Transliterator.Position
 import android.location.Location
 import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -40,12 +42,17 @@ import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListene
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
 class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
-    private var distance: Int = 60
+
 
     private lateinit var locationPermissionHelper: LocationPermissionHelper
 
@@ -82,6 +89,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -121,6 +129,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun onMapReady() {
 /*
         mapView.getMapboxMap().setCamera(
@@ -186,7 +195,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
         //---------------------------------------------------------------------------
 
-        loadMap(distance)
+        loadMap()
 
 //        mapView.getMapboxMap().loadStyleUri(
 //            Style.MAPBOX_STREETS
@@ -197,13 +206,30 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 //        }
     }
 
-    public fun loadMap(newDistance: Int)
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+    fun removeAllAnnotations() {
+        val annotationApi = mapView?.annotations
+        val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
+        pointAnnotationManager?.let { manager ->
+            val annotations = manager.annotations
+            manager.delete(annotations)
+        }
+    }
+
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    public fun loadMap()
     {
-        distance = newDistance
+        //distance = newDistance
         mapView.invalidate()
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS
         ) {
+
+            addSightingAnnotationsToMap()
+
             initLocationComponent()
             setupGesturesListener()
             addAnnotationsToMap()
@@ -215,6 +241,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     //----------------------------------------------------------------------------------------------------------------------------
     var openInFullView = false
     var centerOnHotspot = false
+    var filterDistance = 50
+    var filterTimeFrame = 1
+    var filterSearchBirdName = ""
     //----------------------------------------------------------------------------------------------------------------------------
 
     private fun setupGesturesListener() {
@@ -322,8 +351,11 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission", "SetTextI18n")
     public fun addAnnotationsToMap() {
+
+        var counterMap = 0 //88888888888888888888888888888888888888888888
 
         removeAllAnnotations()
         //Toast.makeText(requireContext(), checkPermissions().toString(), Toast.LENGTH_SHORT).show()
@@ -345,20 +377,58 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                         // Iterate over each hotspot in the global list
                         for (hotspot in GlobalClass.hotspots) {
                             // Calculate the distance between the user's location and the hotspot.
-                            val distanceInKm = calculateDistance(userLocation!!.latitude, userLocation!!.longitude, hotspot.lat!!, hotspot.lng!!)
+                            val distanceInKm = calculateDistance(
+                                userLocation!!.latitude,
+                                userLocation!!.longitude,
+                                hotspot.lat!!,
+                                hotspot.lng!!
+                            )
                             // If the distance is less than or equal to 50km, add an annotation for this hotspot.
-                            if (distanceInKm <= distance) { //200
-                                // Set options for the resulting symbol layer.
-                                val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
-                                    // Define a geographic coordinate from the hotspot's lat and lng.
-                                    .withPoint(Point.fromLngLat(hotspot.lng!!, hotspot.lat!!))
-                                    // Specify the bitmap you assigned to the point annotation
-                                    // The bitmap will be added to map style automatically.
-                                    .withIconImage(bitmap)
-                                // Add the resulting pointAnnotation to the map.
-                                pointAnnotationManager?.create(pointAnnotationOptions)
+
+
+                            // Define the date format pattern for your input string
+                            val inputPattern = "yyyy-MM-dd HH:mm"
+
+                            // Define the desired date format pattern for the output
+                            val outputPattern = "yyyy-MM-dd"
+
+                            val inputFormat = SimpleDateFormat(inputPattern)
+                            val outputFormat = SimpleDateFormat(outputPattern)
+
+                            var date = inputFormat.parse(hotspot.obsDt)
+                            var localDate = outputFormat.format(date)
+
+                            val daysBetween =
+                                Period.between(LocalDate.parse(localDate), LocalDate.now()).days
+
+                            var commonBirdName = hotspot.comName?.lowercase()
+                            if (commonBirdName?.contains(filterSearchBirdName.lowercase()) == true || filterSearchBirdName == "") {
+                                if (daysBetween <= (filterTimeFrame * 7)) {  ////////88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+                                    if (distanceInKm <= filterDistance) { //200
+
+                                        counterMap = counterMap + 1
+
+
+                                        // Set options for the resulting symbol layer.
+                                        val pointAnnotationOptions: PointAnnotationOptions =
+                                            PointAnnotationOptions()
+                                                // Define a geographic coordinate from the hotspot's lat and lng.
+                                                .withPoint(
+                                                    Point.fromLngLat(
+                                                        hotspot.lng!!,
+                                                        hotspot.lat!!
+                                                    )
+                                                )
+                                                // Specify the bitmap you assigned to the point annotation
+                                                // The bitmap will be added to map style automatically.
+                                                .withIconImage(bitmap)
+                                        // Add the resulting pointAnnotation to the map.
+                                        pointAnnotationManager?.create(pointAnnotationOptions)
+                                    }
+                                }
                             }
                         }
+                        Toast.makeText(requireContext(), counterMap.toString(), Toast.LENGTH_SHORT).show()
                         pointAnnotationManager?.addClickListener { pointAnnotation ->
                             // Show a Toast message with the location name of the clicked annotation
 
@@ -385,14 +455,54 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
-    public fun removeAllAnnotations() {
-        val annotationApi = mapView?.annotations
-        val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
-        pointAnnotationManager?.let { manager ->
-            val annotations = manager.annotations
-            manager.delete(annotations)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    private fun addSightingAnnotationsToMap() {
+        //Toast.makeText(requireContext(), checkPermissions().toString(), Toast.LENGTH_SHORT).show()
+        if (checkPermissions())
+        {
+            // Create an instance of the Annotation API and get the PointAnnotationManager.
+            bitmapFromDrawableRes(
+                requireContext(),
+                R.drawable.imgbird
+            )?.let { bitmap ->
+                val annotationApi = mapView?.annotations
+                val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
+                // Get the user's current location.
+                var userLocation: Location? = null
+                var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                    userLocation = task.result
+                    if (userLocation != null) {
+                        // Iterate over each hotspot in the global list
+                        for (sighting in GlobalClass.userObservations) {
+                            if (sighting.userID == GlobalClass.currentUser.userID) {
+                                // Calculate the distance between the user's location and the hotspot.
+                                val pointAnnotationOptions: PointAnnotationOptions =
+                                    PointAnnotationOptions()
+                                        // Define a geographic coordinate from the hotspot's lat and lng.
+                                        .withPoint(
+                                            Point.fromLngLat(
+                                                sighting.long!!,
+                                                sighting.lat!!
+                                            )
+                                        )
+                                        // Specify the bitmap you assigned to the point annotation
+                                        // The bitmap will be added to map style automatically.
+                                        .withIconImage(bitmap)
+                                // Add the resulting pointAnnotation to the map.
+                                pointAnnotationManager?.create(pointAnnotationOptions)
+                            }
+                        }
+
+                    }
+                }
+            }
         }
     }
+
+
 
 
     private fun checkPermissions(): Boolean {

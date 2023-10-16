@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentMapHotspotBinding
@@ -66,9 +67,16 @@ class MapHotspot : Fragment() {
         binding.tvBirdLocation.text = hotspot.locName
 
         lifecycleScope.launch {
+            try
+            {
             var imageHandler = ImageHandler()
             var image = imageHandler.GetImage(hotspot.comName.toString())
             binding.imgBird.setImageBitmap(image)
+            }
+            catch (e : Exception)
+            {
+                Toast.makeText(requireContext(), getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnDirections.setOnClickListener(){
