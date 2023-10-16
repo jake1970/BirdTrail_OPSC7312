@@ -51,15 +51,15 @@
             android:layout_marginTop="80dp">
 
             <TextView
-                android:id="@+id/tvUsername"
+                android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/usernameText"
+                android:text="@string/emailText"
                 android:textColor="@color/white"
                 android:textSize="16dp"/>
 
             <EditText
-                android:id="@+id/etUsername"
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/palette_full_10"

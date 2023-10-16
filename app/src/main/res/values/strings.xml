@@ -7,7 +7,7 @@
     <string name="backText">&lt; Back</string>
     <string name="welcomeBackText">Welcome Back</string>
     <string name="signInInstructions">Login to your account</string>
-    <string name="usernameText">Username</string>
+    <string name="emailText">Email</string>
     <string name="passwordText">Password</string>
     <string name="rememberMeText">Remember Me</string>
     <string name="forgotPasswordText">Forgot Password?</string>
@@ -59,6 +59,19 @@
     <string name="errorText">Error</string>
     <string name="sightingsAmountText">Sighted:</string>
     <string name="totalAmountText">Total:</string>
+    <string name="failedSignIn">Sign In Failed</string>
+    <string name="incorrectEmailPassCombo">Incorrect Email/Password Combination</string>
+    <string name="failedSignUp">Sign Up Failed</string>
+    <string name="completedSignUp">Sign Up Completed</string>
+    <string name="instructToSignIn">Please Sign In to Continue</string>
+    <string name="missingField">Missing</string>
+    <string name="passwordShort">Password too short, needs to be 8 or more characters</string>
+    <string name="passwordNeedsNumber">Password needs to contain at least 1 digit</string>
+    <string name="passwordNeedsLowerCase">Password needs to contain at least 1 lower case character</string>
+    <string name="passwordNeedsUpperCase">Password needs to contain at least 1 upper case character</string>
+    <string name="passwordNeedsToStartWithUpperCaseLetter">Password needs start with an upper case character</string>
+    <string name="passwordNeedsSpecialCharacter">Password needs to include one of the following special characters: -?!@#£$%+=&amp;</string>
+    <string name="passwordSpecialCharacters">-?!@#£$%+=&amp;</string>
 
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic3QxMDA4MTgzOSIsImEiOiJjbG5lank2cmIwZHlyMmp0Y2h1c2VmZ2lkIn0.AU-LAXgDH6jTS1vHM9pfhw</string>
