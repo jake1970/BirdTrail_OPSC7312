@@ -50,12 +50,14 @@ class MapHotspot : Fragment() {
 
         hotspot.lng?.let { args.putDouble("hotspotLong", it) }
         hotspot.lat?.let { args.putDouble("hotspotLat", it) }
+        args.putBoolean("hotspotCamera", true)
+
+
 
         fullMapView.arguments = args
 
 
         fragmentControl.replaceFragment(fullMapView, R.id.cvHotspotMapFragmentContainer, requireActivity().supportFragmentManager)
-
 
 
         binding.tvHotspotDate.text = hotspot.obsDt.toString()
