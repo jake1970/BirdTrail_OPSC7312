@@ -25,6 +25,8 @@ class LandingPage : AppCompatActivity() {
 
         //---------------------------------------------------------------------------------------//
 
+        //Add Temp Data
+        GlobalClass.main()
 
         binding.btnSignIn.setOnClickListener()
         {
