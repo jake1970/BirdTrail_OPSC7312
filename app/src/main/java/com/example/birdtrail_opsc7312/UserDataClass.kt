@@ -13,6 +13,7 @@ data class UserDataClass(
 
     var userID: Int = 0,
     var email: String = "",
+    var username: String = "",
     var password: String = "",
     var questionID: Int = 0,
     var securityanswer: String = "",
@@ -22,11 +23,9 @@ data class UserDataClass(
     var score : Int = 0,
     var profilepicture : Bitmap? = null
 ) {
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun validateUser(userEmail: String, userPassword: String): Boolean
     {
-
         //loop through users
         for (indexUser in GlobalClass.userData) {
 

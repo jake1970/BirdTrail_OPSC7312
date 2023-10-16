@@ -41,7 +41,8 @@ class GlobalClass: Application()
             userData.add(
                 UserDataClass(
                     userID = 1,
-                    email = "User1",
+                    username = "user1",
+                    email = "user1@gmail.com",
                     password = "Password1",
                     questionID = 1,
                     securityanswer = "Gordan",
@@ -54,7 +55,8 @@ class GlobalClass: Application()
             userData.add(
                 UserDataClass(
                     userID = 2,
-                    email = "User2",
+                    username = "user2",
+                    email = "user2@gmail.com",
                     password = "Password2",
                     questionID = 1,
                     securityanswer = "Jordan",
@@ -67,7 +69,8 @@ class GlobalClass: Application()
             userData.add(
                 UserDataClass(
                     userID = 3,
-                    email = "User3",
+                    username = "user3",
+                    email = "user3@gmail.com",
                     password = "Password3",
                     questionID = 1,
                     securityanswer = "Heaven",

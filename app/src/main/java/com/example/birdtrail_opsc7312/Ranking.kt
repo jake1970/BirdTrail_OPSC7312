@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentRankingBinding
+import com.mapbox.common.location.GetLocationCallback
 
 
 /**
@@ -97,22 +98,40 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         //if all sightings must be loaded
         if (leaderboardView)
         {
+            var sortedUsers = GlobalClass.userData
+            sortedUsers.sortWith(compareBy { it.score })
+
             //loop through the sightings
-            for (i in 1..loopCount) {
+            for (i in 1..sortedUsers.size) {
 
-                //new dynamic component
-                var newLeaderboardCard = Card_Leaderboard(activity)
+                var user = sortedUsers[i-1]
 
-                //add the dynamic component to the container view
-                activityLayout.addView(newLeaderboardCard)
+                if (user.userID != GlobalClass.currentUser.userID) //other users
+                {
+                    //new dynamic component
+                    var newLeaderboardCard = Card_Leaderboard(activity)
+                    newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(user.profilepicture)
+                    newLeaderboardCard.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[user.badgeID])
+                    newLeaderboardCard.binding.tvUsername.text = user.username
+                    newLeaderboardCard.binding.tvScore.text = user.score.toString()
+                    newLeaderboardCard.binding.tvRankingPlace.text = i.toString()
 
-                //call method to generate a space under the dynamic component
-                scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
+                    //add the dynamic component to the container view
+                    activityLayout.addView(newLeaderboardCard)
 
-
+                    //call method to generate a space under the dynamic component
+                    scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
+                }
+                else //current user
+                {
+                    binding.tvScoreValue.text = GlobalClass.currentUser.score.toString()
+                    binding.tvAchievementValue.text = i.toString()
+                    binding.imgMyProfileImage.setImageBitmap(GlobalClass.currentUser.profilepicture)
+                    binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[GlobalClass.currentUser.badgeID])
+                }
             }
         }
-        else
+        else //get Achievements
         {
             GlobalClass.currentUser.userID = 1
             //if species summary must be loaded
