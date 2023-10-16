@@ -64,7 +64,7 @@ class GlobalClass: Application()
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun userachievements()
+        fun Userachievements()
         {
             userAchievements.add(
                 UserAchievementsDataClass(
@@ -321,10 +321,16 @@ class GlobalClass: Application()
         }
 
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate()
     {
         super.onCreate()
 
+        User()
+        Userachievements()
+        securityquestions()
+        observations()
+        AddAcheivements()
         //add badges
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge1))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge2))
