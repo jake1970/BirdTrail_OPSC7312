@@ -1,14 +1,14 @@
 package com.example.birdtrail_opsc7312
 
+
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Space
 import androidx.annotation.RequiresApi
 import androidx.core.view.forEach
@@ -18,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
-import java.time.LocalDate
 
 
 /**
@@ -275,6 +274,13 @@ class Add_Observation : Fragment() {
 
         //---------------------------------------------------------------------------------------------
 
+        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
+            val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+            view.addView(loadingProgressBar)
+        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
+
         var pastDistance = 0.0
         var pastHotspot  = eBirdJson2KtKotlin()
 
@@ -312,6 +318,12 @@ class Add_Observation : Fragment() {
                             pastHotspot.locName = "Unknown"
                         }
                         binding.tvCurrentLocation.text = pastHotspot.locName.toString()
+
+                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
+                        loadingProgressBar.visibility = View.GONE
+
+                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
                     }
                 }
 
