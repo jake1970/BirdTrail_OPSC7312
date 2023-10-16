@@ -1,24 +1,25 @@
 package com.example.birdtrail_opsc7312
 
+
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Space
 import androidx.annotation.RequiresApi
+import androidx.core.view.children
 import androidx.core.view.forEach
+import androidx.core.view.iterator
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
-import java.time.LocalDate
 
 
 /**
@@ -31,6 +32,8 @@ class Add_Observation : Fragment() {
     private var _binding: FragmentAddObservationBinding? = null
     private val binding get() = _binding!!
 
+    private var selectedOption = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     override fun onCreateView(
@@ -40,6 +43,10 @@ class Add_Observation : Fragment() {
 
         _binding = FragmentAddObservationBinding.inflate(inflater, container, false)
         val view = binding.root
+
+
+        val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+        view.addView(loadingProgressBar)
 
         //---------------------------------------------------------------------------------------------------------
 
@@ -104,11 +111,12 @@ class Add_Observation : Fragment() {
 
         fun populateBirdOptions(searchList: ArrayList<String>) {
 
+            val activityLayout = binding.llBirdList;
 
             for (birdName in searchList)
             {
 
-                val activityLayout = binding.llBirdList;
+
 
                 var birdOption = Card_SpeciesSelector(activity)
 
@@ -136,14 +144,22 @@ class Add_Observation : Fragment() {
                     binding.tvSpeciesName.text = birdOption.binding.tvSpecies.text
 
 
-                    //load the image
-                    lifecycleScope.launch {
-                        var imageHandler = ImageHandler()
-                        var image = imageHandler.GetImage(
-                            birdOption.binding.tvSpecies.text.toString()
-                        )
-                        binding.imgBirdImageExpanded.setImageBitmap(image)
+                    if (selectedOption != birdOption.binding.tvSpecies.text.toString()) {
+
+                        loadingProgressBar.visibility = View.VISIBLE
+
+                        //load the image
+                        lifecycleScope.launch {
+                            var imageHandler = ImageHandler()
+                            var image = imageHandler.GetImage(
+                                birdOption.binding.tvSpecies.text.toString()
+                            )
+                            binding.imgBirdImageExpanded.setImageBitmap(image)
+                            loadingProgressBar.visibility = View.GONE
+                        }
                     }
+
+                    selectedOption = birdOption.binding.tvSpecies.text.toString()
 
                 }
 
@@ -156,6 +172,16 @@ class Add_Observation : Fragment() {
                 activityLayout.addView(spacer)
 
             }
+
+
+            for (option in activityLayout)
+            {
+                if (option is Card_SpeciesSelector && option.binding.tvSpecies.text == selectedOption)
+                {
+                    option.callOnClick()
+                }
+            }
+
         }
 
 
@@ -231,49 +257,38 @@ class Add_Observation : Fragment() {
 
 
 
-        /*
-        for (i in 1..20) {
 
-            val activityLayout = binding.llBirdList;
-
-            var birdOption = Card_SpeciesSelector(activity)
+        //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
 
-            birdOption.binding.rlSelector.visibility = View.INVISIBLE
-           // birdOption.binding.tvContactName.text = "Jake Young"
-            //birdOption.binding.tvContactRole.text = "Senior Member"
 
-            //add the new view
-            activityLayout.addView(birdOption)
+        //if distance to closest hotspot is more than the max distance settable (60 km) then set the location as unknown
 
-            birdOption.setOnClickListener()
-            {
+        var userLocation: Location? = null
+        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+            userLocation = task.result
+            if (userLocation != null) {
 
-                activityLayout.forEach{ childView ->
-                    // do something with this childView
+                populateBirdOptions(uniqueBirdList)
 
-                    if (childView is Card_SpeciesSelector)
-                    {
-                        childView.binding.rlSelector.visibility = View.INVISIBLE
-                    }
+                binding.llBirdList.children.first().callOnClick()
 
-                }
+                binding.tvCurrentLocation.text = " Lon: " + userLocation!!.longitude.toString() + " Lat: " + userLocation!!.latitude.toString()
 
-                birdOption.binding.rlSelector.visibility = View.VISIBLE
+                loadingProgressBar.visibility = View.GONE
+
             }
-
-
-            val scale = requireActivity().resources.displayMetrics.density
-            val pixels = (14 * scale + 0.5f)
-
-            val spacer = Space(activity)
-            spacer.minimumHeight = pixels.toInt()
-            activityLayout.addView(spacer)
-
         }
-         */
+        //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
         //---------------------------------------------------------------------------------------------
+
+
+
+/*
+
+
 
         var pastDistance = 0.0
         var pastHotspot  = eBirdJson2KtKotlin()
@@ -307,16 +322,28 @@ class Add_Observation : Fragment() {
 
                     withContext (Dispatchers.Main) {
                         populateBirdOptions(uniqueBirdList)
+
+                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+                            binding.llBirdList.children.first().callOnClick()
+                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
                         if (pastHotspot.locName.isNullOrEmpty())
                         {
                             pastHotspot.locName = "Unknown"
                         }
                         binding.tvCurrentLocation.text = pastHotspot.locName.toString()
+
+
+                        loadingProgressBar.visibility = View.GONE
+
+
                     }
                 }
 
             }
         }
+
+ */
 
         binding.btnEnter.setOnClickListener()
         {
@@ -330,8 +357,16 @@ class Add_Observation : Fragment() {
 
 
                 newSighting.userID = GlobalClass.currentUser.userID
+
+                //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+                newSighting.lat = userLocation!!.latitude
+                newSighting.long = userLocation!!.longitude
+                //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+                /*
                 newSighting.lat = pastHotspot.lat!!
                 newSighting.long = pastHotspot.lng!!
+
+                 */
                 newSighting.birdName = binding.tvSpeciesName.text.toString()
 
                 //date is set by default
@@ -341,16 +376,20 @@ class Add_Observation : Fragment() {
                 GlobalClass.userObservations.add(newSighting)
 
 
+
+
+                requireActivity().findViewById<View>(R.id.home).callOnClick()
+
                 /*
-                var observationID: Int = 0,
-                var userID: Int = 0,
-                var lat: Double = 0.0,
-                var long: Double = 0.0,
-                var birdName: String = "",
-                var eBirdCode: String = "",
-                var date: LocalDate = LocalDate.now(),
-                var count: Int = 0
+                //create local fragment controller
+                val fragmentControl = FragmentHandler()
+
+                fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, requireActivity().supportFragmentManager)
                  */
+
+
+
+
             }
             catch (e: Error)
             {

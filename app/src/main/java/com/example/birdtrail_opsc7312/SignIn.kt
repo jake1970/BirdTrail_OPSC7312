@@ -1,13 +1,16 @@
 package com.example.birdtrail_opsc7312
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
 import com.example.birdtrail_opsc7312.databinding.SignInBinding
 
 class SignIn : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_in)
@@ -26,15 +29,47 @@ class SignIn : AppCompatActivity() {
 
         //---------------------------------------------------------------------------------------//
 
+
+        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
+        binding.etEmail.setText("User1")
+        binding.etPassword.setText("Password1")
+
+        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
+
+
         binding.btnSignIn.setOnClickListener()
         {
-            var intent = Intent(this, Homepage::class.java)
-            startActivity(intent)
+
+
+
+
+            val attemptSignIn = UserDataClass().validateUser(binding.etEmail.text.toString(), binding.etPassword.text.toString())
+
+            if (attemptSignIn == true)
+            {
+                var intent = Intent(this, Homepage::class.java)
+                startActivity(intent)
+            }
+            else
+            {
+                GlobalClass.InformUser(getString(R.string.failedSignIn), getString(R.string.incorrectEmailPassCombo), this)
+            }
+
+
         }
 
         binding.tvBack.setOnClickListener()
         {
             finish()
+        }
+
+
+        binding.tvSignUp.setOnClickListener()
+        {
+            var intent = Intent(this, SignUp::class.java)
+            startActivity(intent)
         }
 
     }

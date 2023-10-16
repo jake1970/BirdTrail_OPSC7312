@@ -15,7 +15,7 @@ class GlobalClass: Application()
     companion object
     {
         @RequiresApi(Build.VERSION_CODES.O)
-        var currentUser = UserObservationDataClass()
+        var currentUser = UserDataClass()
 
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
         var userObservations = arrayListOf<UserObservationDataClass>()
@@ -34,12 +34,14 @@ class GlobalClass: Application()
             alert.show()
         }
 
+
+
         fun User()
         {
             userData.add(
                 UserDataClass(
                     userID = 1,
-                    username = "User1",
+                    email = "User1",
                     password = "Password1",
                     questionID = 1,
                     securityanswer = "Gordan",
@@ -52,7 +54,7 @@ class GlobalClass: Application()
             userData.add(
                 UserDataClass(
                     userID = 2,
-                    username = "User2",
+                    email = "User2",
                     password = "Password2",
                     questionID = 1,
                     securityanswer = "Jordan",
@@ -65,7 +67,7 @@ class GlobalClass: Application()
             userData.add(
                 UserDataClass(
                     userID = 3,
-                    username = "User3",
+                    email = "User3",
                     password = "Password3",
                     questionID = 1,
                     securityanswer = "Heaven",

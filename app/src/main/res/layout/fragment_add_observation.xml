@@ -56,7 +56,7 @@
             android:layout_marginBottom="10dp"
             android:drawableLeft="@drawable/imglocation_pin"
             android:drawableTint="@color/white"
-            android:text="TextView"
+            android:text="@string/unknownText"
             android:textColor="@color/white"
             android:textSize="14dp" />
 
@@ -82,7 +82,7 @@
                     android:id="@+id/imgBirdImageExpanded"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_launcher_background"
+                    android:src="@drawable/imgbird"
                     app:shapeAppearanceOverlay="@style/roundedImageView"
                     app:srcCompat="@color/white" />
             </RelativeLayout>
@@ -115,7 +115,7 @@
                     android:paddingHorizontal="6dp"
                     android:textColor="@color/black"
                     android:background="@drawable/palette_full_12"
-                    android:text="TextView"
+                    android:text=""
                     />
 
                 <TextView
@@ -156,7 +156,7 @@
                         android:textAlignment="center"
                         android:background="@color/white"
                         android:textColor="@color/black"
-                        android:text="TextView" />
+                        android:text="" />
 
 
                     <ImageView

@@ -3,6 +3,8 @@ package com.example.birdtrail_opsc7312
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
@@ -22,11 +24,17 @@ class Homepage : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+        binding.root.addView(loadingProgressBar)
+
         GlobalScope.launch {
             //get bird observations
             var eBirdHandler = eBirdAPIHandler()
             eBirdHandler.getRecentObservations("ZA")
+
+
             withContext(Dispatchers.Main) {
+                loadingProgressBar.visibility = View.GONE
             }
         }
 
@@ -69,7 +77,7 @@ class Homepage : AppCompatActivity() {
             true
         }
 
-
+        findViewById<View>(R.id.placeholder).isClickable = false
 
 
         /*

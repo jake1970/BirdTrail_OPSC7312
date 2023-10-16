@@ -58,7 +58,7 @@
                 android:layout_marginRight="400dp"
                 android:backgroundTint="@color/light_blue"
                 android:text="@string/SettingsMetric"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 app:cornerRadius="12dp" />
 
             <Button
@@ -84,20 +84,27 @@
             android:textColor="@color/white"
             android:textSize="20dp"/>
 
+
         <com.google.android.material.slider.Slider
             android:id="@+id/slider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvDefaultDistance"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="35dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="35dp"
-            app:cornerRadius="12dp"
-            android:contentDescription="Default Distance"
+            android:layout_weight="1"
+            android:background="@drawable/palette_full_12"
+            android:stepSize="1.0"
             android:value="50.0"
             android:valueFrom="0.0"
-            android:background="@drawable/palette_full_12"
-            android:valueTo="50.0" />
+            android:valueTo="50.0"
+            app:cornerRadius="12dp"
+            app:labelBehavior="gone"
+            app:thumbColor="@color/black"
+            app:tickVisible="false"
+            app:trackColor="@color/light_blue"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/tvOptions"
