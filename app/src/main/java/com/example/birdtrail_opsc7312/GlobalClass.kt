@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
@@ -10,8 +11,12 @@ import java.time.LocalDate
 
 class GlobalClass: Application()
 {
+
     companion object
     {
+        @RequiresApi(Build.VERSION_CODES.O)
+        var currentUser = UserObservationDataClass()
+
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
         var userObservations = arrayListOf<UserObservationDataClass>()
         var userData = arrayListOf<UserDataClass>()
@@ -19,6 +24,15 @@ class GlobalClass: Application()
         var userAchievements = arrayListOf<UserAchievementsDataClass>()
         var acheivements = arrayListOf<AchievementsDataClass>()
         var badgeImages = arrayListOf<Bitmap>()
+
+        fun InformUser(messageTitle: String, messageText: String, context: Context) {
+            val alert = AlertDialog.Builder(context)
+            alert.setTitle(messageTitle)
+            alert.setMessage(messageText)
+            alert.setPositiveButton(context.getString(R.string.okText), null)
+
+            alert.show()
+        }
 
         fun User()
         {

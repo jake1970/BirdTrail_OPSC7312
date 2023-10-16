@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
+import androidx.annotation.RequiresApi
 import androidx.core.view.forEach
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -16,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
+import java.time.LocalDate
 
 
 /**
@@ -28,6 +31,7 @@ class Add_Observation : Fragment() {
     private var _binding: FragmentAddObservationBinding? = null
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +84,7 @@ class Add_Observation : Fragment() {
                 binding.tvNumberOfSightings.text = (++currentSightingValue).toString()
             }
         }
+
 
 
 
@@ -214,7 +219,8 @@ class Add_Observation : Fragment() {
                 var searchBirdList = ArrayList<String>()
 
                 for (birds in uniqueBirdList) {
-                    if (charSequence?.let { birds.contains(it) } == true) {
+//                    if (charSequence?.let { birds.contains(it) } == true) {
+                    if (birds.lowercase().contains(charSequence.toString().lowercase())) {
                         searchBirdList.add(birds)
                     }
                 }
@@ -265,13 +271,12 @@ class Add_Observation : Fragment() {
             activityLayout.addView(spacer)
 
         }
-
          */
 
         //---------------------------------------------------------------------------------------------
 
         var pastDistance = 0.0
-        var pastHotspot = "Unknown"
+        var pastHotspot  = eBirdJson2KtKotlin()
 
 
         //if distance to closest hotspot is more than the max distance settable (60 km) then set the location as unknown
@@ -295,18 +300,65 @@ class Add_Observation : Fragment() {
                             if (distanceInKm <= pastDistance || pastDistance == 0.0)
                             {
                                 pastDistance = distanceInKm
-                                pastHotspot = hotspot.locName.toString()
+                                pastHotspot = hotspot
                             }
                         }
                     }
 
                     withContext (Dispatchers.Main) {
                         populateBirdOptions(uniqueBirdList)
-                        binding.tvCurrentLocation.text = pastHotspot
+                        if (pastHotspot.locName.isNullOrEmpty())
+                        {
+                            pastHotspot.locName = "Unknown"
+                        }
+                        binding.tvCurrentLocation.text = pastHotspot.locName.toString()
                     }
                 }
 
             }
+        }
+
+        binding.btnEnter.setOnClickListener()
+        {
+
+            try {
+                var newSighting = UserObservationDataClass()
+
+                if (GlobalClass.userObservations.count() > 0) {
+                    newSighting.observationID = (GlobalClass.userObservations.last().observationID + 1)
+                }
+
+
+                newSighting.userID = GlobalClass.currentUser.userID
+                newSighting.lat = pastHotspot.lat!!
+                newSighting.long = pastHotspot.lng!!
+                newSighting.birdName = binding.tvSpeciesName.text.toString()
+
+                //date is set by default
+                newSighting.count = binding.tvNumberOfSightings.text.toString().toInt()
+
+
+                GlobalClass.userObservations.add(newSighting)
+
+
+                /*
+                var observationID: Int = 0,
+                var userID: Int = 0,
+                var lat: Double = 0.0,
+                var long: Double = 0.0,
+                var birdName: String = "",
+                var eBirdCode: String = "",
+                var date: LocalDate = LocalDate.now(),
+                var count: Int = 0
+                 */
+            }
+            catch (e: Error)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
+            }
+
+
+
         }
 
         // Inflate the layout for this fragment

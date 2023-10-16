@@ -55,6 +55,10 @@
     <string name="hotspotText">Hotspot</string>
     <string name="RankingLeaderboard">Leaderboard</string>
     <string name="RankingAchievements">Achievements</string>
+    <string name="okText">ok</string>
+    <string name="errorText">Error</string>
+    <string name="sightingsAmountText">Sighted:</string>
+    <string name="totalAmountText">Total:</string>
 
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic3QxMDA4MTgzOSIsImEiOiJjbG5lank2cmIwZHlyMmp0Y2h1c2VmZ2lkIn0.AU-LAXgDH6jTS1vHM9pfhw</string>

@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserObservationsBinding
+import java.time.LocalDate
 
 
 /**
@@ -25,6 +27,7 @@ class UserObservations : Fragment() {
     private var _binding: FragmentUserObservationsBinding? = null
     private val binding get() = _binding!!
     private val spacerSize = 14
+    private var onAllSightings = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,12 +51,38 @@ class UserObservations : Fragment() {
             {
                 binding.imgFilter.rotation = (180).toFloat()
 
+                GlobalClass.userObservations.reverse()
 
+                //reverse the order
+                if (onAllSightings == true)
+                {
+                    //latest sighting first
+                    populateViewContent(true, GlobalClass.userObservations)
+                }
+                else
+                {
+                    //reverse alphabetical order (Z-A)
+                    populateViewContent(false, GlobalClass.userObservations)
+                }
 
             }
             else
             {
                 binding.imgFilter.rotation = (0.0).toFloat()
+
+                GlobalClass.userObservations.reverse()
+
+                //reverse the order
+                if (onAllSightings == true)
+                {
+                    //oldest sighting first
+                    populateViewContent(true, GlobalClass.userObservations)
+                }
+                else
+                {
+                    //alphabetical order (A-Z)
+                    populateViewContent(false, GlobalClass.userObservations)
+                }
 
 
             }
@@ -64,7 +93,7 @@ class UserObservations : Fragment() {
         //---------------------------------------------------------------------------------------------
 
         //Load initial view of all sightings
-        populateViewContent(true)
+        populateViewContent(true, GlobalClass.userObservations)
 
 
         binding.tvAllSightings.setOnClickListener()
@@ -74,7 +103,7 @@ class UserObservations : Fragment() {
             animationManager.animateX(binding.vwSelectedView, 0f)
 
             //Load view of all sightings
-            populateViewContent(true)
+            populateViewContent(true, GlobalClass.userObservations)
         }
 
         binding.tvSpeciesSightings.setOnClickListener()
@@ -87,7 +116,7 @@ class UserObservations : Fragment() {
             animationManager.animateX(binding.vwSelectedView, -moveToPosition.x.toFloat())
 
             //Load grouped view of species sightings
-            populateViewContent(false)
+            populateViewContent(false, GlobalClass.userObservations)
 
         }
 
@@ -103,7 +132,7 @@ class UserObservations : Fragment() {
     //---------------------------------------------------------------------------------------------
     //Swap User Observation Views
     //---------------------------------------------------------------------------------------------
-    private fun populateViewContent(allSightings: Boolean){
+    private fun populateViewContent(allSightings: Boolean, searchList: ArrayList<UserObservationDataClass>){
 
         //loop iterations
         val loopCount = 20
@@ -126,11 +155,16 @@ class UserObservations : Fragment() {
         if (allSightings)
         {
             //loop through the sightings
-            for (i in 1..loopCount) {
+            for (sighting in searchList) {
 
                 //new dynamic component
                 var birdOption = Card_Observations_All(activity)
 
+
+                birdOption.binding.tvSpecies.text = sighting.birdName
+                birdOption.binding.tvDate.text = sighting.date.toString()
+                birdOption.binding.tvSighted.text = getString(R.string.sightingsAmountText) + " " + sighting.count.toString()
+
                 //add the dynamic component to the container view
                 activityLayout.addView(birdOption)
 
@@ -139,27 +173,111 @@ class UserObservations : Fragment() {
 
 
             }
+
+            onAllSightings = true
         }
-        else
-        {
+        else {
+
+            var speciesTotalList = arrayListOf<BirdSpeciesSightingDataClass>()
             //if species summary must be loaded
 
             //loop through the species
-            for (i in 1..loopCount) {
+            for (sighting in searchList)
+            {
 
+
+                var matchFound = false
+                for (species in speciesTotalList) {
+
+                    if (sighting.birdName == species.birdSpeciesName) {
+                        species.birdSpeciesTotalCount =
+                            species.birdSpeciesTotalCount + sighting.count
+                        matchFound = true
+                    }
+                }
+
+                if (matchFound == false) {
+                    var newSpeciesEntry = BirdSpeciesSightingDataClass()
+                    newSpeciesEntry.birdSpeciesName = sighting.birdName
+                    newSpeciesEntry.birdSpeciesTotalCount = sighting.count
+                    speciesTotalList.add(newSpeciesEntry)
+                }
+            }
+
+
+
+            for (species in speciesTotalList) {
 
                 //new dynamic component
                 var birdOption = Card_Observations_Species(activity)
 
+                birdOption.binding.tvSpecies.text = species.birdSpeciesName
+                birdOption.binding.tvSighted.text = getString(R.string.totalAmountText) + " " + species.birdSpeciesTotalCount.toString()
+
                 //add the dynamic component to the container view
                 activityLayout.addView(birdOption)
 
                 //call method to generate a space under the dynamic component
                 scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
 
+            }
+
+            onAllSightings = false
+        }
+
+
+        binding.etSearch.addTextChangedListener { charSequence ->
+
+            //check if there are existing dynamic components
+            if (binding.llBirdList.childCount != 0) {
+
+                //clear the dynamic components
+                binding.llBirdList.removeAllViews()
+            }
+
+
+            if (charSequence.isNullOrEmpty()) {
+
+                if (onAllSightings == true)
+                {
+                    populateViewContent(true, GlobalClass.userObservations)
+                }
+                else
+                {
+                    populateViewContent(false, GlobalClass.userObservations)
+                }
+
+                binding.imgFilter.isEnabled = true
+                binding.imgFilter.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), android.graphics.PorterDuff.Mode.SRC_IN)
+
 
             }
+            else
+            {
+
+                binding.imgFilter.isEnabled = false
+                binding.imgFilter.setColorFilter(ContextCompat.getColor(requireContext(), R.color.sub_grey), android.graphics.PorterDuff.Mode.SRC_IN)
+
+                var searchBirdList = arrayListOf<UserObservationDataClass>()
+
+                for (birds in GlobalClass.userObservations) {
+                    if (birds.birdName.lowercase().contains(charSequence.toString().lowercase())) {
+                        searchBirdList.add(birds)
+                    }
+                }
+
+                if (onAllSightings == true)
+                {
+                    populateViewContent(true, searchBirdList)
+                }
+                else
+                {
+                    populateViewContent(false, searchBirdList)
+                }
+            }
         }
+
+
 
     }
     //---------------------------------------------------------------------------------------------
