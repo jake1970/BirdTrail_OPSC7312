@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserFullMapViewBinding
@@ -26,6 +27,7 @@ class UserFullMapView : Fragment() {
 
     private var _binding: FragmentUserFullMapViewBinding? = null
     private val binding get() = _binding!!
+    private var distance: Int = 50
 
 
     override fun onCreateView(
@@ -36,13 +38,11 @@ class UserFullMapView : Fragment() {
         _binding = FragmentUserFullMapViewBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
         //create local fragment controller
         val fragmentControl = FragmentHandler()
 
         var fullMapView = FullMapFragment()
         fragmentControl.replaceFragment(fullMapView, R.id.cvFullMapFragmentContainer, requireActivity().supportFragmentManager)
-
 
         binding.tvBack.setOnClickListener()
         {
@@ -53,8 +53,6 @@ class UserFullMapView : Fragment() {
 
         binding.tvFilter.setOnClickListener()
         {
-
-
             if (initialHeight == 0)
             {
                 initialHeight = binding.rlTopBar.height
@@ -71,15 +69,9 @@ class UserFullMapView : Fragment() {
                 }
                 va.start()
 
-
-
                 binding.llFilterOptions.visibility = View.VISIBLE//}
 
-
                 binding.imgDarkenOverlay.visibility = View.VISIBLE
-
-
-
             }
             else
             {
@@ -96,21 +88,22 @@ class UserFullMapView : Fragment() {
                 binding.llFilterOptions.visibility = View.GONE//}
                 binding.imgDarkenOverlay.visibility = View.INVISIBLE
 
-
-
+                Toast.makeText(requireContext(), distance.toString(), Toast.LENGTH_SHORT).show()
+                fullMapView.loadMap(distance)
             }
 
-            binding.tvDistanceValue.text = "50KM"
+            //distance
+            binding.tvDistanceValue.text = "${distance}KM"
             binding.slDistance.addOnChangeListener { rangeSlider, value, fromUser ->
                 // Responds to when slider's value is changed
 
-                binding.tvDistanceValue.text = value.roundToInt().toString() + "KM"
+                distance = value.roundToInt()
+                binding.tvDistanceValue.text = "${distance}KM"
+//                fullMapView.removeAllAnnotations()
+//                fullMapView.addAnnotationsToMap(value.roundToInt())
             }
 
-
-
-
-
+            //time frame
             binding.spnTimeFrame.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -125,11 +118,7 @@ class UserFullMapView : Fragment() {
             })
 
         }
-
-
         // Inflate the layout for this fragment
         return view
     }
-
-
 }

@@ -45,6 +45,8 @@ import java.util.*
 
 class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
+    private var distance: Int = 60
+
     private lateinit var locationPermissionHelper: LocationPermissionHelper
 
     private val onIndicatorBearingChangedListener = OnIndicatorBearingChangedListener {
@@ -184,8 +186,21 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
         //---------------------------------------------------------------------------
 
+        loadMap(distance)
 
+//        mapView.getMapboxMap().loadStyleUri(
+//            Style.MAPBOX_STREETS
+//        ) {
+//            initLocationComponent()
+//            setupGesturesListener()
+//            addAnnotationsToMap(60)
+//        }
+    }
 
+    public fun loadMap(newDistance: Int)
+    {
+        distance = newDistance
+        mapView.invalidate()
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS
         ) {
@@ -194,6 +209,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
             addAnnotationsToMap()
         }
     }
+
+
 
     //----------------------------------------------------------------------------------------------------------------------------
     var openInFullView = false
@@ -251,7 +268,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
-    public fun onCameraTrackingDismissed() {
+    private fun onCameraTrackingDismissed() {
         Toast.makeText(requireContext(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
         mapView.location
             .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
@@ -259,7 +276,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
             .removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
         mapView.gestures.removeOnMoveListener(onMoveListener)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -307,7 +323,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     }
 
     @SuppressLint("MissingPermission", "SetTextI18n")
-    private fun addAnnotationsToMap() {
+    public fun addAnnotationsToMap() {
+
+        removeAllAnnotations()
         //Toast.makeText(requireContext(), checkPermissions().toString(), Toast.LENGTH_SHORT).show()
         if (checkPermissions())
         {
@@ -329,7 +347,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                             // Calculate the distance between the user's location and the hotspot.
                             val distanceInKm = calculateDistance(userLocation!!.latitude, userLocation!!.longitude, hotspot.lat!!, hotspot.lng!!)
                             // If the distance is less than or equal to 50km, add an annotation for this hotspot.
-                            if (distanceInKm <= 60) { //200
+                            if (distanceInKm <= distance) { //200
                                 // Set options for the resulting symbol layer.
                                 val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
                                     // Define a geographic coordinate from the hotspot's lat and lng.
@@ -367,6 +385,14 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
+    public fun removeAllAnnotations() {
+        val annotationApi = mapView?.annotations
+        val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
+        pointAnnotationManager?.let { manager ->
+            val annotations = manager.annotations
+            manager.delete(annotations)
+        }
+    }
 
 
     private fun checkPermissions(): Boolean {
