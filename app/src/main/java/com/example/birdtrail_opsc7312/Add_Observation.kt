@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Space
 import androidx.annotation.RequiresApi
+import androidx.core.view.children
 import androidx.core.view.forEach
+import androidx.core.view.iterator
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +32,8 @@ class Add_Observation : Fragment() {
     private var _binding: FragmentAddObservationBinding? = null
     private val binding get() = _binding!!
 
+    private var selectedOption = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     override fun onCreateView(
@@ -39,6 +43,10 @@ class Add_Observation : Fragment() {
 
         _binding = FragmentAddObservationBinding.inflate(inflater, container, false)
         val view = binding.root
+
+
+        val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+        view.addView(loadingProgressBar)
 
         //---------------------------------------------------------------------------------------------------------
 
@@ -103,11 +111,12 @@ class Add_Observation : Fragment() {
 
         fun populateBirdOptions(searchList: ArrayList<String>) {
 
+            val activityLayout = binding.llBirdList;
 
             for (birdName in searchList)
             {
 
-                val activityLayout = binding.llBirdList;
+
 
                 var birdOption = Card_SpeciesSelector(activity)
 
@@ -135,14 +144,22 @@ class Add_Observation : Fragment() {
                     binding.tvSpeciesName.text = birdOption.binding.tvSpecies.text
 
 
-                    //load the image
-                    lifecycleScope.launch {
-                        var imageHandler = ImageHandler()
-                        var image = imageHandler.GetImage(
-                            birdOption.binding.tvSpecies.text.toString()
-                        )
-                        binding.imgBirdImageExpanded.setImageBitmap(image)
+                    if (selectedOption != birdOption.binding.tvSpecies.text.toString()) {
+
+                        loadingProgressBar.visibility = View.VISIBLE
+
+                        //load the image
+                        lifecycleScope.launch {
+                            var imageHandler = ImageHandler()
+                            var image = imageHandler.GetImage(
+                                birdOption.binding.tvSpecies.text.toString()
+                            )
+                            binding.imgBirdImageExpanded.setImageBitmap(image)
+                            loadingProgressBar.visibility = View.GONE
+                        }
                     }
+
+                    selectedOption = birdOption.binding.tvSpecies.text.toString()
 
                 }
 
@@ -155,6 +172,16 @@ class Add_Observation : Fragment() {
                 activityLayout.addView(spacer)
 
             }
+
+
+            for (option in activityLayout)
+            {
+                if (option is Card_SpeciesSelector && option.binding.tvSpecies.text == selectedOption)
+                {
+                    option.callOnClick()
+                }
+            }
+
         }
 
 
@@ -230,55 +257,14 @@ class Add_Observation : Fragment() {
 
 
 
-        /*
-        for (i in 1..20) {
 
-            val activityLayout = binding.llBirdList;
-
-            var birdOption = Card_SpeciesSelector(activity)
-
-
-            birdOption.binding.rlSelector.visibility = View.INVISIBLE
-           // birdOption.binding.tvContactName.text = "Jake Young"
-            //birdOption.binding.tvContactRole.text = "Senior Member"
-
-            //add the new view
-            activityLayout.addView(birdOption)
-
-            birdOption.setOnClickListener()
-            {
-
-                activityLayout.forEach{ childView ->
-                    // do something with this childView
-
-                    if (childView is Card_SpeciesSelector)
-                    {
-                        childView.binding.rlSelector.visibility = View.INVISIBLE
-                    }
-
-                }
-
-                birdOption.binding.rlSelector.visibility = View.VISIBLE
-            }
-
-
-            val scale = requireActivity().resources.displayMetrics.density
-            val pixels = (14 * scale + 0.5f)
-
-            val spacer = Space(activity)
-            spacer.minimumHeight = pixels.toInt()
-            activityLayout.addView(spacer)
-
-        }
-         */
 
         //---------------------------------------------------------------------------------------------
 
-        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
 
-            val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
-            view.addView(loadingProgressBar)
-        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
+
+
 
 
         var pastDistance = 0.0
@@ -313,17 +299,21 @@ class Add_Observation : Fragment() {
 
                     withContext (Dispatchers.Main) {
                         populateBirdOptions(uniqueBirdList)
+
+                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+                            binding.llBirdList.children.first().callOnClick()
+                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
                         if (pastHotspot.locName.isNullOrEmpty())
                         {
                             pastHotspot.locName = "Unknown"
                         }
                         binding.tvCurrentLocation.text = pastHotspot.locName.toString()
 
-                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
 
                         loadingProgressBar.visibility = View.GONE
 
-                        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
+
                     }
                 }
 
@@ -352,6 +342,11 @@ class Add_Observation : Fragment() {
 
                 GlobalClass.userObservations.add(newSighting)
 
+
+                //create local fragment controller
+                val fragmentControl = FragmentHandler()
+
+                fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, requireActivity().supportFragmentManager)
 
                 /*
                 var observationID: Int = 0,
