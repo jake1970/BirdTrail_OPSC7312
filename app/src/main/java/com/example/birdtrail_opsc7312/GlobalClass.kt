@@ -350,6 +350,14 @@ class GlobalClass: Application()
         securityquestions()
         observations()
         AddAcheivements()
+
+        //set user images
+        var profileImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultprofile)
+        for (i in 1..userData.size)
+        {
+            userData[i-1].profilepicture = profileImage
+        }
+
         //add badges
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge1))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge2))
