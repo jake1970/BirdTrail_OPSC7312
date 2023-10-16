@@ -71,8 +71,8 @@ import java.util.*
 
 class MapDirectionsActivity : AppCompatActivity()
 {
-
-    private companion object {
+    private companion object
+    {
         private const val BUTTON_ANIMATION_DURATION = 1500L
     }
 
@@ -302,7 +302,7 @@ class MapDirectionsActivity : AppCompatActivity()
      * Gets notified with progress along the currently active route.
      */
     private val routeProgressObserver = RouteProgressObserver { routeProgress ->
-// update the camera position to account for the progressed fragment of the route
+        // update the camera position to account for the progressed fragment of the route
         viewportDataSource.onRouteProgressChanged(routeProgress)
         viewportDataSource.evaluate()
 
@@ -345,7 +345,7 @@ class MapDirectionsActivity : AppCompatActivity()
      */
     private val routesObserver = RoutesObserver { routeUpdateResult ->
         if (routeUpdateResult.navigationRoutes.isNotEmpty()) {
-// generate route geometries asynchronously and render them
+            // generate route geometries asynchronously and render them
             routeLineApi.setNavigationRoutes(
                 routeUpdateResult.navigationRoutes
             ) { value ->
@@ -503,6 +503,7 @@ class MapDirectionsActivity : AppCompatActivity()
                 findRoute()
                 true
             }
+            findRoute()
         }
 
         // initialize view interactions
@@ -525,7 +526,6 @@ class MapDirectionsActivity : AppCompatActivity()
         // set initial sounds button state
         binding.soundButton.unmute()
 
-        findRoute()
     }
 
     override fun onDestroy() {
@@ -651,12 +651,4 @@ class MapDirectionsActivity : AppCompatActivity()
         binding.routeOverview.visibility = View.INVISIBLE
         binding.tripProgressCard.visibility = View.INVISIBLE
     }
-
-
-
-
-
-
-
-
 }
