@@ -2,6 +2,9 @@ package com.example.birdtrail_opsc7312
 
 import android.content.Intent
 import android.app.Activity
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +17,7 @@ import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
+import java.io.IOException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +35,7 @@ class AppSettings : Fragment() {
     private var param2: String? = null
     private var _binding: FragmentAppSettingsBinding? = null
     private val binding get() = _binding!!
+    private var selectedImageBitmap : Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +52,17 @@ class AppSettings : Fragment() {
         _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
 
+
+        binding.btnChangePassword.setOnClickListener()
+        {
+
+        }
+
         binding.btnChangeProfilePicture.setOnClickListener()
         {
             Gallery()
         }
+
 
         binding.btnLogOut.setOnClickListener()
         {
@@ -90,11 +102,23 @@ class AppSettings : Fragment() {
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null)
         {
-            val selectedImageUri = data.data
+            val selectedImageURI = data.data
+            selectedImageBitmap = uriToBitmap(selectedImageURI)
         }
 
-
     }
+
+    private fun uriToBitmap(uri: Uri?): Bitmap? {
+        if (uri == null) return null
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     companion object {
 
