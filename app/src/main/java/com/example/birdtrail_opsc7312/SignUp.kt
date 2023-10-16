@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -67,8 +68,22 @@ class SignUp : AppCompatActivity() {
 
 
                 if (attemptRegister == "") {
-                    GlobalClass.InformUser(getString(R.string.completedSignUp), getString(R.string.instructToSignIn), this)
-                    finish()
+
+                   //GlobalClass.InformUser(getString(R.string.completedSignUp), getString(R.string.instructToSignIn), this)
+
+                    val alert = AlertDialog.Builder(this)
+                    alert.setTitle(getString(R.string.completedSignUp))
+                    alert.setMessage(getString(R.string.instructToSignIn))
+                    alert.setPositiveButton(getString(R.string.okText)){ dialog, which ->
+
+                        var intent = Intent(this, LandingPage::class.java)
+                        startActivity(intent)
+
+                    }
+                    alert.show()
+
+
+
                 } else {
                     GlobalClass.InformUser(getString(R.string.failedSignUp), attemptRegister, this)
                 }
