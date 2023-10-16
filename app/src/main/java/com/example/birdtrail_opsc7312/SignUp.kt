@@ -87,6 +87,12 @@ class SignUp : AppCompatActivity() {
             finish()
         }
 
+        binding.tvSignIn.setOnClickListener()
+        {
+            var intent = Intent(this, SignIn::class.java)
+            startActivity(intent)
+        }
+
         binding.spnSecurityQuestion.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,

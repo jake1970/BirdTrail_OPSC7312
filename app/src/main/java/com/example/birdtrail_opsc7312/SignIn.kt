@@ -55,5 +55,12 @@ class SignIn : AppCompatActivity() {
             finish()
         }
 
+
+        binding.tvSignUp.setOnClickListener()
+        {
+            var intent = Intent(this, SignUp::class.java)
+            startActivity(intent)
+        }
+
     }
 }

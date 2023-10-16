@@ -72,6 +72,9 @@
     <string name="passwordNeedsToStartWithUpperCaseLetter">Password needs start with an upper case character</string>
     <string name="passwordNeedsSpecialCharacter">Password needs to include one of the following special characters: -?!@#£$%+=&amp;</string>
     <string name="passwordSpecialCharacters">-?!@#£$%+=&amp;</string>
+    <string name="emailAlreadyExists">Email Already Exists</string>
+    <string name="emailNotValid">Email is not valid</string>
+    <string name="passwordsNotMatching">Passwords do not match</string>
 
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic3QxMDA4MTgzOSIsImEiOiJjbG5lank2cmIwZHlyMmp0Y2h1c2VmZ2lkIn0.AU-LAXgDH6jTS1vHM9pfhw</string>

@@ -116,7 +116,7 @@ data class UserDataClass(
     fun registerUser(userEmail: String, userPassword: String, userConfirmPassword: String, securityQuestion: Int, securityAnswer: String, context : Context): String
     {
 
-        //var validRegistration = true
+
         var invalidEntries = ""
 
         //loop through users
@@ -128,8 +128,7 @@ data class UserDataClass(
                 //if user exists
                 GlobalClass.currentUser = indexUser
 
-               // validRegistration = false
-                invalidEntries += "Email Already Exists\n"
+                invalidEntries += context.getString(R.string.emailAlreadyExists) + "\n"
 
                 //exit loop
                 break
@@ -144,14 +143,14 @@ data class UserDataClass(
 
             if (evaluateEmail == false)
             {
-                invalidEntries += "Email is not valid\n"
+                invalidEntries += context.getString(R.string.emailNotValid) + "\n"
             }
         }
 
 
         if (userPassword != userConfirmPassword)
         {
-            invalidEntries += "Passwords do not match\n"
+            invalidEntries += context.getString(R.string.passwordsNotMatching) + "\n"
         }
         else
         {
