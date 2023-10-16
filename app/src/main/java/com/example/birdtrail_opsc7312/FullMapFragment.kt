@@ -128,13 +128,10 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         )
 
  */
-
         //---------------------------------------------------------------------------
 
         if (centerOnHotspot == true)
         {
-
-
 
             val hotspotLong = arguments?.getDouble("hotspotLong")
             val hotspotLat = arguments?.getDouble("hotspotLat")
@@ -148,7 +145,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
  */
 
-
             val hotspotPoint = hotspotLong?.let { hotspotLat?.let { it1 -> Point.fromLngLat(it, it1) } }
 
             val cameraPosition = CameraOptions.Builder()
@@ -157,6 +153,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                 .build()
             // set camera position
             mapView.getMapboxMap().setCamera(cameraPosition)
+
 
                         /*
             mapView.getMapboxMap().setCamera(
@@ -246,11 +243,15 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                 }.toJson()
             )
         }
-        locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-        locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+        if (arguments?.getBoolean("hotspotCamera") != true)
+        {
+            locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+            locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+
+        }
     }
 
-    private fun onCameraTrackingDismissed() {
+    public fun onCameraTrackingDismissed() {
         Toast.makeText(requireContext(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
         mapView.location
             .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
@@ -396,11 +397,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
         return earthRadiusKm * c
     }
-
-
-
-
-
 
 
 
