@@ -1,10 +1,19 @@
 package com.example.birdtrail_opsc7312
 
+import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import android.provider.MediaStore
+import android.widget.Toast
+import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
+import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
+import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
+import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +29,8 @@ class AppSettings : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var _binding: FragmentAppSettingsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,17 +39,66 @@ class AppSettings : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_app_settings, container, false)
+
+        _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        binding.btnChangeProfilePicture.setOnClickListener()
+        {
+            Gallery()
+        }
+
+        binding.btnLogOut.setOnClickListener()
+        {
+            var intent = Intent(requireActivity(), LandingPage::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnMetric.setOnClickListener()
+        {
+
+            val blue = ContextCompat.getColor(requireContext(),R.color.light_blue)
+            val white = ContextCompat.getColor(requireContext(),R.color.white)
+            binding.btnImperial.setBackgroundColor(white)
+            binding.btnMetric.setBackgroundColor(blue)
+
+        }
+
+        binding.btnImperial.setOnClickListener()
+        {
+            val blue = ContextCompat.getColor(requireContext(),R.color.light_blue)
+            val white = ContextCompat.getColor(requireContext(),R.color.white)
+            binding.btnImperial.setBackgroundColor(blue)
+            binding.btnMetric.setBackgroundColor(white)
+        }
+        return view
     }
 
-    /*
+    private fun Gallery()
+    {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_PICK_IMAGE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null)
+        {
+            val selectedImageUri = data.data
+        }
+
+
+    }
+
     companion object {
+
+        private const val REQUEST_PICK_IMAGE = 123
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -57,6 +117,5 @@ class AppSettings : Fragment() {
                 }
             }
     }
-    */
 
 }
