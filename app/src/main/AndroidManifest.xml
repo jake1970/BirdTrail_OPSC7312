@@ -37,9 +37,6 @@
             android:name=".Card_Leaderboard"
             android:exported="false" />
         <activity
-            android:name=".SettingsPage"
-            android:exported="false" />
-        <activity
             android:name=".SignUp"
             android:exported="false" />
         <activity
