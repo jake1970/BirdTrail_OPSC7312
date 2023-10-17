@@ -66,7 +66,6 @@ class AppSettings : Fragment() {
         binding.btnChangeProfilePicture.setOnClickListener()
         {
             Gallery()
-            GlobalClass.currentUser.profilepicture = selectedImageBitmap
         }
 
         //log out user
@@ -145,6 +144,7 @@ class AppSettings : Fragment() {
     }
 
     //method to gather the image you have selected and call the Change Uri to Bitmap method to save image
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -153,6 +153,7 @@ class AppSettings : Fragment() {
             val selectedImageURI = data.data
             GlobalClass.InformUser("Confirmation","Image Selected Saved", requireContext())
             selectedImageBitmap = uriToBitmap(selectedImageURI)
+            GlobalClass.currentUser.profilepicture = selectedImageBitmap
         }
     }
 
