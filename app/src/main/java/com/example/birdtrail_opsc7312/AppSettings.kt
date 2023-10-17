@@ -3,6 +3,7 @@ package com.example.birdtrail_opsc7312
 import android.content.Intent
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -31,6 +32,7 @@ class AppSettings : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    //binding along with the image and new password
     private var _binding: FragmentAppSettingsBinding? = null
     private val binding get() = _binding!!
     private var selectedImageBitmap : Bitmap? = null
@@ -51,23 +53,27 @@ class AppSettings : Fragment() {
         _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //button change password
         binding.btnChangePassword.setOnClickListener()
         {
             showPasswordChangeDialog()
         }
 
+        //change profile picture
         binding.btnChangeProfilePicture.setOnClickListener()
         {
             Gallery()
             UserDataClass().profilepicture = selectedImageBitmap
         }
 
+        //log out user
         binding.btnLogOut.setOnClickListener()
         {
             var intent = Intent(requireActivity(), LandingPage::class.java)
             startActivity(intent)
         }
 
+        //metric button
         binding.btnMetric.setOnClickListener()
         {
 
@@ -78,6 +84,7 @@ class AppSettings : Fragment() {
 
         }
 
+        //imperial button
         binding.btnImperial.setOnClickListener()
         {
             val blue = ContextCompat.getColor(requireContext(),R.color.light_blue)
@@ -88,7 +95,8 @@ class AppSettings : Fragment() {
         return view
     }
 
-
+//Password Change Dialog, this method will prompt the user as they have elected to change password
+//User will enter a password and then go through the validation method before telling the user if the password has been changed
     private fun showPasswordChangeDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Change Password")
@@ -104,12 +112,12 @@ class AppSettings : Fragment() {
 
             if (validatePassword.isEmpty())
             {
-                Toast.makeText(requireContext(), "Password changed successfully", Toast.LENGTH_SHORT).show()
+                GlobalClass.InformUser("Confirmation","Password changed successfully", requireContext())
                 SavedPassword = newPassword
 
             } else
             {
-                Toast.makeText(requireContext(), "Password changed failed", Toast.LENGTH_SHORT).show()
+                GlobalClass.InformUser("Confirmation","Password Invalid", requireContext())
             }
         }
 
@@ -120,6 +128,7 @@ class AppSettings : Fragment() {
         builder.show()
     }
 
+    //method to access gallery on your phone
     private fun Gallery()
     {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -127,18 +136,19 @@ class AppSettings : Fragment() {
         startActivityForResult(intent, REQUEST_PICK_IMAGE)
     }
 
+    //method to gather the image you have selected and call the Change Uri to Bitmap method to save image
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null)
         {
-            Toast.makeText(requireContext(), "Image Selected Saved", Toast.LENGTH_SHORT).show()
             val selectedImageURI = data.data
+            GlobalClass.InformUser("Confirmation","Image Selected Saved", requireContext())
             selectedImageBitmap = uriToBitmap(selectedImageURI)
         }
-
     }
 
+    //method to change URI to Bitmap format
     private fun uriToBitmap(uri: Uri?): Bitmap? {
         if (uri == null) return null
         return try {
