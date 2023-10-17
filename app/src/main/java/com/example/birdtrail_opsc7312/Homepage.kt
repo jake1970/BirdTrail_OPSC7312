@@ -45,6 +45,7 @@ class Homepage : AppCompatActivity() {
 
 
 
+
         //Hide the action bar
         supportActionBar?.hide()
 
@@ -117,4 +118,9 @@ class Homepage : AppCompatActivity() {
 
 
     }
+
+    override fun onBackPressed() {
+        // Do nothing
+    }
+
 }
