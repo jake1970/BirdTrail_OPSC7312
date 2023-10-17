@@ -553,9 +553,14 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     }
 
 
+    private fun kilometersToMiles(kilometers: Double): Double {
+        // 1 kilometer = 0.62137119 miles
+        return kilometers * 0.62137119
+    }
 
     // Function to calculate distance between two points in km using Haversine formula
-        fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val earthRadiusKm = 6371.0
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
@@ -563,7 +568,16 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
                 Math.sin(dLon / 2) * Math.sin(dLon / 2)
         val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-        return earthRadiusKm * c
+
+        var measurement = earthRadiusKm * c
+
+
+        if (GlobalClass.currentUser.isMetric == false)
+        {
+            measurement = kilometersToMiles(measurement)
+        }
+
+        return measurement
     }
 
 

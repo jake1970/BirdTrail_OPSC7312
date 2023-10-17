@@ -45,6 +45,7 @@ class UserFullMapView : Fragment() {
     private lateinit var currentTimeFrame: String
     private var currentSearchTerm = ""
 
+    private var measurementSymbol = "KM"
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -54,6 +55,23 @@ class UserFullMapView : Fragment() {
 
         _binding = FragmentUserFullMapViewBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        //------------------------------------------------------------------------------------------
+        //handle measurements
+        //------------------------------------------------------------------------------------------
+
+        if (GlobalClass.currentUser.isMetric == false)
+        {
+            measurementSymbol = "mi"
+            binding.slDistance.valueTo = 40f
+            binding.slDistance.value = 30f
+            currentDistance = 30
+        }
+
+
+
+        //------------------------------------------------------------------------------------------
+
 
         currentTimeFrame = binding.spnTimeFrame.selectedItem.toString()
 
@@ -121,7 +139,7 @@ class UserFullMapView : Fragment() {
             //binding.tvDistanceValue.text = "${distance}KM"
             binding.slDistance.addOnChangeListener { rangeSlider, value, fromUser ->
 
-                binding.tvDistanceValue.text = "${value.toInt()}KM"
+                binding.tvDistanceValue.text = "${value.toInt()}$measurementSymbol"
 //
             }
 
@@ -166,9 +184,15 @@ class UserFullMapView : Fragment() {
 
         }
 
+        binding.tvDistanceValue.text = "${currentDistance}$measurementSymbol"
+
         // Inflate the layout for this fragment
         return view
     }
+
+
+
+
 
     private fun modifyMap()
     {
