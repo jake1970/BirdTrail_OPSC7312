@@ -78,7 +78,8 @@ class SignIn : AppCompatActivity() {
 
         binding.tvBack.setOnClickListener()
         {
-            finish()
+            var intent = Intent(this, LandingPage::class.java)
+            startActivity(intent)
         }
 
 

@@ -34,11 +34,27 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 app:shapeAppearanceOverlay="@style/circleImageView"
-                app:srcCompat="@color/white"
+                app:contentPadding="8dp"
+                app:srcCompat="@drawable/imgbirdcard"
+                android:tint="@color/white"
                 android:layout_marginLeft="8dp"
                 android:layout_weight="0"
                 android:layout_marginRight="14dp"
                 />
+
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:layout_gravity="center"-->
+<!--                android:id="@+id/imgBirdImage"-->
+<!--                android:layout_width="56dp"-->
+<!--                android:layout_height="56dp"-->
+<!--                app:shapeAppearanceOverlay="@style/circleImageView"-->
+<!--                app:contentPadding="8dp"-->
+<!--                app:srcCompat="@drawable/imgbirdcard"-->
+<!--                android:background="@color/white"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_weight="0"-->
+<!--                android:layout_marginRight="14dp"-->
+<!--                />-->
 
         </RelativeLayout>
 

@@ -81,7 +81,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                     userLocation = task.result
                     if (userLocation != null) {
-                        GlobalScope.launch(Dispatchers.IO) {
+                        //GlobalScope.launch(Dispatchers.IO) {
                             // Your code here...
 
 
@@ -106,7 +106,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                                 }
                             }
-                        }
+                        //}
                     }
                 }
             } else {
@@ -148,6 +148,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         //======================================================================================================
         //add componets
         //activityLayout.addView(closestGeneralSighting)
+
+
 
         //call method to generate a space under the dynamic component
         scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)

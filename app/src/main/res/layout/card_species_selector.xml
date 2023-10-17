@@ -33,7 +33,9 @@
                 android:layout_width="46dp"
                 android:layout_height="46dp"
                 app:shapeAppearanceOverlay="@style/circleImageView"
-                app:srcCompat="@color/white"
+                app:contentPadding="8dp"
+                app:srcCompat="@drawable/imgbirdcard"
+                android:tint="@color/white"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="14dp"
                 />
