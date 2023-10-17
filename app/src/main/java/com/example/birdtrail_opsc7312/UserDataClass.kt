@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.text.TextUtils
 import android.util.Patterns
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -207,7 +208,7 @@ data class UserDataClass(
 
         if (!invalidEntries.contains(context.getString(R.string.usernameAlreadyExists)))
         {
-            var evaluateUsername = validateUserUsername(userEmail, context)
+            var evaluateUsername = validateUserUsername(userUsername, context)
 
             if (evaluateUsername != "")
             {
@@ -241,14 +242,16 @@ data class UserDataClass(
             {
 
                 newUser.userID = GlobalClass.userData.last().userID + 1
+              //  Toast.makeText(context, newUser.userID.toString(), Toast.LENGTH_SHORT).show()
 
             }
 
             newUser.email = userEmail
+            newUser.username = userUsername
             newUser.password = userPassword
             newUser.questionID = securityQuestion
             newUser.securityanswer = securityanswer
-            newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgperson)?.toBitmap()
+            newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgdefaultprofile)?.toBitmap()
             newUser.registrationDate = LocalDate.now()
 
 

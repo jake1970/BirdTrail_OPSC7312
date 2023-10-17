@@ -122,7 +122,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 observationlist.add(GlobalClass.userObservations[i - 1])
             }
         }
-        var userSighting = observationlist.last()
+
+
+            var userSighting = observationlist.last()
+
+
 
         latestUserSighting.binding.tvSpecies.text = userSighting.birdName
         latestUserSighting.binding.tvSighted.text = userSighting.date.toString()

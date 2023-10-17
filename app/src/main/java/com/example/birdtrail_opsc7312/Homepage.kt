@@ -26,6 +26,8 @@ class Homepage : AppCompatActivity() {
         var binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
 
         val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
         binding.root.addView(loadingProgressBar)
