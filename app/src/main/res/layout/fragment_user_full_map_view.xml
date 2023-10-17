@@ -212,6 +212,18 @@
                 android:text="@string/backText"
                 android:textColor="@color/white"
                 />
+
+
+            <ImageView
+                android:id="@+id/imgCenterMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/imguser_location"
+                android:scaleY="0.8"
+                android:scaleX="0.8"
+                app:tint="@color/white" />
+
             <TextView
                 android:id="@+id/tvFilter"
                 android:layout_width="wrap_content"

@@ -20,6 +20,8 @@ class GlobalClass: Application()
         var currentUser = UserDataClass()
         var totalObservations = 0
 
+        var showCenterOnUserIndicator = true
+
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
         var userObservations = arrayListOf<UserObservationDataClass>()
         var userData = arrayListOf<UserDataClass>()
@@ -198,6 +200,8 @@ class GlobalClass: Application()
                 ))
 
         }
+
+
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun Userachievements()

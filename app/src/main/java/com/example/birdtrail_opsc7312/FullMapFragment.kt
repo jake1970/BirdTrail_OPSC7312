@@ -1,6 +1,7 @@
 package com.example.birdtrail_opsc7312
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
@@ -16,6 +17,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -36,6 +38,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.OnMoveListener
+import com.mapbox.maps.plugin.gestures.addOnMoveListener
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
@@ -64,7 +67,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         mapView.gestures.focalPoint = mapView.getMapboxMap().pixelForCoordinate(it)
     }
 
-    private val onMoveListener = object : OnMoveListener {
+    //private val onMoveListener = object : OnMoveListener {
+     var onMoveListener = object : OnMoveListener {
         override fun onMoveBegin(detector: MoveGestureDetector) {
             onCameraTrackingDismissed()
         }
@@ -74,7 +78,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
 
         override fun onMoveEnd(detector: MoveGestureDetector) {}
-
     }
 
     private lateinit var mapView: MapView
@@ -129,7 +132,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun onMapReady() {
+     fun onMapReady() {
 /*
         mapView.getMapboxMap().setCamera(
             CameraOptions.Builder()
@@ -196,6 +199,11 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
         loadMap()
 
+        // Accuracy ring is only shown when zoom is greater than or equal to 18
+
+
+
+
 //        mapView.getMapboxMap().loadStyleUri(
 //            Style.MAPBOX_STREETS
 //        ) {
@@ -204,6 +212,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 //            addAnnotationsToMap(60)
 //        }
     }
+
+
 
     //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
@@ -296,7 +306,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
-    private fun onCameraTrackingDismissed() {
+    //private fun onCameraTrackingDismissed() {
+     fun onCameraTrackingDismissed() {
         Toast.makeText(requireContext(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
         mapView.location
             .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)

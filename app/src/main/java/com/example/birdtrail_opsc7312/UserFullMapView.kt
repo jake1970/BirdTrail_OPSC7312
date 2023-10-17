@@ -2,20 +2,31 @@ package com.example.birdtrail_opsc7312
 
 
 import android.R.attr.button
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserFullMapViewBinding
+import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.maps.extension.style.expressions.dsl.generated.switchCase
+import com.mapbox.maps.plugin.gestures.OnMoveListener
+import com.mapbox.maps.plugin.gestures.gestures
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 
@@ -35,6 +46,7 @@ class UserFullMapView : Fragment() {
     private var currentSearchTerm = ""
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -129,6 +141,30 @@ class UserFullMapView : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             })
 
+
+
+        fullMapView.onMoveListener = object : OnMoveListener {
+            override fun onMoveBegin(detector: MoveGestureDetector) {
+                fullMapView.onCameraTrackingDismissed()
+                //binding.imgCenterMap.visibility = View.VISIBLE
+                ObjectAnimator.ofFloat( binding.imgCenterMap, View.ALPHA, 0.0f, 1.0f).setDuration(600).start();
+            }
+
+            override fun onMove(detector: MoveGestureDetector): Boolean {
+                return false
+            }
+
+            override fun onMoveEnd(detector: MoveGestureDetector) {}
+
+        }
+
+        binding.imgCenterMap.setOnClickListener()
+        {
+
+                    fullMapView.onMapReady()
+                    ObjectAnimator.ofFloat(binding.imgCenterMap, View.ALPHA, 1.0f, 0.0f).setDuration(600).start();
+
+        }
 
         // Inflate the layout for this fragment
         return view
