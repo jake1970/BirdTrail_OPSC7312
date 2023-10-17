@@ -101,6 +101,7 @@
                         android:id="@+id/imgMyProfileImage"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
+                        android:scaleType="centerCrop"
                         app:shapeAppearanceOverlay="@style/circleImageView"
                         android:layout_marginLeft="16dp"
                         app:srcCompat="@color/white"
@@ -112,7 +113,6 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_alignBottom="@id/imgMyProfileImage"
-                        app:shapeAppearanceOverlay="@style/circleImageView"
                         app:srcCompat="@color/sub_grey" />
 
                 </RelativeLayout>

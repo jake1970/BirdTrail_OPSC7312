@@ -141,7 +141,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
             activityLayout.removeAllViews()
         }
 
-        //if all sightings must be loaded
+        //if leaderboard must be loaded
         if (leaderboardView)
         {
 
@@ -155,8 +155,20 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
             var userRankingPosition = 0
             var pastuserScore = -1
 
-            //loop through the sightings
+            //loop through users
             for (user in sortedUsers) {
+
+
+                var userUnlockedAchievements = 0
+
+                for (userAchievement in GlobalClass.userAchievements)
+                {
+                    if (userAchievement.userID == user.userID)
+                    {
+                        userUnlockedAchievements++
+                    }
+                }
+
 
 
                     //new dynamic component
@@ -165,6 +177,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
                     newLeaderboardCard.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[user.badgeID])
                     newLeaderboardCard.binding.tvUsername.text = user.username
                     newLeaderboardCard.binding.tvScore.text = user.score.toString()
+                    newLeaderboardCard.binding.tvBadges.text = "${userUnlockedAchievements} / ${GlobalClass.acheivements.size}"
 
                     if (pastuserScore != user.score) {
                         userRankingPosition++
@@ -335,7 +348,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         refreshCard.binding.tvDate.text = newAchievementCard.binding.tvDate.text
 
         newAchievementCard.binding.tvSelectorText.text = getString(R.string.selectedText)
-        newAchievementCard.binding.tvSelectorText.setPadding(0,32,0,0)
+        newAchievementCard.binding.tvSelectorText.setPadding(0,36,0,0)
         newAchievementCard.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.confirmation_green), android.graphics.PorterDuff.Mode.SRC_IN)
     }
 

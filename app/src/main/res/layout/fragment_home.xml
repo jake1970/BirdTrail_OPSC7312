@@ -37,6 +37,7 @@
             android:layout_height="30dp"
             app:shapeAppearanceOverlay="@style/circleImageView"
             app:srcCompat="@color/white"
+            android:scaleType="centerCrop"
             android:layout_marginLeft="6dp"
             android:layout_weight="0"
             />
@@ -47,7 +48,6 @@
             android:id="@+id/imgBadge"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            app:shapeAppearanceOverlay="@style/circleImageView"
             android:layout_marginTop="14dp"
             app:srcCompat="@color/sub_grey"
             android:layout_weight="0"

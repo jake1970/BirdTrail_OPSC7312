@@ -33,7 +33,6 @@
                 android:id="@+id/imgBadge"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                app:shapeAppearanceOverlay="@style/circleImageView"
                 app:srcCompat="@color/white"
                 android:layout_marginLeft="8dp"
                 android:layout_weight="0"
