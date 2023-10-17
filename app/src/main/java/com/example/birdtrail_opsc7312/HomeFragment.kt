@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
@@ -29,6 +32,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
 
     private val spacerSize = 20
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -58,7 +63,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         var fullMapView = FullMapFragment()
         fullMapView.openInFullView = true
-        fragmentControl.replaceFragment(fullMapView, R.id.cvMapFragmentContainer, requireActivity().supportFragmentManager)
+        fragmentControl.replaceFragment(
+            fullMapView,
+            R.id.cvMapFragmentContainer,
+            requireActivity().supportFragmentManager
+        )
 
         //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
@@ -66,66 +75,41 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         //======================================================================================================
 
-        //clostest sighting to user
-        val closestGeneralSighting = Card_Observations_Species(activity)
+        val nextAchievement = Card_Achievement(activity)
 
-        var pastDistance = 0.0
-        var pastHotspot  = eBirdJson2KtKotlin()
-
-        var userLocation: Location? = null
-        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        // Define the permission request
-        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                // Permission has been granted, proceed with your operation
-                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
-                    userLocation = task.result
-                    if (userLocation != null) {
-                        //GlobalScope.launch(Dispatchers.IO) {
-                            // Your code here...
-
-
-                            GlobalScope.launch (Dispatchers.IO) {
-                                // Iterate over each hotspot in the global list
-                                for (hotspot in GlobalClass.hotspots) {
-                                    // Calculate the distance between the user's location and the hotspot.
-                                    val distanceInKm = FullMapFragment().calculateDistance(userLocation!!.latitude, userLocation!!.longitude, hotspot.lat!!, hotspot.lng!!)
-                                    // If the distance is less than or equal to 50km, add an annotation for this hotspot.
-                                    if (distanceInKm <= 60 ) {
-                                        if (distanceInKm <= pastDistance || pastDistance == 0.0)
-                                        {
-                                            pastDistance = distanceInKm
-                                            pastHotspot = hotspot
-                                        }
-                                    }
-                                }
-                                withContext (Dispatchers.Main) {
-                                    closestGeneralSighting.binding.tvSpecies.text = pastHotspot.comName
-                                    closestGeneralSighting.binding.tvSighted.text = pastHotspot.obsDt
-                                    activityLayout.addView(closestGeneralSighting)
-
-                                }
-                            }
-                        //}
-                    }
-                }
-            } else {
-                // Permission has been denied, handle accordingly
+        var currentUserAchievementListAchID = arrayListOf<Int>()
+        for (achievement in GlobalClass.userAchievements)
+        {
+            if (achievement.userID == GlobalClass.currentUser.userID)
+            {
+                currentUserAchievementListAchID.add(achievement.achID)
             }
         }
 
-        // Check if we have the permission
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // If not, request the permission
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        for (achievement in GlobalClass.acheivements) //ach 1
+        {
+            if (currentUserAchievementListAchID.contains(achievement.achID))
+            {
+                //if the user has this achievement
+            }
+            else
+            {
+                //if the user doesnt have this achievement
+                nextAchievement.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[achievement.badgeIndex])
+                nextAchievement.binding.tvAchievementName.text = achievement.name
+                nextAchievement.binding.tvDate.visibility = EditText.GONE
+                nextAchievement.binding.tvRequirements.text = achievement.requirements
+                nextAchievement.binding.tvSelectorText.text = "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
+                nextAchievement.binding.tvSelectorText.setCompoundDrawables(null,null,null,null);
+                nextAchievement.binding.tvSelectorText.setPadding(0,0,0,0)
+                nextAchievement.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
+                break
+            }
         }
+
+        activityLayout.addView(nextAchievement)
+
+
         //======================================================================================================
 
         //lastest user sighting
@@ -133,11 +117,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         var observationlist = arrayListOf<UserObservationDataClass>()
         //get latest sighting
-        for (i in 1..GlobalClass.userObservations.size)
-        {
-            if (GlobalClass.userObservations[i-1].userID == GlobalClass.currentUser.userID)
-            {
-                observationlist.add(GlobalClass.userObservations[i-1])
+        for (i in 1..GlobalClass.userObservations.size) {
+            if (GlobalClass.userObservations[i - 1].userID == GlobalClass.currentUser.userID) {
+                observationlist.add(GlobalClass.userObservations[i - 1])
             }
         }
         var userSighting = observationlist.last()
@@ -149,8 +131,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         //add componets
         //activityLayout.addView(closestGeneralSighting)
 
-
-
         //call method to generate a space under the dynamic component
         scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
 
@@ -159,7 +139,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         //call method to generate a space under the dynamic component
         scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
         //======================================================================================================
-
 
 
         //MostRecentGeneralSighting
@@ -173,12 +152,39 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //        }
 
 
-
-
         return view
     }
 
-
-
-
+//    fun getLocationAndFindClosestHotspot() {
+//        mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+//            userLocation = task.result
+//            if (userLocation != null) {
+//                GlobalScope.launch(Dispatchers.IO) {
+//                    // Your code here...
+//
+//                    for (hotspot in GlobalClass.hotspots) {
+//                        // Calculate the distance between the user's location and the hotspot.
+//                        val distanceInKm = FullMapFragment().calculateDistance(
+//                            userLocation!!.latitude,
+//                            userLocation!!.longitude,
+//                            hotspot.lat!!,
+//                            hotspot.lng!!
+//                        )
+//                        // If the distance is less than or equal to 50km, add an annotation for this hotspot.
+//                        if (distanceInKm <= 60) {
+//                            if (distanceInKm <= pastDistance || pastDistance == 0.0) {
+//                                pastDistance = distanceInKm
+//                                pastHotspot = hotspot
+//                            }
+//                        }
+//                    }
+//                    withContext(Dispatchers.Main) {
+//                        closestGeneralSighting.binding.tvSpecies.text = pastHotspot.comName
+//                        closestGeneralSighting.binding.tvSighted.text = pastHotspot.obsDt
+//                        activityLayout.addView(closestGeneralSighting)
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
