@@ -20,7 +20,7 @@ class GlobalClass: Application()
         var currentUser = UserDataClass()
         var totalObservations = 0
 
-        var showCenterOnUserIndicator = true
+
 
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
         var userObservations = arrayListOf<UserObservationDataClass>()
@@ -29,6 +29,7 @@ class GlobalClass: Application()
         var userAchievements = arrayListOf<UserAchievementsDataClass>()
         var acheivements = arrayListOf<AchievementsDataClass>()
         var badgeImages = arrayListOf<Bitmap>()
+
 
         fun InformUser(messageTitle: String, messageText: String, context: Context) {
             val alert = AlertDialog.Builder(context)
