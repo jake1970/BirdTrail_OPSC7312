@@ -149,6 +149,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
 
             var sortedUsers = GlobalClass.userData
             sortedUsers.sortWith(compareBy { it.score })
+            sortedUsers.reverse()
 
 
             var userRankingPosition = 0
@@ -230,15 +231,17 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
             //if achievements view must be loaded
 
             //2023-10-17
-
-
-            GlobalClass.userAchievements.add(
-            UserAchievementsDataClass(
+/*
+           var  starterAchievement = UserAchievementsDataClass(
                 userID = GlobalClass.currentUser.userID,
                 achID = 0,
                 date = GlobalClass.currentUser.registrationDate,
             )
-            )
+
+ */
+
+
+
 
 
             var currentBadge = 0
@@ -261,12 +264,11 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
 
                 for (unlockedAchievement in GlobalClass.userAchievements)
                 {
-                    Toast.makeText(activity, "for", Toast.LENGTH_SHORT).show()
+
 
                     if ((unlockedAchievement.userID == GlobalClass.currentUser.userID && unlockedAchievement.achID == achievement.achID))
                     {
 
-                        Toast.makeText(activity, "if", Toast.LENGTH_SHORT).show()
 
                         NewAchievementUnlockedStyle(newAchievementCard, unlockedAchievement.date)
                         achievementUnlocked = true
@@ -298,7 +300,9 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
                 if (achievementUnlocked == false)
                 {
                     //locked achievement
-                    newAchievementCard.binding.tvSelectorText.text = "99/100"
+
+
+                    newAchievementCard.binding.tvSelectorText.text = "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
                     newAchievementCard.binding.tvSelectorText.setCompoundDrawables(null,null,null,null);
                     newAchievementCard.binding.tvSelectorText.setPadding(0,0,0,0)
                     newAchievementCard.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)

@@ -426,7 +426,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                                 }
                             }
                         }
-                        Toast.makeText(requireContext(), counterMap.toString(), Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), counterMap.toString(), Toast.LENGTH_SHORT).show()
                         pointAnnotationManager?.addClickListener { pointAnnotation ->
                             // Show a Toast message with the location name of the clicked annotation
 

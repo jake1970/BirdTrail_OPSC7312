@@ -150,6 +150,7 @@ class Add_Observation : Fragment() {
                         loadingProgressBar.visibility = View.VISIBLE
 
 
+
                         //load the image
                         lifecycleScope.launch {
 
@@ -162,11 +163,13 @@ class Add_Observation : Fragment() {
                             }
                             catch (e : Exception)
                             {
-                                Toast.makeText(requireContext(), getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
                             }
+                             }
 
                             loadingProgressBar.visibility = View.GONE
-                        }
+
+
                     }
 
                     selectedOption = birdOption.binding.tvSpecies.text.toString()
@@ -390,6 +393,8 @@ class Add_Observation : Fragment() {
 
                 requireActivity().findViewById<View>(R.id.home).callOnClick()
 
+
+                GlobalClass.evaluateObservations(requireContext())
                 /*
                 //create local fragment controller
                 val fragmentControl = FragmentHandler()

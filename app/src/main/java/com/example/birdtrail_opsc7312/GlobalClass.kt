@@ -6,7 +6,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import okhttp3.internal.notifyAll
 import java.time.LocalDate
 
 class GlobalClass: Application()
@@ -16,6 +18,7 @@ class GlobalClass: Application()
     {
         @RequiresApi(Build.VERSION_CODES.O)
         var currentUser = UserDataClass()
+        var totalObservations = 0
 
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
         var userObservations = arrayListOf<UserObservationDataClass>()
@@ -34,6 +37,116 @@ class GlobalClass: Application()
             alert.show()
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun initStarterAchievement(context: Context)
+        {
+            var containsInitial = false
+
+            for (achievement in userAchievements)
+            {
+                if (achievement.userID == currentUser.userID && achievement.achID == 0)
+                {
+                    containsInitial = true
+                    break
+                }
+            }
+
+            if (containsInitial == false)
+            {
+                userAchievements.add(
+                    UserAchievementsDataClass(
+                        userID = currentUser.userID,
+                        achID = 0,
+                        date = currentUser.registrationDate,
+                    )
+                )
+            }
+
+            evaluateObservations(context)
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun evaluateObservations(context: Context)
+        {
+            currentUser.score = 0
+            totalObservations = 0
+
+            for (observation in userObservations)
+            {
+                if (observation.userID == currentUser.userID)
+                {
+                    totalObservations += 1
+                    currentUser.score += 5 //currentUser.score + 5
+                }
+            }
+
+        evaluateAchievements(context)
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun evaluateAchievements(context: Context)
+        {
+            var scoreMultiplier = 20
+
+            var currentUserAchievementListAchID = arrayListOf<Int>()
+
+
+            for (achievement in userAchievements)
+            {
+                if (achievement.userID == currentUser.userID)
+                {
+                    currentUserAchievementListAchID.add(achievement.achID)
+                }
+            }
+
+            currentUserAchievementListAchID.sort()
+
+            //Toast.makeText(context, "current badge count:  " + currentUserAchievementListAchID.count().toString(), Toast.LENGTH_LONG).show()
+
+
+            var unlockNew = false
+
+            for (achievement in acheivements) //ach 1
+            {
+                if (currentUserAchievementListAchID.contains(achievement.achID))
+                {
+                    //if the user has this achievement
+                    unlockNew = false
+                }
+                else
+                {
+                    //if the user doesnt have this achievement
+                    if (achievement.observationsRequired <= totalObservations) {
+                        unlockNew = true
+                        break
+                    }
+
+                }
+            }
+
+
+
+            val scoreBooster = scoreMultiplier*currentUserAchievementListAchID.count()
+            currentUser.score = currentUser.score + (scoreBooster)
+
+
+            if (unlockNew == true)
+            {
+                userAchievements.add(
+                    UserAchievementsDataClass(
+                        userID = currentUser.userID,
+                        achID = acheivements[currentUserAchievementListAchID.last().toInt()+1].achID,
+                        date = LocalDate.now(),
+                    )
+                )
+
+                currentUser.score = currentUser.score + (scoreMultiplier)
+
+                InformUser(acheivements[currentUserAchievementListAchID.last().toInt()+1].name, context.getString(R.string.newBadgeText),  context )
+            }
+
+
+        }
 
 
         @RequiresApi(Build.VERSION_CODES.O)
