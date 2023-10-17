@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat
 import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
@@ -36,7 +38,7 @@ class AppSettings : Fragment() {
     private var _binding: FragmentAppSettingsBinding? = null
     private val binding get() = _binding!!
     private var selectedImageBitmap : Bitmap? = null
-    private var SavedPassword : String? = ""
+    private var savedPassword : String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,7 @@ class AppSettings : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,12 +66,13 @@ class AppSettings : Fragment() {
         binding.btnChangeProfilePicture.setOnClickListener()
         {
             Gallery()
-            UserDataClass().profilepicture = selectedImageBitmap
+            GlobalClass.currentUser.profilepicture = selectedImageBitmap
         }
 
         //log out user
         binding.btnLogOut.setOnClickListener()
         {
+            GlobalClass.currentUser = UserDataClass()
             var intent = Intent(requireActivity(), LandingPage::class.java)
             startActivity(intent)
         }
@@ -81,7 +85,7 @@ class AppSettings : Fragment() {
             val white = ContextCompat.getColor(requireContext(),R.color.white)
             binding.btnImperial.setBackgroundColor(white)
             binding.btnMetric.setBackgroundColor(blue)
-
+            GlobalClass.currentUser.isMetric = true
         }
 
         //imperial button
@@ -91,12 +95,14 @@ class AppSettings : Fragment() {
             val white = ContextCompat.getColor(requireContext(),R.color.white)
             binding.btnImperial.setBackgroundColor(blue)
             binding.btnMetric.setBackgroundColor(white)
+            GlobalClass.currentUser.isMetric = false
         }
         return view
     }
 
 //Password Change Dialog, this method will prompt the user as they have elected to change password
 //User will enter a password and then go through the validation method before telling the user if the password has been changed
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showPasswordChangeDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Change Password")
@@ -113,7 +119,9 @@ class AppSettings : Fragment() {
             if (validatePassword.isEmpty())
             {
                 GlobalClass.InformUser("Confirmation","Password changed successfully", requireContext())
-                SavedPassword = newPassword
+                savedPassword = newPassword
+
+                GlobalClass.currentUser.password = savedPassword as String
 
             } else
             {
