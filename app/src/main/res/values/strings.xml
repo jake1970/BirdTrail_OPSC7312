@@ -84,7 +84,7 @@
     <string name="usernameNeedsLowerCase">Username needs to contain at least 1 lower case character</string>
     <string name="usernameNeedsUpperCase">Username needs to contain at least 1 upper case character</string>
     <string name="usernameNeedsToStartWithUpperCaseLetter">Username needs start with an upper case character</string>
-
+    <string name="newBadgeText">New Badge Unlocked</string>
     <string name="ImageSaved">Image Selected Saved</string>
     <string name="Confirmation">Confirmation</string>
     <string name="PasswordSuccessful">Password changed successfully</string>
