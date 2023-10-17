@@ -36,6 +36,7 @@ class GlobalClass: Application()
 
 
 
+        @RequiresApi(Build.VERSION_CODES.O)
         fun User()
         {
             userData.add(
@@ -46,10 +47,11 @@ class GlobalClass: Application()
                     password = "Password1",
                     questionID = 1,
                     securityanswer = "Gordan",
-                    badgeID = 2,
+                    badgeID = 1,
                     isMetric = true,
                     defaultdistance = 50,
                     score = 0,
+                    registrationDate = LocalDate.now()
                 ))
 
             userData.add(
@@ -64,6 +66,7 @@ class GlobalClass: Application()
                     isMetric = true,
                     defaultdistance = 50,
                     score = 0,
+                    registrationDate = LocalDate.now()
                 ))
 
             userData.add(
@@ -78,6 +81,7 @@ class GlobalClass: Application()
                     isMetric = true,
                     defaultdistance = 50,
                     score = 0,
+                    registrationDate = LocalDate.now()
                 ))
 
         }
@@ -92,6 +96,19 @@ class GlobalClass: Application()
                     date = LocalDate.now()
                 )
             )
+
+            //---------------------------------------------------------------------
+
+            /*userAchievements.add(
+                UserAchievementsDataClass(
+                    userID = 1,
+                    achID = 2,
+                    date = LocalDate.now()
+                )
+            )
+
+             */
+            //---------------------------------------------------------------------
 
             userAchievements.add(
                 UserAchievementsDataClass(
@@ -258,10 +275,18 @@ class GlobalClass: Application()
         {
             acheivements.add(
                 AchievementsDataClass(
+                    achID = 0,
+                    name = "New Comer",
+                    requirements = "Sign up for an account",
+                    badgeIndex = 0,
+                    observationsRequired = 1,
+                ))
+            acheivements.add(
+                AchievementsDataClass(
                     achID = 1,
                     name = "First Flight",
                     requirements = "Record your first observation",
-                    badgeIndex = 0,
+                    badgeIndex = 1,
                     observationsRequired = 1,
             ))
             acheivements.add(
@@ -269,7 +294,7 @@ class GlobalClass: Application()
                     achID = 2,
                     name = "Novice",
                     requirements = "Record 5 observations",
-                    badgeIndex = 1,
+                    badgeIndex = 2,
                     observationsRequired = 5,
                 ))
             acheivements.add(
@@ -277,7 +302,7 @@ class GlobalClass: Application()
                     achID = 3,
                     name = "Rookie",
                     requirements = "Record 10 observations",
-                    badgeIndex = 2,
+                    badgeIndex = 3,
                     observationsRequired = 10,
                 ))
             acheivements.add(
@@ -285,7 +310,7 @@ class GlobalClass: Application()
                     achID = 4,
                     name = "Beginner",
                     requirements = "Record 15 observations",
-                    badgeIndex = 3,
+                    badgeIndex = 4,
                     observationsRequired = 15,
                 ))
             acheivements.add(
@@ -293,7 +318,7 @@ class GlobalClass: Application()
                     achID = 5,
                     name = "Intermediate",
                     requirements = "Record 20 observations",
-                    badgeIndex = 4,
+                    badgeIndex = 5,
                     observationsRequired = 20,
                 ))
             acheivements.add(
@@ -301,7 +326,7 @@ class GlobalClass: Application()
                     achID = 6,
                     name = "Skilled",
                     requirements = "Record 25 observations",
-                    badgeIndex = 5,
+                    badgeIndex = 6,
                     observationsRequired = 25,
                 ))
             acheivements.add(
@@ -309,7 +334,7 @@ class GlobalClass: Application()
                     achID = 7,
                     name = "Advanced",
                     requirements = "Record 30 observations",
-                    badgeIndex = 6,
+                    badgeIndex = 7,
                     observationsRequired = 30,
                 ))
             acheivements.add(
@@ -317,7 +342,7 @@ class GlobalClass: Application()
                     achID = 8,
                     name = "Senior",
                     requirements = "Record 35 observations",
-                    badgeIndex = 7,
+                    badgeIndex = 8,
                     observationsRequired = 35,
                 ))
             acheivements.add(
@@ -325,7 +350,7 @@ class GlobalClass: Application()
                     achID = 9,
                     name = "Expert",
                     requirements = "Record 40 observations",
-                    badgeIndex = 3,
+                    badgeIndex = 9,
                     observationsRequired = 40,
                 ))
             acheivements.add(
@@ -333,7 +358,7 @@ class GlobalClass: Application()
                     achID = 10,
                     name = "Master",
                     requirements = "Record 45 observations",
-                    badgeIndex = 0,
+                    badgeIndex = 10,
                     observationsRequired = 45,
                 ))
 
@@ -353,12 +378,13 @@ class GlobalClass: Application()
 
         //set user images
         var profileImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultprofile)
-        for (i in 1..userData.size)
+        for (user in userData)
         {
-            userData[i-1].profilepicture = profileImage
+            user.profilepicture = profileImage
         }
 
-        //add badges
+        //add badges#
+        badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultbadge))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge1))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge2))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge3))

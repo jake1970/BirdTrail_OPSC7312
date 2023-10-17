@@ -13,6 +13,7 @@ class Card_Achievement (
 ) : RelativeLayout(context){
 
     var binding: CardAchievementBinding
+    var badgeID = 0
 
     init
     {

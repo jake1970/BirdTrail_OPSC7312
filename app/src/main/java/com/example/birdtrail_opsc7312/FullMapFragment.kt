@@ -383,8 +383,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                                 hotspot.lat!!,
                                 hotspot.lng!!
                             )
-                            // If the distance is less than or equal to 50km, add an annotation for this hotspot.
-
 
                             // Define the date format pattern for your input string
                             val inputPattern = "yyyy-MM-dd HH:mm"

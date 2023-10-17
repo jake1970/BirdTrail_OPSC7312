@@ -16,6 +16,7 @@
        >
 
         <RelativeLayout
+            android:id="@+id/rlIdentityBacking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingVertical="12dp"

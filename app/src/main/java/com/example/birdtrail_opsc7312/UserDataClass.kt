@@ -8,6 +8,7 @@ import android.util.Patterns
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import java.time.LocalDate
 
 data class UserDataClass(
 
@@ -21,7 +22,8 @@ data class UserDataClass(
     var isMetric: Boolean = true,
     var defaultdistance : Int = 50,
     var score : Int = 0,
-    var profilepicture : Bitmap? = null
+    var profilepicture : Bitmap? = null,
+    var registrationDate : LocalDate = LocalDate.now()
 ) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun validateUser(userEmail: String, userPassword: String): Boolean
@@ -247,6 +249,7 @@ data class UserDataClass(
             newUser.questionID = securityQuestion
             newUser.securityanswer = securityanswer
             newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgperson)?.toBitmap()
+            newUser.registrationDate = LocalDate.now()
 
 
             GlobalClass.userData.add(newUser)
