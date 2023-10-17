@@ -5,8 +5,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.icu.text.Transliterator.Position
@@ -405,7 +404,30 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                                 if (daysBetween <= (filterTimeFrame * 7)) {
                                     if (distanceInKm <= filterDistance) { //200
 
-                                        counterMap = counterMap + 1
+                                       // counterMap = counterMap + 1
+
+                                        /*
+                                         defaultUserImage = defaultUserImage.mutate()
+            defaultUserImage.colorFilter = PorterDuffColorFilter(context.resources.getColor(R.color.sub_grey), PorterDuff.Mode.SRC_IN)
+                                         */
+                                       // var tintColor = resources.getColor(R.color.baby_blue)
+                                        //var dividedDistance = distanceInKm
+
+
+                                        var tintColor = when {
+                                            distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green) //red
+                                            distanceInKm <= filterDistance/2 -> resources.getColor(R.color.mediumOrange)
+                                            //distanceInKm <= filterDistance -> resources.getColor(R.color.farRed)
+                                            else -> {resources.getColor(R.color.farRed)}
+                                        }
+
+                                        val paint = Paint()
+                                        val colorFilter: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
+                                        paint.colorFilter = colorFilter
+
+                                        val tintedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+                                        val canvas = Canvas(tintedBitmap)
+                                        canvas.drawBitmap(bitmap, 0f, 0f, paint)
 
 
                                         // Set options for the resulting symbol layer.
@@ -420,7 +442,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                                                 )
                                                 // Specify the bitmap you assigned to the point annotation
                                                 // The bitmap will be added to map style automatically.
-                                                .withIconImage(bitmap)
+                                                .withIconImage(tintedBitmap/*bitmap*/)
                                         // Add the resulting pointAnnotation to the map.
                                         pointAnnotationManager?.create(pointAnnotationOptions)
                                     }
