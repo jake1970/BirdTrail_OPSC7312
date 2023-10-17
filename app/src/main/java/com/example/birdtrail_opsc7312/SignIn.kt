@@ -10,6 +10,10 @@ import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
 import com.example.birdtrail_opsc7312.databinding.SignInBinding
 
 class SignIn : AppCompatActivity() {
+
+   private val myPrefsFile = "MyPrefsFile";
+   private val myUserID = "";
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +53,18 @@ class SignIn : AppCompatActivity() {
 
             if (attemptSignIn == true)
             {
+
+                //---------------------------------------------------------------------------------------//
+                //Remember Me
+                //---------------------------------------------------------------------------------------//
+                if (binding.chkRememberMe.isChecked == true) {
+                    getSharedPreferences(myPrefsFile, MODE_PRIVATE)
+                        .edit()
+                        .putString(myUserID, GlobalClass.currentUser.userID.toString())
+                        .commit();
+                }
+                //---------------------------------------------------------------------------------------//
+
                 var intent = Intent(this, Homepage::class.java)
                 startActivity(intent)
             }

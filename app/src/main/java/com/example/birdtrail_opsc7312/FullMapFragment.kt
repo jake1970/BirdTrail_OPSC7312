@@ -400,8 +400,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                                 Period.between(LocalDate.parse(localDate), LocalDate.now()).days
 
                             var commonBirdName = hotspot.comName?.lowercase()
-                            if (commonBirdName?.contains(filterSearchBirdName.lowercase()) == true || filterSearchBirdName == "") {
-                                if (daysBetween <= (filterTimeFrame * 7)) {  ////////88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+                           // if (commonBirdName?.contains(filterSearchBirdName.lowercase()) == true || filterSearchBirdName == "") {
+                            if (filterSearchBirdName.lowercase() in commonBirdName!! || filterSearchBirdName == "") {
+                                if (daysBetween <= (filterTimeFrame * 7)) {
                                     if (distanceInKm <= filterDistance) { //200
 
                                         counterMap = counterMap + 1
