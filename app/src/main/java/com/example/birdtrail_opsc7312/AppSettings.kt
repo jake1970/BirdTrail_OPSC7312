@@ -2,6 +2,8 @@ package com.example.birdtrail_opsc7312
 
 import android.content.Intent
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -12,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import android.provider.MediaStore
+import android.widget.EditText
 import android.widget.Toast
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
@@ -31,6 +34,7 @@ class AppSettings : Fragment() {
     private var _binding: FragmentAppSettingsBinding? = null
     private val binding get() = _binding!!
     private var selectedImageBitmap : Bitmap? = null
+    private var SavedPassword : String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,17 +51,16 @@ class AppSettings : Fragment() {
         _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
         binding.btnChangePassword.setOnClickListener()
         {
-
+            showPasswordChangeDialog()
         }
 
         binding.btnChangeProfilePicture.setOnClickListener()
         {
             Gallery()
+            UserDataClass().profilepicture = selectedImageBitmap
         }
-
 
         binding.btnLogOut.setOnClickListener()
         {
@@ -85,6 +88,38 @@ class AppSettings : Fragment() {
         return view
     }
 
+
+    private fun showPasswordChangeDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Change Password")
+
+        val input = EditText(requireContext())
+        input.hint = "Enter new password"
+        builder.setView(input)
+
+        builder.setPositiveButton("Change") { dialog, which ->
+            val newPassword = input.text.toString()
+
+            val validatePassword = UserDataClass().validateUserPassword(newPassword,requireContext())
+
+            if (validatePassword.isEmpty())
+            {
+                Toast.makeText(requireContext(), "Password changed successfully", Toast.LENGTH_SHORT).show()
+                SavedPassword = newPassword
+
+            } else
+            {
+                Toast.makeText(requireContext(), "Password changed failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
     private fun Gallery()
     {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -97,6 +132,7 @@ class AppSettings : Fragment() {
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null)
         {
+            Toast.makeText(requireContext(), "Image Selected Saved", Toast.LENGTH_SHORT).show()
             val selectedImageURI = data.data
             selectedImageBitmap = uriToBitmap(selectedImageURI)
         }
