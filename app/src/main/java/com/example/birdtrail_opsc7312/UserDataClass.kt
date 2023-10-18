@@ -13,7 +13,7 @@ import java.time.LocalDate
 
 data class UserDataClass(
 
-    var userID: Int = 0,
+    var userID: Int = -1,
     var email: String = "",
     var username: String = "",
     var password: String = "",
@@ -44,7 +44,7 @@ data class UserDataClass(
             }
         }
 
-        return GlobalClass.currentUser.userID != 0
+        return GlobalClass.currentUser.userID != -1
     }
 
     fun validateUserEmail(attemptedEmail: CharSequence?): Boolean {

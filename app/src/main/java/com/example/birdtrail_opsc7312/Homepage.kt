@@ -37,6 +37,8 @@ class Homepage : AppCompatActivity() {
     var lat: Double = 0.0
     var long: Double = 0.0
 
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -53,6 +55,8 @@ class Homepage : AppCompatActivity() {
         val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
         binding.root.addView(loadingProgressBar)
 
+        var loadHome = HomeFragment()
+
         GlobalScope.launch {
             //get bird observations
             var eBirdHandler = eBirdAPIHandler()
@@ -63,7 +67,7 @@ class Homepage : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 loadingProgressBar.visibility = View.GONE
-                Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size, Toast.LENGTH_SHORT).show()
+              //  Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -81,7 +85,9 @@ class Homepage : AppCompatActivity() {
         //create local fragment controller
         val fragmentControl = FragmentHandler()
 
-        fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, supportFragmentManager)
+       // fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, supportFragmentManager)
+
+        fragmentControl.replaceFragment(loadHome, R.id.flContent, supportFragmentManager)
 
         // replaceFragment(home())
         binding.bottomNavigationView.selectedItemId = R.id.home

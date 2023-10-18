@@ -47,8 +47,6 @@ class SignIn : AppCompatActivity() {
         {
 
 
-
-
             val attemptSignIn = UserDataClass().validateUser(binding.etEmail.text.toString(), binding.etPassword.text.toString())
 
             if (attemptSignIn == true)
