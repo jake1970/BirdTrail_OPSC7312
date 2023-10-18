@@ -10,12 +10,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.SignInBinding
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import okhttp3.internal.wait
 import java.lang.ref.WeakReference
 
@@ -25,86 +27,10 @@ class SignIn : AppCompatActivity() {
    private val myPrefsFile = "MyPrefsFile";
    private val myUserID = "";
 
-
+    lateinit var binding: SignInBinding
 
     lateinit var locationPermissionHelper: LocationPermissionHelper
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        locationPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
 
-    /*
-    @OptIn(InternalCoroutinesApi::class)
-    suspend fun getLocation() : Location? {
-         /*
-        var userLocation: Location? = null
-
-        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mFusedLocationClient.
-        mFusedLocationClient.wait()
-
-            mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
-                    userLocation = task.result
-                    mFusedLocationClient.notify()
-            }
-
-         */
-
-
-            var userLocation: Location? = null
-
-            var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            mFusedLocationClient.lastLocation
-                .addOnSuccessListener(this) { task ->   userLocation = task.result }.()
-               // .addOnFailureListener(this) { task ->   it.completeResume("") }
-
-        return userLocation
-
-
-     }
-
-     */
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun signIn(binding: SignInBinding)
-    {
-        //---------------------------------------------------------------------------------------//
-        //Remember Me
-        //---------------------------------------------------------------------------------------//
-        if (binding.chkRememberMe.isChecked == true) {
-            getSharedPreferences(myPrefsFile, MODE_PRIVATE)
-                .edit()
-                .putString(myUserID, GlobalClass.currentUser.userID.toString())
-                .commit();
-        }
-        //---------------------------------------------------------------------------------------//
-
-
-        //888888888888888888888888888
-
-        //GlobalScope.launch {
-
-          // var yourLoc = getLocation()
-
-           // withContext(Dispatchers.Main) {
-              //GlobalClass.InformUser("", "Long: ${yourLoc?.longitude} Lat: ${yourLoc?.latitude}", this@SignIn)
-               // Toast.makeText(this@SignIn, "Long: ${yourLoc?.longitude} Lat: ${yourLoc?.latitude}", Toast.LENGTH_SHORT).show()
-
-                var intent = Intent(this@SignIn, Homepage::class.java)
-                startActivity(intent)
-           // }
-       // }
-
-        //888888888888888888888888888
-
-
-//        var intent = Intent(this, Homepage::class.java)
-//        startActivity(intent)
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,7 +40,8 @@ class SignIn : AppCompatActivity() {
         //---------------------------------------------------------------------------------------//
         //initial view config
         //---------------------------------------------------------------------------------------//
-        var binding = SignInBinding.inflate(layoutInflater)
+        //var binding = SignInBinding.inflate(layoutInflater)
+        binding = SignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //Hide the action bar
@@ -151,12 +78,12 @@ class SignIn : AppCompatActivity() {
 
                 locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
                 locationPermissionHelper.checkPermissions {
-                    signIn(binding)
+                    signIn()
                 }
 
 
                 /*
-                  //---------------------------------------------------------------------------------------//
+                 //---------------------------------------------------------------------------------------//
                 //Remember Me
                 //---------------------------------------------------------------------------------------//
                 if (binding.chkRememberMe.isChecked == true) {
@@ -194,4 +121,58 @@ class SignIn : AppCompatActivity() {
         }
 
     }
+
+    suspend fun getUserLocation() : Location? {
+
+        var userLocation: Location? = null
+
+        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        mFusedLocationClient.lastLocation
+            .addOnSuccessListener (this) { task ->
+                userLocation = task
+            }.await()
+
+        return userLocation
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun signIn()
+    {
+        //---------------------------------------------------------------------------------------//
+        //Remember Me
+        //---------------------------------------------------------------------------------------//
+        if (binding.chkRememberMe.isChecked == true) {
+            getSharedPreferences(myPrefsFile, MODE_PRIVATE)
+                .edit()
+                .putString(myUserID, GlobalClass.currentUser.userID.toString())
+                .commit();
+        }
+        //---------------------------------------------------------------------------------------//
+
+
+        var userLocation: Location? = null
+        lifecycleScope.launch {
+
+            userLocation = getUserLocation()
+
+            withContext(Dispatchers.Main) {
+
+                Toast.makeText(this@SignIn, "Long: ${userLocation?.longitude} Lat: ${userLocation?.latitude}", Toast.LENGTH_SHORT).show()
+
+                var intent = Intent(this@SignIn, Homepage::class.java)
+                startActivity(intent)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        locationPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
 }
