@@ -158,8 +158,6 @@ class SignIn : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
 
-                Toast.makeText(this@SignIn, "Long: ${userLocation?.longitude} Lat: ${userLocation?.latitude}", Toast.LENGTH_SHORT).show()
-
                 var intent = Intent(this@SignIn, Homepage::class.java)
                 userLocation?.let { intent.putExtra("lat", it.latitude) }
                 userLocation?.let { intent.putExtra("long", it.longitude) }
