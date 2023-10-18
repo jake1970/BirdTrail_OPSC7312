@@ -10,7 +10,9 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentMapHotspotBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,7 +40,7 @@ class MapHotspot : Fragment() {
 
         val hotspotIndex = arguments?.getInt("hotspotIndex")
 
-        var hotspot = GlobalClass.hotspots[hotspotIndex!!]
+        var hotspot = GlobalClass.nearbyHotspots[hotspotIndex!!]
 
         //create local fragment controller
         val fragmentControl = FragmentHandler()
@@ -61,17 +63,33 @@ class MapHotspot : Fragment() {
         fragmentControl.replaceFragment(fullMapView, R.id.cvHotspotMapFragmentContainer, requireActivity().supportFragmentManager)
 
 
-        binding.tvHotspotDate.text = hotspot.obsDt.toString()
-        binding.tvBirdName.text = hotspot.comName
-        binding.tvBirdCount.text = hotspot.howMany.toString()
-        binding.tvBirdLocation.text = hotspot.locName
+        binding.tvHotspotDate.text = hotspot.latestObsDt.toString()
+        binding.tvHotspotLocation.text = hotspot.locName
+
 
         lifecycleScope.launch {
             try
             {
-            var imageHandler = ImageHandler()
-            var image = imageHandler.GetImage(hotspot.comName.toString())
-            binding.imgBird.setImageBitmap(image)
+                var ebirdHandler = eBirdAPIHandler()
+                hotspot.locId?.let { ebirdHandler.getHotspotBirds("ZA", it) }
+
+            //var imageHandler = ImageHandler()
+            //var image = imageHandler.GetImage(hotspot.comName.toString())
+            //binding.imgBird.setImageBitmap(image)
+                val scrollViewTools = ScrollViewHandler()
+                withContext(Dispatchers.Main) {
+                    val activityLayout = binding.llBirdList;
+                    for (bird in GlobalClass.currentHotspotBirds)
+                    {
+                        var birdDisplay = Card_Observations_All(requireContext())
+                        birdDisplay.binding.tvSpecies.text = bird.comName
+                        birdDisplay.binding.tvDate.text = bird.obsDt
+                        birdDisplay.binding.tvSighted.text = bird.howMany.toString()
+                        activityLayout.addView(birdDisplay)
+                        scrollViewTools.generateSpacer(activityLayout, requireActivity(), 20)
+
+                    }
+                }
             }
             catch (e : Exception)
             {

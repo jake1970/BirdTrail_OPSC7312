@@ -28,6 +28,8 @@ class GlobalClass: Application()
         var totalObservations = 0
 
         var nearbyHotspots = arrayListOf<HotspotJson2KtKotlin>()
+        var currentHotspotBirds = arrayListOf<eBirdJson2KtKotlin>()
+
 
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
         var userObservations = arrayListOf<UserObservationDataClass>()

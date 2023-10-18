@@ -79,11 +79,18 @@ class Homepage : AppCompatActivity() {
 
         var loadHome = HomeFragment()
 
-
+        var lat = intent.getDoubleExtra("lat", 0.0)
+        var long = intent.getDoubleExtra("long", 0.0)
 
         GlobalScope.launch {
             //get bird observations
+
             var eBirdHandler = eBirdAPIHandler()
+            eBirdHandler.getNearbyHotspots(long, lat)
+
+
+
+
             eBirdHandler.getRecentObservations("ZA")
 
             //GetUserLocation()
@@ -91,6 +98,7 @@ class Homepage : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 loadingProgressBar.visibility = View.GONE
+                //Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size.toString(), Toast.LENGTH_SHORT).show()
             }
         }
 

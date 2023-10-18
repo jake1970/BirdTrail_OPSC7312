@@ -45,7 +45,7 @@ class eBirdAPIHandler
 
     suspend fun getNearbyHotspots(long: Double, lat: Double): String = withContext(Dispatchers.IO)
     {
-        val url = URL("https://api.ebird.org/v2/ref/hotspot/geo?lat=$lat&lng=$long?fmt=json")
+        val url = URL("https://api.ebird.org/v2/ref/hotspot/geo?lat=${lat}&lng=${long}&fmt=json&back=21&dist=60")
         val connection = url.openConnection() as HttpURLConnection
         connection.setRequestProperty("X-eBirdApiToken", "q9penhe399qf")
         connection.requestMethod = "GET"
@@ -72,5 +72,36 @@ class eBirdAPIHandler
             return@withContext "Error: $responseCode"
         }
     }
+
+    suspend fun getHotspotBirds(regionCode: String, locationCode: String): String = withContext(Dispatchers.IO)
+    {
+        val url = URL("https://api.ebird.org/v2/data/obs/${regionCode}/recent?hotspot=true&r=$locationCode&back=21")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.setRequestProperty("X-eBirdApiToken", "q9penhe399qf")
+        connection.requestMethod = "GET"
+
+        val responseCode = connection.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK)
+        {
+            val reader = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = reader.readText()
+
+            // Parse the JSON response into eBirdJson2KtKotlin objects
+            val listType = object : TypeToken<List<eBirdJson2KtKotlin>>() {}.type
+            val items: List<eBirdJson2KtKotlin> = Gson().fromJson(response, listType)
+
+            // Add the observations to the global list
+            GlobalClass.currentHotspotBirds = arrayListOf<eBirdJson2KtKotlin>()
+            GlobalClass.currentHotspotBirds.addAll(items)
+
+            Log.d("E-BIRD OUTPUT", response)
+            return@withContext response
+        }
+        else
+        {
+            return@withContext "Error: $responseCode"
+        }
+    }
+
 
 }

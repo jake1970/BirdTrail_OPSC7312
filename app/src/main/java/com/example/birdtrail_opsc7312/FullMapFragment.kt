@@ -259,7 +259,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
     var centerOnHotspot = false
     var filterDistance = 50.0
     var filterTimeFrame = 1
-    var filterSearchBirdName = ""
+    //var filterSearchBirdName = ""
     //----------------------------------------------------------------------------------------------------------------------------
 
 
@@ -423,7 +423,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
 
                         // Iterate over each hotspot in the global list
-                        for (hotspot in GlobalClass.hotspots) {
+                        for (hotspot in GlobalClass.nearbyHotspots) {
                             // Calculate the distance between the user's location and the hotspot.
                             val distanceInKm = calculateDistance(
                                 userLocation!!.latitude,
@@ -441,75 +441,77 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                             val inputFormat = SimpleDateFormat(inputPattern)
                             val outputFormat = SimpleDateFormat(outputPattern)
 
-                            var date = inputFormat.parse(hotspot.obsDt)
+                            var date = inputFormat.parse(hotspot.latestObsDt)
                             var localDate = outputFormat.format(date)
 
                             val daysBetween =
                                 Period.between(LocalDate.parse(localDate), LocalDate.now()).days
 
-                            var commonBirdName = hotspot.comName?.lowercase()
+                           // var commonBirdName = hotspot.comName?.lowercase()
 
                             if (GlobalClass.currentUser.isMetric == false)
                             {
                                 filterDistance = milesToKilometers(filterDistance)
                             }
 
+                            if (daysBetween <= (filterTimeFrame * 7)) {
+                                if (distanceInKm <= filterDistance) { //200
 
-                           // if (commonBirdName?.contains(filterSearchBirdName.lowercase()) == true || filterSearchBirdName == "") {
-                            if (filterSearchBirdName.lowercase() in commonBirdName!! || filterSearchBirdName == "") {
-                                if (daysBetween <= (filterTimeFrame * 7)) {
-                                    if (distanceInKm <= filterDistance) { //200
+                                    // counterMap = counterMap + 1
 
-                                       // counterMap = counterMap + 1
-
-                                        /*
-                                         defaultUserImage = defaultUserImage.mutate()
-            defaultUserImage.colorFilter = PorterDuffColorFilter(context.resources.getColor(R.color.sub_grey), PorterDuff.Mode.SRC_IN)
-                                         */
-                                       // var tintColor = resources.getColor(R.color.baby_blue)
-                                        //var dividedDistance = distanceInKm
+                                    /*
+                                     defaultUserImage = defaultUserImage.mutate()
+        defaultUserImage.colorFilter = PorterDuffColorFilter(context.resources.getColor(R.color.sub_grey), PorterDuff.Mode.SRC_IN)
+                                     */
+                                    // var tintColor = resources.getColor(R.color.baby_blue)
+                                    //var dividedDistance = distanceInKm
 
 
-                                        var tintColor = when {
-                                            distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green) //red
-                                            distanceInKm <= filterDistance/2 -> resources.getColor(R.color.mediumOrange)
-                                            //distanceInKm <= filterDistance -> resources.getColor(R.color.farRed)
-                                            else -> {resources.getColor(R.color.farRed)}
-                                        }
-
-                                        val paint = Paint()
-                                        val colorFilter: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
-                                        paint.colorFilter = colorFilter
-
-                                        val tintedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-                                        val canvas = Canvas(tintedBitmap)
-                                        canvas.drawBitmap(bitmap, 0f, 0f, paint)
-
-
-                                        // Set options for the resulting symbol layer.
-                                        val pointAnnotationOptions: PointAnnotationOptions =
-                                            PointAnnotationOptions()
-                                                // Define a geographic coordinate from the hotspot's lat and lng.
-                                                .withPoint(
-                                                    Point.fromLngLat(
-                                                        hotspot.lng!!,
-                                                        hotspot.lat!!
-                                                    )
-                                                )
-                                                // Specify the bitmap you assigned to the point annotation
-                                                // The bitmap will be added to map style automatically.
-                                                .withIconImage(tintedBitmap/*bitmap*/)
-                                        // Add the resulting pointAnnotation to the map.
-                                        pointAnnotationManager?.create(pointAnnotationOptions)
+                                    var tintColor = when {
+                                        distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green) //red
+                                        distanceInKm <= filterDistance/2 -> resources.getColor(R.color.mediumOrange)
+                                        //distanceInKm <= filterDistance -> resources.getColor(R.color.farRed)
+                                        else -> {resources.getColor(R.color.farRed)}
                                     }
+
+                                    val paint = Paint()
+                                    val colorFilter: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
+                                    paint.colorFilter = colorFilter
+
+                                    val tintedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+                                    val canvas = Canvas(tintedBitmap)
+                                    canvas.drawBitmap(bitmap, 0f, 0f, paint)
+
+
+                                    // Set options for the resulting symbol layer.
+                                    val pointAnnotationOptions: PointAnnotationOptions =
+                                        PointAnnotationOptions()
+                                            // Define a geographic coordinate from the hotspot's lat and lng.
+                                            .withPoint(
+                                                Point.fromLngLat(
+                                                    hotspot.lng!!,
+                                                    hotspot.lat!!
+                                                )
+                                            )
+                                            // Specify the bitmap you assigned to the point annotation
+                                            // The bitmap will be added to map style automatically.
+                                            .withIconImage(tintedBitmap/*bitmap*/)
+                                    // Add the resulting pointAnnotation to the map.
+                                    pointAnnotationManager?.create(pointAnnotationOptions)
                                 }
                             }
+
+
+                           // if (commonBirdName?.contains(filterSearchBirdName.lowercase()) == true || filterSearchBirdName == "") {
+//                            if (filterSearchBirdName.lowercase() in commonBirdName!! || filterSearchBirdName == "") {
+//
+//                            }
                         }
                         //Toast.makeText(requireContext(), counterMap.toString(), Toast.LENGTH_SHORT).show()
                         pointAnnotationManager?.addClickListener { pointAnnotation ->
                             // Show a Toast message with the location name of the clicked annotation
 
-                            val clickedHotspotIndex = GlobalClass.hotspots.indexOfFirst { it.lng == pointAnnotation.point.longitude() && it.lat == pointAnnotation.point.latitude() }
+                            val clickedHotspotIndex = GlobalClass.nearbyHotspots.indexOfFirst { it.lng == pointAnnotation.point.longitude() && it.lat == pointAnnotation.point.latitude() }
 
                             val mapHotspotView = MapHotspot()
                             val args = Bundle()
