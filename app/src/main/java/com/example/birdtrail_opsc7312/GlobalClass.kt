@@ -12,7 +12,10 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.example.HotspotJson2KtKotlin
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.internal.notifyAll
 import java.time.LocalDate
 
@@ -43,7 +46,7 @@ class GlobalClass: Application()
             alert.show()
         }
 
-        fun generateObservationPrompt(activityLayout: LinearLayout, context: Context)
+        fun generateObservationPrompt(activityLayout: LinearLayout, context: Context, fragmentManager: FragmentManager)
         {
             var addDataCard = Card_Observations_Species(context)
 
@@ -53,6 +56,21 @@ class GlobalClass: Application()
             addDataCard.binding.tvSpecies.text = ""
             addDataCard.binding.tvSpecies.visibility = View.GONE
             addDataCard.binding.tvSighted.text = context.getString(R.string.noObservations)
+
+            addDataCard.setOnClickListener()
+            {
+
+
+                //create local fragment controller
+                val fragmentControl = FragmentHandler()
+
+                (context as Homepage).binding.bottomNavigationView.selectedItemId = R.id.placeholder
+
+                fragmentControl.replaceFragment(Add_Observation(), R.id.flContent, fragmentManager)
+
+
+
+            }
 
             activityLayout.addView(addDataCard)
         }

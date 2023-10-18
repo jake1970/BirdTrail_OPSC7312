@@ -41,14 +41,15 @@ import java.time.Period
 class Homepage : AppCompatActivity() {
 
 
-
+    lateinit var binding : ActivityHomepageBinding
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_homepage)
 
-        var binding = ActivityHomepageBinding.inflate(layoutInflater)
+      //  var binding = ActivityHomepageBinding.inflate(layoutInflater)
+         binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
@@ -185,20 +186,20 @@ class Homepage : AppCompatActivity() {
 
 
 
-    private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        return false
-    }
+//    private fun checkPermissions(): Boolean {
+//        if (ActivityCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED &&
+//            ActivityCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED
+//        ) {
+//            return true
+//        }
+//        return false
+//    }
 
 
 //    override fun onBackPressed() {

@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
 
 
@@ -35,6 +36,9 @@ class Add_Observation : Fragment() {
 
     private var selectedOption = ""
 
+
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     override fun onCreateView(
@@ -45,18 +49,18 @@ class Add_Observation : Fragment() {
         _binding = FragmentAddObservationBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //---------------------------------------------------------------------------------------------------------
+
+        // view.findViewById<BottomNavigationView>(R.id.bottomNavigationView).selectedItemId = R.id.placeholder
+       // (requireActivity() as Homepage).binding.bottomNavigationView.selectedItemId = R.id.placeholder
+
+
+        //---------------------------------------------------------------------------------------------------------
 
         val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
         view.addView(loadingProgressBar)
 
-        //---------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-        //---------------------------------------------------------------------------------------------------------
 
         binding.btnBack.setOnClickListener()
         {

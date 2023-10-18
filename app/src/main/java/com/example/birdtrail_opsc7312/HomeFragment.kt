@@ -105,7 +105,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 nextAchievement.binding.tvSelectorText.text = "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
                 nextAchievement.binding.tvSelectorText.setCompoundDrawables(null,null,null,null);
                 nextAchievement.binding.tvSelectorText.setPadding(0,0,0,0)
-                nextAchievement.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
+                nextAchievement.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.medium_blue), android.graphics.PorterDuff.Mode.SRC_IN)
                 break
             }
         }
@@ -148,7 +148,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             activityLayout.addView(addDataCard)
 
  */
-            GlobalClass.generateObservationPrompt(activityLayout, requireContext())
+            GlobalClass.generateObservationPrompt(activityLayout, requireContext(), parentFragmentManager)
         }
         else
         {
@@ -193,15 +193,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         return view
     }
 
-    suspend public fun getUserLocation() : Location?
-    {
-        if (this::fullMapView.isInitialized == false)
-        {
-            fullMapView = FullMapFragment()
-        }
-
-        return fullMapView.getUserLocation()
-    }
+//    suspend public fun getUserLocation() : Location?
+//    {
+//        if (this::fullMapView.isInitialized == false)
+//        {
+//            fullMapView = FullMapFragment()
+//        }
+//
+//        return fullMapView.getUserLocation()
+//    }
 
 
 
