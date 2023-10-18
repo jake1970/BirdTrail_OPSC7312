@@ -1,6 +1,7 @@
 package com.example.birdtrail_opsc7312
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.location.Location
@@ -509,7 +510,16 @@ class MapDirectionsActivity : AppCompatActivity()
         // initialize view interactions
         binding.btnBack.setOnClickListener {
             //load map here
+
+            var homepage = Homepage()
+            val transaction = homepage.supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.flContent, FullMapFragment())
+            val intent = Intent(this, homepage::class.java).apply {
+                // Pass any data to Homepage Activity if needed
+            }
+            startActivity(intent)
         }
+
 
 
 
