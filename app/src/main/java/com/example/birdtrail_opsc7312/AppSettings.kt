@@ -49,12 +49,14 @@ class AppSettings : Fragment() {
         if (GlobalClass.currentUser.isMetric == false)
         {
             /*
-            measurementSymbol = "mi"
+
             binding.slDistance.valueTo = 40f
             binding.tgUnitSystem.check(R.id.btnImperial)
             //binding.tg
 
              */
+            measurementSymbol = "mi"
+            binding.slDistance.valueTo = 40f
             binding.btnImperial.callOnClick()
             binding.btnImperial.setBackgroundColor(resources.getColor(R.color.light_blue))
             binding.btnImperial.setTextColor(resources.getColor(R.color.white))

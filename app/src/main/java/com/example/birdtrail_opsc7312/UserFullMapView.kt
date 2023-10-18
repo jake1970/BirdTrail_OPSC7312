@@ -43,8 +43,6 @@ class UserFullMapView : Fragment() {
 
     private var currentDistance = 50
     private lateinit var currentTimeFrame: String
-    private var currentSearchTerm = ""
-
     private var measurementSymbol = "KM"
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -68,13 +66,15 @@ class UserFullMapView : Fragment() {
         }
 
 
+
         if (GlobalClass.currentUser.defaultdistance > binding.slDistance.value)
         {
             binding.slDistance.value = binding.slDistance.valueTo
         }
 
+        binding.slDistance.valueTo = GlobalClass.currentUser.defaultdistance.toFloat()
 
-            binding.slDistance.valueTo = GlobalClass.currentUser.defaultdistance.toFloat()
+
 
         //------------------------------------------------------------------------------------------
 
@@ -145,7 +145,7 @@ class UserFullMapView : Fragment() {
             //binding.tvDistanceValue.text = "${distance}KM"
             binding.slDistance.addOnChangeListener { rangeSlider, value, fromUser ->
 
-                binding.tvDistanceValue.text = "${value.toInt()}$measurementSymbol"
+               binding.tvDistanceValue.text = "${value.toInt()}$measurementSymbol"
 //
             }
 
