@@ -17,8 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:visibility="invisible"
         app:cardElevation="8dp"
         app:cardUseCompatPadding="false">
@@ -27,7 +25,9 @@
             android:id="@+id/tripProgressView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foregroundGravity="center" />
+            android:foregroundGravity="center"
+            android:gravity="center"
+            />
 
         <!--        <ImageView-->
         <!--            android:id="@+id/stop"-->
