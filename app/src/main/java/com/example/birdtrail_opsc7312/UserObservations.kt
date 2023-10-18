@@ -282,7 +282,10 @@ class UserObservations : Fragment() {
             }
         }
 
-
+        if (activityLayout.childCount == 0)
+        {
+            GlobalClass.generateObservationPrompt(activityLayout, requireContext())
+        }
 
     }
     //---------------------------------------------------------------------------------------------

@@ -14,8 +14,10 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.children
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
@@ -118,29 +120,60 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         var observationlist = arrayListOf<UserObservationDataClass>()
         //get latest sighting
+
+
         for (i in 1..GlobalClass.userObservations.size) {
             if (GlobalClass.userObservations[i - 1].userID == GlobalClass.currentUser.userID) {
                 observationlist.add(GlobalClass.userObservations[i - 1])
             }
         }
 
+        scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
+
+        if (observationlist.isEmpty())
+        {
+            //add default add card
+/*
+            var addDataCard = Card_Observations_Species(activity)
+
+            addDataCard.binding.imgBirdImage.setImageBitmap(AppCompatResources.getDrawable(requireContext(), R.drawable.imgplus)
+                ?.toBitmap())
+            addDataCard.binding.tvSpecies.text = ""
+            addDataCard.binding.tvSpecies.visibility = View.GONE
+            addDataCard.binding.tvSighted.text = getString(R.string.noObservations)
+
+
+            //addDataCard.binding.tvSighted.textSize = 60f
+
+            activityLayout.addView(addDataCard)
+
+ */
+            GlobalClass.generateObservationPrompt(activityLayout, requireContext())
+        }
+        else
+        {
 
             var userSighting = observationlist.last()
 
+            latestUserSighting.binding.tvSpecies.text = userSighting.birdName
+            latestUserSighting.binding.tvSighted.text = userSighting.date.toString()
 
 
-        latestUserSighting.binding.tvSpecies.text = userSighting.birdName
-        latestUserSighting.binding.tvSighted.text = userSighting.date.toString()
+
+            activityLayout.addView(latestUserSighting)
+
+        }
+
+
+
+
 
         //======================================================================================================
         //add componets
         //activityLayout.addView(closestGeneralSighting)
 
         //call method to generate a space under the dynamic component
-        scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
 
-
-        activityLayout.addView(latestUserSighting)
         //call method to generate a space under the dynamic component
         scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
         //======================================================================================================
@@ -162,6 +195,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     suspend public fun getUserLocation() : Location?
     {
+        if (this::fullMapView.isInitialized == false)
+        {
+            fullMapView = FullMapFragment()
+        }
+
         return fullMapView.getUserLocation()
     }
 

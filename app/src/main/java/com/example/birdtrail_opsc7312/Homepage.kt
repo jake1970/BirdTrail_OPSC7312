@@ -15,23 +15,31 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.navigation.core.trip.session.LocationMatcherResult
+import com.mapbox.navigation.core.trip.session.LocationObserver
+import com.mapbox.navigation.ui.maps.camera.transition.NavigationCameraTransitionOptions
+import com.mapbox.navigation.ui.maps.location.NavigationLocationProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.wait
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
 
 class Homepage : AppCompatActivity() {
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -50,34 +58,42 @@ class Homepage : AppCompatActivity() {
         val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
         binding.root.addView(loadingProgressBar)
 
+
+
+/*
+        var userLocation: Location? = null
+        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        var a = mFusedLocationClient.lastLocation.result
+
+        while (a == null)
+        {
+      //  var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        //mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+            //userLocation = task.result
+           // if (userLocation != null) {
+        }
+
+ */
+
+
         var loadHome = HomeFragment()
+
+
 
         GlobalScope.launch {
             //get bird observations
             var eBirdHandler = eBirdAPIHandler()
             eBirdHandler.getRecentObservations("ZA")
 
-
-
-
-            var location = loadHome.getUserLocation()
-            if (location != null)
-            {
-                eBirdHandler.getNearbyHotspots(location.longitude, location.latitude)
-            }
-
-            //Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size.toString(), Toast.LENGTH_SHORT).show()
-
             //GetUserLocation()
             //eBirdHandler.getNearbyHotspots(long, lat)
 
             withContext(Dispatchers.Main) {
                 loadingProgressBar.visibility = View.GONE
-                //Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size.toString(), Toast.LENGTH_SHORT).show()
-                Toast.makeText(this@Homepage, location.toString(), Toast.LENGTH_SHORT).show()
-
             }
         }
+
+
 
 
 

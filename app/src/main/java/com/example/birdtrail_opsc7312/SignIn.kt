@@ -1,18 +1,110 @@
 package com.example.birdtrail_opsc7312
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
 import com.example.birdtrail_opsc7312.databinding.SignInBinding
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.suspendCancellableCoroutine
+import okhttp3.internal.wait
+import java.lang.ref.WeakReference
+
 
 class SignIn : AppCompatActivity() {
 
    private val myPrefsFile = "MyPrefsFile";
    private val myUserID = "";
+
+
+
+    lateinit var locationPermissionHelper: LocationPermissionHelper
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        locationPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    /*
+    @OptIn(InternalCoroutinesApi::class)
+    suspend fun getLocation() : Location? {
+         /*
+        var userLocation: Location? = null
+
+        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        mFusedLocationClient.
+        mFusedLocationClient.wait()
+
+            mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
+                    userLocation = task.result
+                    mFusedLocationClient.notify()
+            }
+
+         */
+
+
+            var userLocation: Location? = null
+
+            var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            mFusedLocationClient.lastLocation
+                .addOnSuccessListener(this) { task ->   userLocation = task.result }.()
+               // .addOnFailureListener(this) { task ->   it.completeResume("") }
+
+        return userLocation
+
+
+     }
+
+     */
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun signIn(binding: SignInBinding)
+    {
+        //---------------------------------------------------------------------------------------//
+        //Remember Me
+        //---------------------------------------------------------------------------------------//
+        if (binding.chkRememberMe.isChecked == true) {
+            getSharedPreferences(myPrefsFile, MODE_PRIVATE)
+                .edit()
+                .putString(myUserID, GlobalClass.currentUser.userID.toString())
+                .commit();
+        }
+        //---------------------------------------------------------------------------------------//
+
+
+        //888888888888888888888888888
+
+        //GlobalScope.launch {
+
+          // var yourLoc = getLocation()
+
+           // withContext(Dispatchers.Main) {
+              //GlobalClass.InformUser("", "Long: ${yourLoc?.longitude} Lat: ${yourLoc?.latitude}", this@SignIn)
+               // Toast.makeText(this@SignIn, "Long: ${yourLoc?.longitude} Lat: ${yourLoc?.latitude}", Toast.LENGTH_SHORT).show()
+
+                var intent = Intent(this@SignIn, Homepage::class.java)
+                startActivity(intent)
+           // }
+       // }
+
+        //888888888888888888888888888
+
+
+//        var intent = Intent(this, Homepage::class.java)
+//        startActivity(intent)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +128,13 @@ class SignIn : AppCompatActivity() {
 
         //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
 
+        /*
         binding.etEmail.setText("user1@gmail.com")
         binding.etPassword.setText("Password1")
+         */
+
+        binding.etEmail.setText("jake")
+        binding.etPassword.setText("jake")
 
         //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
 
@@ -52,7 +149,14 @@ class SignIn : AppCompatActivity() {
             if (attemptSignIn == true)
             {
 
-                //---------------------------------------------------------------------------------------//
+                locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
+                locationPermissionHelper.checkPermissions {
+                    signIn(binding)
+                }
+
+
+                /*
+                  //---------------------------------------------------------------------------------------//
                 //Remember Me
                 //---------------------------------------------------------------------------------------//
                 if (binding.chkRememberMe.isChecked == true) {
@@ -65,6 +169,8 @@ class SignIn : AppCompatActivity() {
 
                 var intent = Intent(this, Homepage::class.java)
                 startActivity(intent)
+                 */
+
             }
             else
             {

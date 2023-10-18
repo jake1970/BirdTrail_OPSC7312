@@ -394,7 +394,9 @@ class Add_Observation : Fragment() {
                 requireActivity().findViewById<View>(R.id.home).callOnClick()
 
 
-                GlobalClass.evaluateObservations(requireContext())
+                GlobalClass.evaluateObservations(requireActivity())
+
+
                 /*
                 //create local fragment controller
                 val fragmentControl = FragmentHandler()

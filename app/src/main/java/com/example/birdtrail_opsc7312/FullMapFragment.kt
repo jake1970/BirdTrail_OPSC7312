@@ -43,6 +43,10 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.internal.wait
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -53,8 +57,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
-
+class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
 
     private lateinit var locationPermissionHelper: LocationPermissionHelper
@@ -69,7 +72,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     }
 
     //private val onMoveListener = object : OnMoveListener {
-     var onMoveListener = object : OnMoveListener {
+    var onMoveListener = object : OnMoveListener {
         override fun onMoveBegin(detector: MoveGestureDetector) {
             onCameraTrackingDismissed()
         }
@@ -102,6 +105,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         val view = binding.root
 
 
+
         mapView = MapView(requireContext())
         view.addView(mapView) // Add the MapView to your layout
 
@@ -111,7 +115,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         //---------------------------------------------------------
         mapView.compass.visibility = false
         //---------------------------------------------------------
-
 
 
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) { style ->
@@ -130,6 +133,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
         return view
     }
+
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -256,6 +262,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     var filterSearchBirdName = ""
     //----------------------------------------------------------------------------------------------------------------------------
 
+
     private fun setupGesturesListener() {
         mapView.gestures.addOnMoveListener(onMoveListener)
 
@@ -363,16 +370,26 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         }
     }
 
-    suspend fun getUserLocation() : Location?
+    fun getUserLocation() : Location?
     {
+
+
+
         var userLocation: Location? = null
         if (checkPermissions())
         {
+
+          //  var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
             var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-            mFusedLocationClient.lastLocation.wait()
+            mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                userLocation = task.result
+            }
+
+
 
                 //  (requireActivity()) { task ->
-                userLocation = mFusedLocationClient.lastLocation.result//task.result
+               // userLocation = mFusedLocationClient.lastLocation.result//task.result
                 //}
         }
         return userLocation

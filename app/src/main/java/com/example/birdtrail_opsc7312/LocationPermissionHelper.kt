@@ -39,6 +39,8 @@ class LocationPermissionHelper(val activity: WeakReference<Activity>)
         }
     }
 
+
+
     fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

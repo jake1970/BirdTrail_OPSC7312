@@ -89,6 +89,7 @@
     <string name="Confirmation">Confirmation</string>
     <string name="PasswordSuccessful">Password changed successfully</string>
     <string name="PasswordIncorrect">Password Invalid</string>
+    <string name="noObservations">No Observations, click here to add</string>
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic3QxMDA4MTgzOSIsImEiOiJjbG5lank2cmIwZHlyMmp0Y2h1c2VmZ2lkIn0.AU-LAXgDH6jTS1vHM9pfhw</string>
     <!-- TODO: Remove or change this placeholder text -->

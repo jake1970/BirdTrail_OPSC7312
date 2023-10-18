@@ -6,8 +6,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toBitmap
 import com.example.example.HotspotJson2KtKotlin
 import okhttp3.internal.notifyAll
 import java.time.LocalDate
@@ -38,6 +42,21 @@ class GlobalClass: Application()
 
             alert.show()
         }
+
+        fun generateObservationPrompt(activityLayout: LinearLayout, context: Context)
+        {
+            var addDataCard = Card_Observations_Species(context)
+
+            addDataCard.binding.imgBirdImage.setImageBitmap(
+                AppCompatResources.getDrawable(context, R.drawable.imgplus)
+                ?.toBitmap())
+            addDataCard.binding.tvSpecies.text = ""
+            addDataCard.binding.tvSpecies.visibility = View.GONE
+            addDataCard.binding.tvSighted.text = context.getString(R.string.noObservations)
+
+            activityLayout.addView(addDataCard)
+        }
+
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun initStarterAchievement(context: Context)
@@ -487,11 +506,27 @@ class GlobalClass: Application()
     {
         super.onCreate()
 
+
         User()
         Userachievements()
         securityquestions()
         observations()
         AddAcheivements()
+
+        userData.add(
+            UserDataClass(
+                userID = 3,
+                username = "jake",
+                email = "jake",
+                password = "jake",
+                questionID = 1,
+                securityanswer = "Gordan",
+                badgeID = 0,
+                isMetric = true,
+                defaultdistance = 50,
+                score = 0,
+                registrationDate = LocalDate.now()
+            ))
 
         //set user images
         var profileImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultprofile)
