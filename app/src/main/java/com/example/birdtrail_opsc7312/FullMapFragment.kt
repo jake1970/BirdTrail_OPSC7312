@@ -335,6 +335,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         locationPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+
     private fun addAnnotationToMap() {
         // Create an instance of the Annotation API and get the PointAnnotationManager.
         bitmapFromDrawableRes(
@@ -384,6 +385,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                     userLocation = task.result
                     if (userLocation != null) {
+
+
+
                         // Iterate over each hotspot in the global list
                         for (hotspot in GlobalClass.hotspots) {
                             // Calculate the distance between the user's location and the hotspot.
@@ -486,6 +490,10 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
             }
         }
     }
+
+
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)

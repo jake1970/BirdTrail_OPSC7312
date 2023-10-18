@@ -8,19 +8,19 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.example.example.HotspotJson2KtKotlin
 import okhttp3.internal.notifyAll
 import java.time.LocalDate
 
 class GlobalClass: Application()
 {
-
     companion object
     {
         @RequiresApi(Build.VERSION_CODES.O)
         var currentUser = UserDataClass()
         var totalObservations = 0
 
-
+        var nearbyHotspots = arrayListOf<HotspotJson2KtKotlin>()
 
         var hotspots = arrayListOf<eBirdJson2KtKotlin>()
         var userObservations = arrayListOf<UserObservationDataClass>()
@@ -29,7 +29,6 @@ class GlobalClass: Application()
         var userAchievements = arrayListOf<UserAchievementsDataClass>()
         var acheivements = arrayListOf<AchievementsDataClass>()
         var badgeImages = arrayListOf<Bitmap>()
-
 
         fun InformUser(messageTitle: String, messageText: String, context: Context) {
             val alert = AlertDialog.Builder(context)

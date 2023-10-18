@@ -1,22 +1,42 @@
 package com.example.birdtrail_opsc7312
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.*
+import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
+import com.google.android.gms.location.LocationServices
+import com.mapbox.geojson.Point
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
 
 class Homepage : AppCompatActivity() {
+
+    //private lateinit var locationPermissionHelper: LocationPermissionHelper
+    var lat: Double = 0.0
+    var long: Double = 0.0
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -29,6 +49,7 @@ class Homepage : AppCompatActivity() {
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
 
+        //locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
         val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
         binding.root.addView(loadingProgressBar)
 
@@ -37,12 +58,14 @@ class Homepage : AppCompatActivity() {
             var eBirdHandler = eBirdAPIHandler()
             eBirdHandler.getRecentObservations("ZA")
 
+            //GetUserLocation()
+            //eBirdHandler.getNearbyHotspots(long, lat)
 
             withContext(Dispatchers.Main) {
                 loadingProgressBar.visibility = View.GONE
+                Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size, Toast.LENGTH_SHORT).show()
             }
         }
-
 
 
 
@@ -71,13 +94,10 @@ class Homepage : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId)
             {
-
                 R.id.ranking -> fragmentControl.replaceFragment(Ranking(), R.id.flContent, supportFragmentManager)
                 R.id.home -> fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, supportFragmentManager)
                 R.id.observations -> fragmentControl.replaceFragment(UserObservations(), R.id.flContent, supportFragmentManager)
                 R.id.settings -> fragmentControl.replaceFragment(AppSettings(), R.id.flContent, supportFragmentManager)
-
-
                 else -> {
 
                 }
@@ -86,7 +106,6 @@ class Homepage : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.placeholder).isClickable = false
-
 
         /*
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -116,11 +135,44 @@ class Homepage : AppCompatActivity() {
         }
          */
 
-
     }
 
-    override fun onBackPressed() {
-        // Do nothing
+//    fun GetUserLocation()
+//    {
+//        if (checkPermissions()) {
+//            var userLocation: Location? = null
+//            var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+//            mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
+//                userLocation = task.result
+//                if (userLocation != null) {
+//                    lat = userLocation!!.latitude
+//                    long = userLocation!!.longitude
+//                }
+//            }
+//        }
+//    }
+
+
+
+
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
     }
+
+
+//    override fun onBackPressed() {
+//        // Do nothing
+//    }
 
 }

@@ -196,7 +196,7 @@ class UserFullMapView : Fragment() {
 
     private fun modifyMap()
     {
-//currentSearchTerm = binding.etSearch.text.toString()
+        //currentSearchTerm = binding.etSearch.text.toString()
         if ((currentDistance != binding.slDistance.value.toInt()) || (currentTimeFrame != binding.spnTimeFrame.selectedItem.toString()) || currentSearchTerm != binding.etSearch.text.toString())
             {
 
