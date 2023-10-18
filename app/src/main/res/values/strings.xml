@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BirdTrail_OPSC7312</string>
+    <string name="app_name">BirdTrail</string>
     <string name="appNameNeat">BirdTrail</string>
     <string name="appPurpose">A bird tracking app</string>
     <string name="signIn">Sign In</string>
