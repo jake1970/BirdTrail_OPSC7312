@@ -105,7 +105,7 @@ class UserFullMapView : Fragment() {
 
             if (binding.rlTopBar.height == initialHeight)
             {
-                val va = ValueAnimator.ofInt(100, 740)
+                val va = ValueAnimator.ofInt(100, 556)
                 va.duration = 300
                 va.addUpdateListener { animation ->
                     val value = animation.animatedValue as Int
@@ -120,7 +120,7 @@ class UserFullMapView : Fragment() {
 
                 currentTimeFrame = binding.spnTimeFrame.selectedItem.toString()
                 currentDistance = binding.slDistance.value.toInt()
-                currentSearchTerm = binding.etSearch.text.toString()
+               // currentSearchTerm = binding.etSearch.text.toString()
             }
             else
             {
@@ -203,7 +203,7 @@ class UserFullMapView : Fragment() {
     private fun modifyMap()
     {
         //currentSearchTerm = binding.etSearch.text.toString()
-        if ((currentDistance != binding.slDistance.value.toInt()) || (currentTimeFrame != binding.spnTimeFrame.selectedItem.toString()) || currentSearchTerm != binding.etSearch.text.toString())
+        if ((currentDistance != binding.slDistance.value.toInt()) || (currentTimeFrame != binding.spnTimeFrame.selectedItem.toString()))
             {
 
                 //create local fragment controller

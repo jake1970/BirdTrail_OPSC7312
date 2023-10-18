@@ -27,7 +27,7 @@
     </string-array>
     <string name="rankingText">Ranking</string>
     <string name="homeText">Home</string>
-    <string name="observationsText">Observations</string>
+    <string name="observationsText">Sightings</string>
     <string name="settingsText">Settings</string>
     <string name="selectedText">Selected</string>
     <string name="addObservationText">Add Observation</string>
