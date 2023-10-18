@@ -507,9 +507,12 @@ class MapDirectionsActivity : AppCompatActivity()
         }
 
         // initialize view interactions
-        binding.stop.setOnClickListener {
-            clearRouteAndStopNavigation()
+        binding.btnBack.setOnClickListener {
+            //load map here
         }
+
+
+
         binding.recenter.setOnClickListener {
             navigationCamera.requestNavigationCameraToFollowing()
             binding.routeOverview.showTextAndExtend(BUTTON_ANIMATION_DURATION)

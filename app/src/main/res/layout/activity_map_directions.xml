@@ -26,14 +26,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/stop"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="right"
-            android:foregroundGravity="right"
-            app:srcCompat="@android:drawable/ic_delete" />
+<!--        <ImageView-->
+<!--            android:id="@+id/stop"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_gravity="right"-->
+<!--            android:foregroundGravity="right"-->
+<!--            app:srcCompat="@android:drawable/ic_delete" />-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/dark_blue"
+            android:insetTop="0dp"
+            android:insetBottom="6dp"
+            android:letterSpacing="0"
+            android:stateListAnimator="@null"
+            android:text="@string/backText"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:cornerRadius="14dp"
+            />
+
+
     </androidx.cardview.widget.CardView>
 
     <com.mapbox.navigation.ui.maneuver.view.MapboxManeuverView
