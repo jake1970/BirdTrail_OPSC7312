@@ -63,12 +63,18 @@ class UserFullMapView : Fragment() {
         if (GlobalClass.currentUser.isMetric == false)
         {
             measurementSymbol = "mi"
-            binding.slDistance.valueTo = 40f
             binding.slDistance.value = 30f
             currentDistance = 30
         }
 
 
+        if (GlobalClass.currentUser.defaultdistance > binding.slDistance.value)
+        {
+            binding.slDistance.value = binding.slDistance.valueTo
+        }
+
+
+            binding.slDistance.valueTo = GlobalClass.currentUser.defaultdistance.toFloat()
 
         //------------------------------------------------------------------------------------------
 

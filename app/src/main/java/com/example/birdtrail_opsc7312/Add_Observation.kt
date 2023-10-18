@@ -52,8 +52,7 @@ class Add_Observation : Fragment() {
         //---------------------------------------------------------------------------------------------------------
 
         // view.findViewById<BottomNavigationView>(R.id.bottomNavigationView).selectedItemId = R.id.placeholder
-       // (requireActivity() as Homepage).binding.bottomNavigationView.selectedItemId = R.id.placeholder
-
+        // (requireActivity() as Homepage).binding.bottomNavigationView.selectedItemId = R.id.placeholder
 
         //---------------------------------------------------------------------------------------------------------
 

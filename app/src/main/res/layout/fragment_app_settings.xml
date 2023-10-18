@@ -3,210 +3,490 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark_blue"
     tools:context=".AppSettings">
 
     <RelativeLayout
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/SettingsLabel"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="15dp"
-            android:textColor="@color/white"
-            android:textSize="25dp"/>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:background="#ECE6E6"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="35dp"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/tvSettings"/>
-
-        <TextView
-            android:id="@+id/tvUnitsType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/SettingsUnitsType"
-            android:layout_below="@id/tvSettings"
-            android:layout_marginTop="60dp"
-            android:layout_marginLeft="35dp"
-            android:textColor="@color/white"
-            android:textSize="20dp"/>
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleButton"
-            android:layout_width="match_parent"
-            android:layout_below="@id/tvUnitsType"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btnMetric"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="165dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="400dp"
-                android:backgroundTint="@color/light_blue"
-                android:text="@string/SettingsMetric"
-                android:textColor="@color/black"
-                app:cornerRadius="12dp" />
-
-            <Button
-                android:id="@+id/btnImperial"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
-                android:text="@string/SettingsImperial"
-                android:textColor="@color/black"
-                app:cornerRadius="12dp"
-                tools:ignore="TouchTargetSizeCheck" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <TextView
-            android:id="@+id/tvDefaultDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/SettingsDefualtDistance"
-            android:layout_below="@id/toggleButton"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="35dp"
-            android:textColor="@color/white"
-            android:textSize="20dp"/>
-
-        <com.google.android.material.slider.Slider
-            android:id="@+id/slider"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvDefaultDistance"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="35dp"
-            android:layout_weight="1"
-            android:background="@drawable/palette_full_12"
-            android:stepSize="1.0"
-            android:value="50.0"
-            android:valueFrom="1.0"
-            android:valueTo="50.0"
-            app:cornerRadius="12dp"
-            app:thumbColor="@color/black"
-            app:tickVisible="false"
-            app:trackColor="@color/light_blue"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <TextView
-            android:id="@+id/tvOptions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/slider"
-            android:text="@string/SettingsOptions"
-            android:layout_marginTop="28dp"
-            android:layout_marginLeft="37dp"
-            android:textColor="@color/white"
-            android:textSize="18dp"/>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:background="#ECE6E6"
-            android:layout_below="@id/slider"
-            android:layout_marginTop="40dp"
-            android:layout_toRightOf="@id/tvOptions"
-            android:layout_marginRight="35dp"
-            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
-            android:id = "@+id/llButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/llHeader"
+            android:orientation="horizontal"
+
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvRankingHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:text="@string/settingsText" />
+
+            <View
+                android:id="@+id/vwDivLine"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="14dp"
+                android:layout_marginHorizontal="4dp"
+                android:background="@drawable/palette_full_12"
+                android:backgroundTint="@color/white"
+                android:layout_alignLeft="@id/tvAddObservation"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/tvOptions"
+            android:layout_below="@id/llHeader"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/tvUnitsTypeHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:text="@string/SettingsUnitsType" />
+
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/tgUnitSystem"
+                app:singleSelection="true"
+                android:layout_marginTop="6dp"
+                app:selectionRequired="true"
+                android:layout_width="match_parent"
+                app:checkedButton="@id/btnMetric"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnMetric"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cornerRadius="12dp"
+                    android:text="@string/SettingsMetric"
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/white"
+                    android:stateListAnimator="@null"
+                    app:strokeColor="@color/white"
+                    android:letterSpacing="0"
+                    android:textAllCaps="false"
+                    />
+
+
+                <Button
+                    android:id="@+id/btnImperial"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cornerRadius="12dp"
+                    android:text="@string/SettingsImperial"
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/white"
+                    android:stateListAnimator="@null"
+                    app:strokeColor="@color/white"
+                    android:letterSpacing="0"
+                    android:textAllCaps="false"
+                    />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+
+            <TextView
+                android:id="@+id/tvDefaultDistanceHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/SettingsDefualtDistance" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                >
+
+
+                <View
+                    android:id="@+id/vwSliderBacking"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/palette_full_12"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgDistanceIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/imglocation_pin"
+                        app:tint="@color/black" />
+
+
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slDistance"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cornerRadius="12dp"
+                        app:trackColor="@color/black"
+                        app:thumbColor="@color/light_blue"
+                        app:tickVisible="false"
+                        app:labelBehavior="gone"
+                        android:value="50.0"
+                        android:stepSize="1.0"
+                        android:valueFrom="1.0"
+                        android:valueTo="60.0" />
+
+                    <TextView
+                        android:id="@+id/tvDistanceValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="-2dp"
+                        android:textColor="@color/black"
+                        android:text="60KM" />
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/llOptions"
+                android:orientation="horizontal"
+                android:layout_marginTop="50dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvOptionsHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:text="@string/SettingsOptions" />
+
+                <View
+                    android:id="@+id/vwSubDivLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="9dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/palette_full_12"
+                    android:backgroundTint="@color/white"
+                    android:layout_alignLeft="@id/tvAddObservation"
+                    />
+
+
+            </LinearLayout>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChangeProfilePicture"
+                android:layout_centerHorizontal="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvOptions"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="20dp"
-                android:drawableLeft="@drawable/imgperson"
-                android:backgroundTint="@color/white"
-                android:letterSpacing="0"
-                android:stateListAnimator="@null"
-                android:text="@string/SettingsChangeProfilePicture"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="15dp"
+                android:layout_below="@id/tvAppPurpose"
+                android:layout_marginTop="12dp"
                 app:cornerRadius="12dp"
-                android:gravity="start"
-                tools:ignore="TextSizeCheck" />
+                android:text="@string/SettingsChangeProfilePicture"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/imgperson"
+                android:stateListAnimator="@null"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp"
+                android:textSize="16dp"
+                android:letterSpacing="0"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChangePassword"
+                android:layout_centerHorizontal="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btnChangeProfilePicture"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/tvAppPurpose"
+                android:layout_marginTop="6dp"
+                app:cornerRadius="12dp"
+                android:text="@string/SettingsPassword"
+                android:textColor="@color/black"
                 android:backgroundTint="@color/white"
-                android:letterSpacing="0"
-                android:gravity="start"
                 android:drawableLeft="@drawable/imgchangepassword"
                 android:stateListAnimator="@null"
-                android:text="@string/SettingsPassword"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp"
+                android:textSize="16dp"
+                android:letterSpacing="0"
+                android:textAlignment="textStart"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                app:cornerRadius="12dp"
-                tools:ignore="TextSizeCheck,DuplicateClickableBoundsCheck" />
+                />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogOut"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnChangePassword"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="35dp"
-                android:drawableLeft="@drawable/imglogout"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/white"
-                android:letterSpacing="0"
-                android:stateListAnimator="@null"
-                android:text="@string/SettingsLogOut"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                app:cornerRadius="12dp"
-                android:gravity="start"
-                tools:ignore="TextSizeCheck" />
-
-            <ImageView
-                android:id="@+id/imgBird"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="270dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginBottom="90dp"
-                android:src="@drawable/imgbirdlogo" />
+                android:layout_below="@id/tvAppPurpose"
+                android:layout_marginTop="6dp"
+                app:cornerRadius="12dp"
+                android:text="@string/SettingsLogOut"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/imglogout"
+                android:stateListAnimator="@null"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp"
+                android:textSize="16dp"
+                android:letterSpacing="0"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                />
+
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgBirdLogo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="-10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/imgbirdlogo" />
+
+
 
     </RelativeLayout>
 
 </FrameLayout>
+
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tvSettings"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="@string/SettingsLabel"-->
+    <!--            android:layout_marginTop="30dp"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="25dp"/>-->
+
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="2dp"-->
+    <!--            android:background="#ECE6E6"-->
+    <!--            android:layout_marginTop="50dp"-->
+    <!--            android:layout_marginRight="35dp"-->
+    <!--            android:layout_marginLeft="10dp"-->
+    <!--            android:layout_toRightOf="@+id/tvSettings"/>-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tvUnitsType"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="@string/SettingsUnitsType"-->
+    <!--            android:layout_below="@id/tvSettings"-->
+    <!--            android:layout_marginTop="60dp"-->
+    <!--            android:layout_marginLeft="35dp"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="20dp"/>-->
+
+    <!--        <com.google.android.material.button.MaterialButtonToggleGroup-->
+    <!--            android:id="@+id/toggleButton"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_below="@id/tvUnitsType"-->
+    <!--            android:layout_marginTop="5dp"-->
+    <!--            android:layout_marginLeft="35dp"-->
+    <!--            android:layout_marginRight="35dp"-->
+    <!--            android:layout_height="wrap_content">-->
+
+    <!--            <Button-->
+    <!--                android:id="@+id/btnMetric"-->
+    <!--                style="?attr/materialButtonOutlinedStyle"-->
+    <!--                android:layout_width="165dp"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:layout_marginRight="400dp"-->
+    <!--                android:backgroundTint="@color/light_blue"-->
+    <!--                android:text="@string/SettingsMetric"-->
+    <!--                android:textColor="@color/black"-->
+    <!--                app:cornerRadius="12dp" />-->
+
+    <!--            <Button-->
+    <!--                android:id="@+id/btnImperial"-->
+    <!--                style="?attr/materialButtonOutlinedStyle"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:backgroundTint="@color/white"-->
+    <!--                android:text="@string/SettingsImperial"-->
+    <!--                android:textColor="@color/black"-->
+    <!--                app:cornerRadius="12dp"-->
+    <!--                tools:ignore="TouchTargetSizeCheck" />-->
+    <!--        </com.google.android.material.button.MaterialButtonToggleGroup>-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tvDefaultDistance"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="@string/SettingsDefualtDistance"-->
+    <!--            android:layout_below="@id/toggleButton"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginLeft="35dp"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="20dp"/>-->
+
+    <!--        <com.google.android.material.slider.Slider-->
+    <!--            android:id="@+id/slider"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_below="@id/tvDefaultDistance"-->
+    <!--            android:layout_marginLeft="35dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginRight="35dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:background="@drawable/palette_full_12"-->
+    <!--            android:stepSize="1.0"-->
+    <!--            android:value="50.0"-->
+    <!--            android:valueFrom="1.0"-->
+    <!--            android:valueTo="50.0"-->
+    <!--            app:cornerRadius="12dp"-->
+    <!--            app:thumbColor="@color/black"-->
+    <!--            app:tickVisible="false"-->
+    <!--            app:trackColor="@color/light_blue"-->
+    <!--            tools:ignore="SpeakableTextPresentCheck" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tvOptions"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_below="@id/slider"-->
+    <!--            android:text="@string/SettingsOptions"-->
+    <!--            android:layout_marginTop="28dp"-->
+    <!--            android:layout_marginLeft="37dp"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="18dp"/>-->
+
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="2dp"-->
+    <!--            android:background="#ECE6E6"-->
+    <!--            android:layout_below="@id/slider"-->
+    <!--            android:layout_marginTop="40dp"-->
+    <!--            android:layout_toRightOf="@id/tvOptions"-->
+    <!--            android:layout_marginRight="35dp"-->
+    <!--            android:layout_marginLeft="10dp"/>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:id = "@+id/llButtons"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_below="@id/tvOptions"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <com.google.android.material.button.MaterialButton-->
+    <!--                android:id="@+id/btnChangeProfilePicture"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_below="@id/tvOptions"-->
+    <!--                android:layout_centerHorizontal="true"-->
+    <!--                android:layout_marginLeft="35dp"-->
+    <!--                android:layout_marginRight="35dp"-->
+    <!--                android:layout_marginTop="20dp"-->
+    <!--                android:drawableLeft="@drawable/imgperson"-->
+    <!--                android:backgroundTint="@color/white"-->
+    <!--                android:letterSpacing="0"-->
+    <!--                android:stateListAnimator="@null"-->
+    <!--                android:text="@string/SettingsChangeProfilePicture"-->
+    <!--                android:textAllCaps="false"-->
+    <!--                android:textColor="@color/black"-->
+    <!--                android:textSize="15dp"-->
+    <!--                app:cornerRadius="12dp"-->
+    <!--                android:gravity="start"-->
+    <!--                tools:ignore="TextSizeCheck" />-->
+
+    <!--            <com.google.android.material.button.MaterialButton-->
+    <!--                android:id="@+id/btnChangePassword"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_below="@id/btnChangeProfilePicture"-->
+    <!--                android:layout_centerHorizontal="true"-->
+    <!--                android:layout_marginLeft="35dp"-->
+    <!--                android:layout_marginRight="35dp"-->
+    <!--                android:layout_marginTop="10dp"-->
+    <!--                android:backgroundTint="@color/white"-->
+    <!--                android:letterSpacing="0"-->
+    <!--                android:gravity="start"-->
+    <!--                android:drawableLeft="@drawable/imgchangepassword"-->
+    <!--                android:stateListAnimator="@null"-->
+    <!--                android:text="@string/SettingsPassword"-->
+    <!--                android:textAllCaps="false"-->
+    <!--                android:textColor="@color/black"-->
+    <!--                android:textSize="15dp"-->
+    <!--                app:cornerRadius="12dp"-->
+    <!--                tools:ignore="TextSizeCheck,DuplicateClickableBoundsCheck" />-->
+
+    <!--            <com.google.android.material.button.MaterialButton-->
+    <!--                android:id="@+id/btnLogOut"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_below="@id/btnChangePassword"-->
+    <!--                android:layout_centerHorizontal="true"-->
+    <!--                android:layout_marginLeft="35dp"-->
+    <!--                android:drawableLeft="@drawable/imglogout"-->
+    <!--                android:layout_marginRight="35dp"-->
+    <!--                android:layout_marginTop="10dp"-->
+    <!--                android:backgroundTint="@color/white"-->
+    <!--                android:letterSpacing="0"-->
+    <!--                android:stateListAnimator="@null"-->
+    <!--                android:text="@string/SettingsLogOut"-->
+    <!--                android:textAllCaps="false"-->
+    <!--                android:textColor="@color/black"-->
+    <!--                android:textSize="15dp"-->
+    <!--                app:cornerRadius="12dp"-->
+    <!--                android:gravity="start"-->
+    <!--                tools:ignore="TextSizeCheck" />-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/imgBird"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginLeft="270dp"-->
+    <!--                android:layout_marginRight="35dp"-->
+    <!--                android:layout_marginBottom="90dp"-->
+    <!--                android:src="@drawable/imgbirdlogo" />-->
+
+    <!--        </LinearLayout>-->
