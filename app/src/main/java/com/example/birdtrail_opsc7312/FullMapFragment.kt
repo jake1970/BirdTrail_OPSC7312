@@ -113,7 +113,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         //---------------------------------------------------------
         //Hide the compass
         //---------------------------------------------------------
-        mapView.compass.visibility = false
+        //mapView.compass.visibility = false
+        mapView.compass.enabled = false
         //---------------------------------------------------------
 
 
