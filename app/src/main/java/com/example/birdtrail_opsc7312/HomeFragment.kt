@@ -32,7 +32,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
 
     private val spacerSize = 20
-
+    private lateinit var fullMapView: FullMapFragment
 
 
 
@@ -61,7 +61,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
-        var fullMapView = FullMapFragment()
+        //var fullMapView = FullMapFragment()
+        fullMapView = FullMapFragment()
         fullMapView.openInFullView = true
         fragmentControl.replaceFragment(
             fullMapView,
@@ -158,6 +159,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         return view
     }
+
+    suspend public fun getUserLocation() : Location?
+    {
+        return fullMapView.getUserLocation()
+    }
+
+
+
 
 //    fun getLocationAndFindClosestHotspot() {
 //        mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->

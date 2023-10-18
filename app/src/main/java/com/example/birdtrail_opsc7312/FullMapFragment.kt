@@ -43,6 +43,7 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import okhttp3.internal.wait
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -361,6 +362,23 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
             pointAnnotationManager?.create(pointAnnotationOptions)
         }
     }
+
+    suspend fun getUserLocation() : Location?
+    {
+        var userLocation: Location? = null
+        if (checkPermissions())
+        {
+            var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            mFusedLocationClient.lastLocation.wait()
+
+                //  (requireActivity()) { task ->
+                userLocation = mFusedLocationClient.lastLocation.result//task.result
+                //}
+        }
+        return userLocation
+    }
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission", "SetTextI18n")

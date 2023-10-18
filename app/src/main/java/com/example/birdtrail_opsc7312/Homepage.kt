@@ -33,11 +33,6 @@ import java.time.Period
 
 class Homepage : AppCompatActivity() {
 
-    //private lateinit var locationPermissionHelper: LocationPermissionHelper
-    var lat: Double = 0.0
-    var long: Double = 0.0
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?)
@@ -62,12 +57,25 @@ class Homepage : AppCompatActivity() {
             var eBirdHandler = eBirdAPIHandler()
             eBirdHandler.getRecentObservations("ZA")
 
+
+
+
+            var location = loadHome.getUserLocation()
+            if (location != null)
+            {
+                eBirdHandler.getNearbyHotspots(location.longitude, location.latitude)
+            }
+
+            //Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size.toString(), Toast.LENGTH_SHORT).show()
+
             //GetUserLocation()
             //eBirdHandler.getNearbyHotspots(long, lat)
 
             withContext(Dispatchers.Main) {
                 loadingProgressBar.visibility = View.GONE
-              //  Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@Homepage, GlobalClass.nearbyHotspots.size.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Homepage, location.toString(), Toast.LENGTH_SHORT).show()
+
             }
         }
 
