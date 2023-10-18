@@ -664,4 +664,8 @@ class MapDirectionsActivity : AppCompatActivity()
         binding.routeOverview.visibility = View.INVISIBLE
         binding.tripProgressCard.visibility = View.INVISIBLE
     }
+
+    override fun onBackPressed() {
+        // Do nothing
+    }
 }

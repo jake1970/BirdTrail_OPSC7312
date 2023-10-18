@@ -177,4 +177,8 @@ class SignIn : AppCompatActivity() {
         locationPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    override fun onBackPressed() {
+        // Do nothing
+    }
+
 }

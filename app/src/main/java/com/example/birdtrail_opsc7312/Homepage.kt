@@ -210,8 +210,8 @@ class Homepage : AppCompatActivity() {
 //    }
 
 
-//    override fun onBackPressed() {
-//        // Do nothing
-//    }
+    override fun onBackPressed() {
+        // Do nothing
+    }
 
 }
