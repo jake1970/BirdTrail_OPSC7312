@@ -113,53 +113,6 @@
                 android:layout_margin="6dp"
                 />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="6dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:src="?android:attr/actionModeWebSearchDrawable"
-                    app:tint="@color/black" />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_gravity="center"
-                    android:id="@+id/imgCircle1"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    app:shapeAppearanceOverlay="@style/circleImageView"
-                    app:srcCompat="@color/white"
-                    android:layout_marginLeft="6dp"
-                    />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_gravity="center"
-                    android:id="@+id/imgCircle2"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    app:shapeAppearanceOverlay="@style/circleImageView"
-                    app:srcCompat="@color/white"
-                    android:layout_marginLeft="6dp"
-                    />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_gravity="center"
-                    android:id="@+id/imgCircle3"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    app:shapeAppearanceOverlay="@style/circleImageView"
-                    app:srcCompat="@color/white"
-                    android:layout_marginLeft="6dp"
-                    />
-
-            </LinearLayout>
-
 
         </LinearLayout>
 

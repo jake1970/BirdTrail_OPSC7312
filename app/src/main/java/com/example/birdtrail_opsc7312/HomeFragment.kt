@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
@@ -97,6 +98,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
             else
             {
+
+
                 //if the user doesnt have this achievement
                 nextAchievement.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[achievement.badgeIndex])
                 nextAchievement.binding.tvAchievementName.text = achievement.name
@@ -110,6 +113,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
+        // Create a TextView
+        val nextAchievementText = TextView(requireContext()).apply {
+            text = "Next Achievement" // replace with actual username
+            textSize = 24f // this is in SP (scale-independent pixels), not DP
+            setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
+            setPadding(8, 0, 0, 0) // assuming you want the left margin to be padding here
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        activityLayout.addView(nextAchievementText)
         activityLayout.addView(nextAchievement)
 
 
@@ -159,7 +175,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             latestUserSighting.binding.tvSighted.text = userSighting.date.toString()
 
 
+            // Create a TextView
+            val latestObservationText = TextView(requireContext()).apply {
+                text = "Your Latest Observation" // replace with actual username
+                textSize = 24f // this is in SP (scale-independent pixels), not DP
+                setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
+                setPadding(8, 0, 0, 0) // assuming you want the left margin to be padding here
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
 
+            activityLayout.addView(latestObservationText)
             activityLayout.addView(latestUserSighting)
 
         }
