@@ -85,7 +85,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
             android:layout_below="@id/llHeader"
-            android:backgroundTint="@color/light_blue"
+            android:backgroundTint="@color/white"
             android:background="@drawable/palette_full_12"
             android:clipToOutline="true"
             android:orientation="vertical">
@@ -112,6 +112,9 @@
                 android:layout_gravity="center"
                 android:layout_margin="6dp"
                 />
+
+
+
 
 
         </LinearLayout>

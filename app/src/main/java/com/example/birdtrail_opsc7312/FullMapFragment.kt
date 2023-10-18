@@ -316,7 +316,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
     //private fun onCameraTrackingDismissed() {
      fun onCameraTrackingDismissed() {
-        Toast.makeText(requireContext(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
         mapView.location
             .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
         mapView.location

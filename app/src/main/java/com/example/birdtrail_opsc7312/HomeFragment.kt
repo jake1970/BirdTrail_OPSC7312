@@ -67,11 +67,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         //var fullMapView = FullMapFragment()
         fullMapView = FullMapFragment()
         fullMapView.openInFullView = true
+
         fragmentControl.replaceFragment(
             fullMapView,
             R.id.cvMapFragmentContainer,
             requireActivity().supportFragmentManager
         )
+
+
 
         //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 

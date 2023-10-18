@@ -222,7 +222,7 @@
                 android:src="@drawable/imguser_location"
                 android:scaleY="0.8"
                 android:scaleX="0.8"
-                android:visibility="invisible"
+                android:alpha="0"
                 app:tint="@color/white" />
 
             <TextView

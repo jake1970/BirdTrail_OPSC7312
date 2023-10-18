@@ -221,7 +221,7 @@ class UserFullMapView : Fragment() {
 
                 fullMapView.filterDistance = binding.slDistance.value.toInt().toDouble()
 
-                fullMapView.filterSearchBirdName = binding.etSearch.text.toString()
+                //ullMapView.filterSearchBirdName = binding.etSearch.text.toString()
 
                 fragmentControl.replaceFragment(
                     fullMapView,
