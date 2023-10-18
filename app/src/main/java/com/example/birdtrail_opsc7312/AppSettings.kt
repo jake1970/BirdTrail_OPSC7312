@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import android.provider.MediaStore
+import com.google.android.material.slider.Slider
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -24,6 +25,7 @@ import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
+import com.google.android.material.slider.RangeSlider
 import java.io.IOException
 
 
@@ -38,6 +40,8 @@ class AppSettings : Fragment() {
     private val binding get() = _binding!!
     private var selectedImageBitmap : Bitmap? = null
     private var savedPassword : String? = ""
+    private var sliderValue : Int = 0
+    private var defaultDistance: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -52,6 +56,13 @@ class AppSettings : Fragment() {
         binding.btnChangePassword.setOnClickListener()
         {
             showPasswordChangeDialog()
+        }
+
+        //get slider default distance
+        binding.slider.addOnChangeListener { slider, value, fromUser ->
+            // Update the variable with the current slider value
+            defaultDistance = sliderValue
+            GlobalClass.currentUser.defaultdistance = defaultDistance
         }
 
         //change profile picture
@@ -132,7 +143,6 @@ class AppSettings : Fragment() {
 
         builder.show()
     }
-
     //method to access gallery on your phone
     private fun Gallery()
     {
@@ -166,7 +176,6 @@ class AppSettings : Fragment() {
             null
         }
     }
-
 
     companion object {
         private const val REQUEST_PICK_IMAGE = 123
