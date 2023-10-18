@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="24dp"
-            android:text="@string/ObservationLabel" />
+            android:text="@string/observationsText" />
 
         <View
             android:id="@+id/vwDivLine"
