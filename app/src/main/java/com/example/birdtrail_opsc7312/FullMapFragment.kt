@@ -251,7 +251,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     //----------------------------------------------------------------------------------------------------------------------------
     var openInFullView = false
     var centerOnHotspot = false
-    var filterDistance = 50
+    var filterDistance = 50.0
     var filterTimeFrame = 1
     var filterSearchBirdName = ""
     //----------------------------------------------------------------------------------------------------------------------------
@@ -405,7 +405,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                     if (userLocation != null) {
 
 
-
                         // Iterate over each hotspot in the global list
                         for (hotspot in GlobalClass.hotspots) {
                             // Calculate the distance between the user's location and the hotspot.
@@ -432,6 +431,13 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
                                 Period.between(LocalDate.parse(localDate), LocalDate.now()).days
 
                             var commonBirdName = hotspot.comName?.lowercase()
+
+                            if (GlobalClass.currentUser.isMetric == false)
+                            {
+                                filterDistance = milesToKilometers(filterDistance)
+                            }
+
+
                            // if (commonBirdName?.contains(filterSearchBirdName.lowercase()) == true || filterSearchBirdName == "") {
                             if (filterSearchBirdName.lowercase() in commonBirdName!! || filterSearchBirdName == "") {
                                 if (daysBetween <= (filterTimeFrame * 7)) {
@@ -561,8 +567,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
     }
 
 
-
-
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -584,6 +588,12 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
         return kilometers * 0.62137119
     }
 
+    private fun milesToKilometers(miles: Double): Double{
+        return miles / 0.62137119
+    }
+
+
+
     // Function to calculate distance between two points in km using Haversine formula
     @RequiresApi(Build.VERSION_CODES.O)
     fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
@@ -597,11 +607,10 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map)  {
 
         var measurement = earthRadiusKm * c
 
-
-        if (GlobalClass.currentUser.isMetric == false)
-        {
-            measurement = kilometersToMiles(measurement)
-        }
+//        if (GlobalClass.currentUser.isMetric == false)
+//        {
+//            measurement = kilometersToMiles(measurement)
+//        }
 
         return measurement
     }
