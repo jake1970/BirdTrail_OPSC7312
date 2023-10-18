@@ -213,7 +213,7 @@ class UserFullMapView : Fragment() {
                 }
                 fullMapView.filterTimeFrame = filterWeeks
 
-                fullMapView.filterDistance = binding.slDistance.value.toInt()
+                fullMapView.filterDistance = binding.slDistance.value.toInt().toDouble()
 
                 fullMapView.filterSearchBirdName = binding.etSearch.text.toString()
 
