@@ -1,18 +1,21 @@
 package com.example.birdtrail_opsc7312
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentAddObservationBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentMapHotspotBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,6 +32,7 @@ class MapHotspot : Fragment() {
     private var _binding: FragmentMapHotspotBinding? = null
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +43,8 @@ class MapHotspot : Fragment() {
         val view = binding.root
 
         val hotspotIndex = arguments?.getInt("hotspotIndex")
+        var distance = arguments?.getDouble("distance")
+
 
         var hotspot = GlobalClass.nearbyHotspots[hotspotIndex!!]
 
@@ -65,6 +71,24 @@ class MapHotspot : Fragment() {
 
         binding.tvHotspotDate.text = hotspot.latestObsDt.toString()
         binding.tvHotspotLocation.text = hotspot.locName
+        if (GlobalClass.currentUser.isMetric)
+        {
+            val decimalFormat = DecimalFormat("#.##")
+            val formattedDistance = decimalFormat.format(distance)
+            binding.tvDistance.text = "Distance: ${formattedDistance}km"
+        }
+        else
+        {
+            if (distance != null) {
+                distance *= 0.62137119
+            }
+            val decimalFormat = DecimalFormat("#.##")
+            val formattedDistance = decimalFormat.format(distance)
+            binding.tvDistance.text = "Distance: ${formattedDistance}mi"
+        }
+
+
+
 
 
         lifecycleScope.launch {
@@ -96,6 +120,14 @@ class MapHotspot : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.btnBack.setOnClickListener(){
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.flContent, FullMapFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
 
         binding.btnDirections.setOnClickListener(){
 

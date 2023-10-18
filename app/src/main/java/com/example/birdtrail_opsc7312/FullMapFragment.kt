@@ -516,7 +516,14 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                             val mapHotspotView = MapHotspot()
                             val args = Bundle()
 
+                            val distanceInKm = calculateDistance(
+                                userLocation!!.latitude,
+                                userLocation!!.longitude,
+                                pointAnnotation.point.latitude(),
+                                pointAnnotation.point.longitude()
+                            )
                             args.putInt("hotspotIndex", clickedHotspotIndex)
+                            args.putDouble("distance", distanceInKm)
 
                             mapHotspotView.arguments = args
 
