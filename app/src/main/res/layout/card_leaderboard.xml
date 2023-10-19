@@ -87,7 +87,7 @@
                     android:layout_marginBottom="6dp"
                     android:drawableLeft="@drawable/imgperson"
                     android:textColor="@color/black"
-                    android:text="TextView" />
+                    android:text="@string/TextView" />
 
                 <TextView
                     android:id="@+id/tvBadges"
@@ -96,7 +96,7 @@
                     android:drawableLeft="@drawable/imgmedal"
                     android:paddingLeft="1dp"
                     android:textColor="@color/black"
-                    android:text="TextView" />
+                    android:text="@string/TextView" />
             </LinearLayout>
 
 
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="TextView" />
+                android:text="@string/TextView" />
 
 
         </LinearLayout>

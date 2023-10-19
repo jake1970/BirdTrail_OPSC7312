@@ -164,21 +164,6 @@
                 android:textColor="@color/white"
                 android:textSize="16dp" />
 
-            <!--
-            <Spinner
-                android:id="@+id/spnSecurityQuestion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                android:entries="@array/securityQuestions"
-                android:backgroundTint="@color/white"
-                android:background="@drawable/palette_full_12"
-                android:textColor="@color/black"
-                android:layout_marginTop="4dp"
-                android:padding="4dp"
-                />
-            -->
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
