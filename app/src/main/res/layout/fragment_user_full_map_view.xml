@@ -234,7 +234,7 @@
                 android:drawableLeft="@drawable/imgfilter"
                 android:drawableTint="@color/white"
                 android:layout_alignParentEnd="true"
-                android:text="Filter"
+                android:text="@string/Filter"
                 android:textColor="@color/white" />  <!-- Add this to strings file-->
 
         </RelativeLayout>
