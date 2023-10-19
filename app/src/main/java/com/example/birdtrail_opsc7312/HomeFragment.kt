@@ -98,7 +98,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             // Create a TextView
             val nextAchievementText = TextView(requireContext()).apply {
-                text = "Next Achievement" // replace with actual username
+                text = getString(R.string.nextAchievement) // replace with actual username
                 textSize = 18f // this is in SP (scale-independent pixels), not DP
                 setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
                 setPadding(8, 0, 0, 6) // assuming you want the left margin to be padding here

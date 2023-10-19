@@ -112,7 +112,7 @@ class MapHotspot : Fragment() {
                 }
                 catch (e : Exception)
                 {
-                    Toast.makeText(requireContext(), getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
 
