@@ -21,6 +21,7 @@
             android:id="@+id/llHeader"
             android:orientation="horizontal"
             android:layout_marginHorizontal="10dp"
+
             android:gravity="center">
 
             <TextView
@@ -115,11 +116,13 @@
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/imgbird"
                     android:paddingHorizontal="6dp"
-                    android:paddingVertical="4dp"
                     android:text=""
+                    android:gravity="center"
+                    android:textAlignment="textStart"
                     android:textColor="@color/black"
                     android:singleLine="true"
-                    android:ellipsize="end"/>
+                    android:ellipsize="end"
+                    tools:ignore="RtlCompat" />
 
                 <TextView
                     android:id="@+id/tvSightingsHeader"
@@ -153,7 +156,7 @@
                         android:id="@+id/tvNumberOfSightings"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:background="@color/white"
                         android:padding="6dp"
                         android:text=""
