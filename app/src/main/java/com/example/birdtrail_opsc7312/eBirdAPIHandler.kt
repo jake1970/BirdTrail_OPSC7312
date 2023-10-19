@@ -13,6 +13,7 @@ import java.net.URL
 
 class eBirdAPIHandler
 {
+    //api call to get region observations
     suspend fun getRecentObservations(regionCode: String): String = withContext(Dispatchers.IO)
     {
         val url = URL("https://api.ebird.org/v2/data/obs/${regionCode}/recent")
@@ -43,6 +44,9 @@ class eBirdAPIHandler
         }
     }
 
+    //---------------------------------------------------------------------------------------------
+
+    //api call to get hotspots nearby to the user
     suspend fun getNearbyHotspots(long: Double, lat: Double): String = withContext(Dispatchers.IO)
     {
         val url = URL("https://api.ebird.org/v2/ref/hotspot/geo?lat=${lat}&lng=${long}&fmt=json&back=21&dist=60")
@@ -73,6 +77,9 @@ class eBirdAPIHandler
         }
     }
 
+    //---------------------------------------------------------------------------------------------
+
+    //api call to get bird observations at a specified hotspot
     suspend fun getHotspotBirds(regionCode: String, locationCode: String): String = withContext(Dispatchers.IO)
     {
         val url = URL("https://api.ebird.org/v2/data/obs/${regionCode}/recent?hotspot=true&r=$locationCode&back=21")
@@ -102,6 +109,4 @@ class eBirdAPIHandler
             return@withContext "Error: $responseCode"
         }
     }
-
-
 }
