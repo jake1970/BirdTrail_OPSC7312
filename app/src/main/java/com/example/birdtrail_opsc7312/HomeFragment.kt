@@ -119,9 +119,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // Create a TextView
         val nextAchievementText = TextView(requireContext()).apply {
             text = "Next Achievement" // replace with actual username
-            textSize = 24f // this is in SP (scale-independent pixels), not DP
+            textSize = 18f // this is in SP (scale-independent pixels), not DP
             setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
-            setPadding(8, 0, 0, 0) // assuming you want the left margin to be padding here
+            setPadding(8, 0, 0, 6) // assuming you want the left margin to be padding here
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -181,9 +181,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             // Create a TextView
             val latestObservationText = TextView(requireContext()).apply {
                 text = "Your Latest Observation" // replace with actual username
-                textSize = 24f // this is in SP (scale-independent pixels), not DP
+                textSize = 18f // this is in SP (scale-independent pixels), not DP
                 setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
-                setPadding(8, 0, 0, 0) // assuming you want the left margin to be padding here
+                setPadding(8, 0, 0, 12) // assuming you want the left margin to be padding here
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT

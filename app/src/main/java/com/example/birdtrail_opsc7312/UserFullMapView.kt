@@ -1,7 +1,6 @@
 package com.example.birdtrail_opsc7312
 
 
-import android.R.attr.button
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.Color
@@ -10,24 +9,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.AdapterView
-import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserFullMapViewBinding
 import com.mapbox.android.gestures.MoveGestureDetector
-import com.mapbox.maps.extension.style.expressions.dsl.generated.switchCase
 import com.mapbox.maps.plugin.gestures.OnMoveListener
-import com.mapbox.maps.plugin.gestures.gestures
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.math.roundToInt
 
 
 /**
@@ -61,18 +49,22 @@ class UserFullMapView : Fragment() {
         if (GlobalClass.currentUser.isMetric == false)
         {
             measurementSymbol = "mi"
-            binding.slDistance.value = 30f
-            currentDistance = 30
+          //  binding.slDistance.value = 30f
+
+            binding.slDistance.valueTo = 40f
         }
-
-
-
-        if (GlobalClass.currentUser.defaultdistance > binding.slDistance.value)
+        else
         {
-            binding.slDistance.value = binding.slDistance.valueTo
+            binding.slDistance.valueTo = 60f
         }
 
-        binding.slDistance.valueTo = GlobalClass.currentUser.defaultdistance.toFloat()
+
+        currentDistance = GlobalClass.currentUser.defaultdistance
+
+         binding.slDistance.value = currentDistance.toFloat()
+
+
+      //  binding.slDistance.valueTo = GlobalClass.currentUser.defaultdistance.toFloat()
 
 
 
@@ -84,8 +76,26 @@ class UserFullMapView : Fragment() {
         //create local fragment controller
         val fragmentControl = FragmentHandler()
 
+
+
+
+
+
         var fullMapView = FullMapFragment()
-        fragmentControl.replaceFragment(fullMapView, R.id.cvFullMapFragmentContainer, requireActivity().supportFragmentManager)
+
+        //fullMapView.centerButton = binding.imgCenterMap
+
+        //fullMapView.setupGesturesListener(binding.imgCenterMap)
+
+        overrideMapMovementListener(fullMapView)
+
+
+        modifyMap(true)
+
+       // fragmentControl.replaceFragment(fullMapView, R.id.cvFullMapFragmentContainer, requireActivity().supportFragmentManager)
+
+
+
 
 
 
@@ -120,6 +130,7 @@ class UserFullMapView : Fragment() {
 
                 currentTimeFrame = binding.spnTimeFrame.selectedItem.toString()
                 currentDistance = binding.slDistance.value.toInt()
+
                // currentSearchTerm = binding.etSearch.text.toString()
             }
             else
@@ -137,7 +148,7 @@ class UserFullMapView : Fragment() {
                 binding.llFilterOptions.visibility = View.GONE//}
                 binding.imgDarkenOverlay.visibility = View.INVISIBLE
 
-                modifyMap()
+                modifyMap(false)
             }
         }
 
@@ -149,7 +160,7 @@ class UserFullMapView : Fragment() {
 //
             }
 
-            binding.tvDistanceValue.text = binding.slDistance.value.toInt().toString()
+           // binding.tvDistanceValue.text = binding.slDistance.value.toInt().toString()
 
             //time frame
             binding.spnTimeFrame.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
@@ -167,6 +178,43 @@ class UserFullMapView : Fragment() {
 
 
 
+
+
+        binding.imgCenterMap.setOnClickListener()
+        {
+
+            modifyMap(true)
+
+                   // fullMapView.onMapReady()
+           /* while (fullMapView.mapView == null)
+            {
+                fullMapView.manualCenter()
+            }
+
+            */
+
+/*
+            fullMapView.mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(14.0)
+                    .build()
+            )
+
+*/
+                //    ObjectAnimator.ofFloat(binding.imgCenterMap, View.ALPHA, 1.0f, 0.0f).setDuration(600).start();
+
+        }
+
+        binding.tvDistanceValue.text = "${currentDistance}$measurementSymbol"
+        //binding.sl.text = "${currentDistance}$measurementSymbol"
+
+        // Inflate the layout for this fragment
+        return view
+    }
+
+
+    private fun overrideMapMovementListener(fullMapView: FullMapFragment)
+    {
         fullMapView.onMoveListener = object : OnMoveListener {
             override fun onMoveBegin(detector: MoveGestureDetector) {
                 fullMapView.onCameraTrackingDismissed()
@@ -181,35 +229,24 @@ class UserFullMapView : Fragment() {
             override fun onMoveEnd(detector: MoveGestureDetector) {}
 
         }
-
-        binding.imgCenterMap.setOnClickListener()
-        {
-
-                    fullMapView.onMapReady()
-                    ObjectAnimator.ofFloat(binding.imgCenterMap, View.ALPHA, 1.0f, 0.0f).setDuration(600).start();
-
-        }
-
-        binding.tvDistanceValue.text = "${currentDistance}$measurementSymbol"
-
-        // Inflate the layout for this fragment
-        return view
     }
 
 
-
-
-
-    private fun modifyMap()
+    private fun modifyMap(forceUpdate : Boolean)
     {
+
+
+
         //currentSearchTerm = binding.etSearch.text.toString()
-        if ((currentDistance != binding.slDistance.value.toInt()) || (currentTimeFrame != binding.spnTimeFrame.selectedItem.toString()))
+        if (((currentDistance != binding.slDistance.value.toInt()) || (currentTimeFrame != binding.spnTimeFrame.selectedItem.toString())) || forceUpdate == true)
             {
 
                 //create local fragment controller
                 val fragmentControl = FragmentHandler()
 
                 var fullMapView = FullMapFragment()
+
+              //  fullMapView.centerButton = binding.imgCenterMap
 
                 var filterWeeks = 1
                 when(binding.spnTimeFrame.selectedItemPosition) {
@@ -221,13 +258,25 @@ class UserFullMapView : Fragment() {
 
                 fullMapView.filterDistance = binding.slDistance.value.toInt().toDouble()
 
-                //ullMapView.filterSearchBirdName = binding.etSearch.text.toString()
+                //fullMapView.filterSearchBirdName = binding.etSearch.text.toString()
+
+
+               // fullMapView.loadMap()
+
 
                 fragmentControl.replaceFragment(
                     fullMapView,
                     R.id.cvFullMapFragmentContainer,
                     requireActivity().supportFragmentManager
                 )
+
+                binding.imgCenterMap.alpha = 0f
+
+
+               // fullMapView.setupGesturesListener(binding.imgCenterMap)
+                overrideMapMovementListener(fullMapView)
+
+
 
 
             }

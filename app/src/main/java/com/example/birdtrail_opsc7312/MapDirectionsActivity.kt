@@ -77,6 +77,8 @@ class MapDirectionsActivity : AppCompatActivity()
         private const val BUTTON_ANIMATION_DURATION = 1500L
     }
 
+
+
     var long: Double = 0.0
     var lat: Double = 0.0
 
@@ -408,6 +410,12 @@ class MapDirectionsActivity : AppCompatActivity()
         binding = ActivityMapDirectionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Hide the action bar
+        supportActionBar?.hide()
+
+        //set status bar color
+        window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+
         lat = intent.getDoubleExtra("lat", 0.0)
         long = intent.getDoubleExtra("long", 0.0)
 
@@ -511,10 +519,14 @@ class MapDirectionsActivity : AppCompatActivity()
         binding.btnBack.setOnClickListener {
             //load map here
 
-            var homepage = Homepage()
-            val transaction = homepage.supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.flContent, FullMapFragment())
-            val intent = Intent(this, homepage::class.java).apply {
+
+            //var homepage = Homepage()
+            //val transaction = homepage.supportFragmentManager.beginTransaction()
+            //transaction.replace(R.id.flContent, FullMapFragment())
+           // val intent = Intent(this, homepage::class.java).apply {
+                // Pass any data to Homepage Activity if needed
+            //}
+            val intent = Intent(this, Homepage::class.java).apply {
                 // Pass any data to Homepage Activity if needed
             }
             startActivity(intent)
