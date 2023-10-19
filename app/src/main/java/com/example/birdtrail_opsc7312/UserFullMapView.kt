@@ -18,19 +18,20 @@ import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [UserFullMapView.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class UserFullMapView : Fragment() {
 
+    //set view binding
     private var _binding: FragmentUserFullMapViewBinding? = null
     private val binding get() = _binding!!
 
-
+    //set the current map filter distance
     private var currentDistance = 50
+
+    //set the current map filter time frame
     private lateinit var currentTimeFrame: String
+
+    //set the current map measurement symbol
     private var measurementSymbol = "KM"
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -39,186 +40,166 @@ class UserFullMapView : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        //view binding
         _binding = FragmentUserFullMapViewBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        //------------------------------------------------------------------------------------------
-        //handle measurements
-        //------------------------------------------------------------------------------------------
 
+        //check the current users measurement settings
         if (GlobalClass.currentUser.isMetric == false)
         {
+            //set the current map measurement symbol to miles
             measurementSymbol = "mi"
-          //  binding.slDistance.value = 30f
 
+            //set the maximum value for miles distance setting
             binding.slDistance.valueTo = 40f
         }
         else
         {
+            //set the maximum value for kilometers distance setting
             binding.slDistance.valueTo = 60f
         }
 
 
+        //set the current map filter distance to the users default distance setting
         currentDistance = GlobalClass.currentUser.defaultdistance
-
-         binding.slDistance.value = currentDistance.toFloat()
-
-
-      //  binding.slDistance.valueTo = GlobalClass.currentUser.defaultdistance.toFloat()
+        binding.slDistance.value = currentDistance.toFloat()
 
 
-
-        //------------------------------------------------------------------------------------------
-
-
+        //set the current map filter timeframe
         currentTimeFrame = binding.spnTimeFrame.selectedItem.toString()
+
 
         //create local fragment controller
         val fragmentControl = FragmentHandler()
 
-
-
-
-
-
+        //new variable from the full map fragment (contains the map view)
         var fullMapView = FullMapFragment()
 
-        //fullMapView.centerButton = binding.imgCenterMap
-
-        //fullMapView.setupGesturesListener(binding.imgCenterMap)
-
+        //call method to modify the movement listener of the map view
         overrideMapMovementListener(fullMapView)
 
-
+        //call method to update the users map
         modifyMap(true)
 
-       // fragmentControl.replaceFragment(fullMapView, R.id.cvFullMapFragmentContainer, requireActivity().supportFragmentManager)
 
-
-
-
-
-
+        //on the top bar back button click
         binding.tvBack.setOnClickListener()
         {
+            //send the user back to the home fragment
             fragmentControl.replaceFragment(HomeFragment(), R.id.flContent, parentFragmentManager)
         }
 
+        //variable to hold the expanding menus initial height
         var initialHeight = 0
 
+
+        //on the top bar filter button click
         binding.tvFilter.setOnClickListener()
         {
+
+            //new animation handler object
+            val animationManager = AnimationHandler()
+
+            //check if the initial height has not been set
             if (initialHeight == 0)
             {
+                //set the initial height to the top bars height
                 initialHeight = binding.rlTopBar.height
             }
 
+
+            //check if the menu is expanded or not
             if (binding.rlTopBar.height == initialHeight)
             {
-                val va = ValueAnimator.ofInt(100, 556)
-                va.duration = 300
-                va.addUpdateListener { animation ->
-                    val value = animation.animatedValue as Int
-                    binding.rlTopBar.getLayoutParams().height = value
-                    binding.rlTopBar.requestLayout()
-                }
-                va.start()
+               //if the menu is not expanded
 
-                binding.llFilterOptions.visibility = View.VISIBLE//}
+                //call method to animate the expansion of the menu
+                animationManager.animateMenu(binding.rlTopBar, 100, 556)
 
+                //show the map filter options
+                binding.llFilterOptions.visibility = View.VISIBLE
+
+                //show the darkened overlay for the map
                 binding.imgDarkenOverlay.visibility = View.VISIBLE
 
+                //set the current map filter time frame to the ui set value
                 currentTimeFrame = binding.spnTimeFrame.selectedItem.toString()
+
+                //set the current map filter distance to the ui set value
                 currentDistance = binding.slDistance.value.toInt()
 
-               // currentSearchTerm = binding.etSearch.text.toString()
+
             }
             else
             {
-                val va = ValueAnimator.ofInt(binding.rlTopBar.height, initialHeight)
-                va.duration = 300
-                va.addUpdateListener { animation ->
-                    val value = animation.animatedValue as Int
-                    binding.rlTopBar.getLayoutParams().height = value
-                    binding.rlTopBar.requestLayout()
-                }
-                va.start()
+                //if the menu is expanded
 
-               // va.doOnEnd {
-                binding.llFilterOptions.visibility = View.GONE//}
+                //call method to animate the shrinking of the menu
+                animationManager.animateMenu(binding.rlTopBar, 556, initialHeight)
+
+                //hide the map filter options
+                binding.llFilterOptions.visibility = View.GONE
+
+                //hide the darkened overlay for the map
                 binding.imgDarkenOverlay.visibility = View.INVISIBLE
 
+                //call method to update the map
                 modifyMap(false)
             }
         }
 
-            //distance
-            //binding.tvDistanceValue.text = "${distance}KM"
-            binding.slDistance.addOnChangeListener { rangeSlider, value, fromUser ->
 
-               binding.tvDistanceValue.text = "${value.toInt()}$measurementSymbol"
-//
-            }
+        //on distance filter slider drag
+        binding.slDistance.addOnChangeListener { rangeSlider, value, fromUser ->
 
-           // binding.tvDistanceValue.text = binding.slDistance.value.toInt().toString()
-
-            //time frame
-            binding.spnTimeFrame.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View,
-                    position: Int,
-                    id: Long
-                ) {
-                    (view as TextView).setTextColor(Color.BLACK) //Change selected text color
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            })
-
-
-
-
-
-        binding.imgCenterMap.setOnClickListener()
-        {
-
-            modifyMap(true)
-
-                   // fullMapView.onMapReady()
-           /* while (fullMapView.mapView == null)
-            {
-                fullMapView.manualCenter()
-            }
-
-            */
-
-/*
-            fullMapView.mapView.getMapboxMap().setCamera(
-                CameraOptions.Builder()
-                    .zoom(14.0)
-                    .build()
-            )
-
-*/
-                //    ObjectAnimator.ofFloat(binding.imgCenterMap, View.ALPHA, 1.0f, 0.0f).setDuration(600).start();
-
+            //set the distance label the the value of the slider
+            binding.tvDistanceValue.text = "${value.toInt()}$measurementSymbol"
         }
 
+
+
+        //fix for spinner not showing text in correct color
+        binding.spnTimeFrame.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                (view as TextView).setTextColor(Color.BLACK) //Change selected text color
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
+
+
+        //on map center button click
+        binding.imgCenterMap.setOnClickListener()
+        {
+            //call method to force update the map
+            modifyMap(true)
+        }
+
+
+        //set default distance filter text display
         binding.tvDistanceValue.text = "${currentDistance}$measurementSymbol"
-        //binding.sl.text = "${currentDistance}$measurementSymbol"
 
         // Inflate the layout for this fragment
         return view
     }
 
 
+    //---------------------------------------------------------------------------------------------
+    //method to modify the maps movement listener
+    //---------------------------------------------------------------------------------------------
     private fun overrideMapMovementListener(fullMapView: FullMapFragment)
     {
         fullMapView.onMoveListener = object : OnMoveListener {
             override fun onMoveBegin(detector: MoveGestureDetector) {
                 fullMapView.onCameraTrackingDismissed()
-                //binding.imgCenterMap.visibility = View.VISIBLE
+
+                //animate the map center button fade in
                 ObjectAnimator.ofFloat( binding.imgCenterMap, View.ALPHA, 0.0f, 1.0f).setDuration(600).start();
             }
 
@@ -230,59 +211,50 @@ class UserFullMapView : Fragment() {
 
         }
     }
+    //---------------------------------------------------------------------------------------------
 
 
+    //---------------------------------------------------------------------------------------------
+    //method to modify the map view and the information it displays
+    //---------------------------------------------------------------------------------------------
     private fun modifyMap(forceUpdate : Boolean)
     {
 
-
-
-        //currentSearchTerm = binding.etSearch.text.toString()
+        //if the filter data has been modified or an update is being forced
         if (((currentDistance != binding.slDistance.value.toInt()) || (currentTimeFrame != binding.spnTimeFrame.selectedItem.toString())) || forceUpdate == true)
             {
 
                 //create local fragment controller
                 val fragmentControl = FragmentHandler()
 
+                //new variable from the full map fragment (contains the map view)
                 var fullMapView = FullMapFragment()
 
-              //  fullMapView.centerButton = binding.imgCenterMap
 
-                var filterWeeks = 1
-                when(binding.spnTimeFrame.selectedItemPosition) {
-                    0 -> filterWeeks = 1
-                    1 -> filterWeeks = 2
-                    2 -> filterWeeks = 3
-                }
-                fullMapView.filterTimeFrame = filterWeeks
+                //set the time frame filter value
+                fullMapView.filterTimeFrame = (binding.spnTimeFrame.selectedItemPosition) + 1
 
+                //set the distance based filter value
                 fullMapView.filterDistance = binding.slDistance.value.toInt().toDouble()
 
-                //fullMapView.filterSearchBirdName = binding.etSearch.text.toString()
 
-
-               // fullMapView.loadMap()
-
-
+                //show the updated map view
                 fragmentControl.replaceFragment(
                     fullMapView,
                     R.id.cvFullMapFragmentContainer,
                     requireActivity().supportFragmentManager
                 )
 
+                //set the center map button to transparent
                 binding.imgCenterMap.alpha = 0f
 
 
-               // fullMapView.setupGesturesListener(binding.imgCenterMap)
+                //call method to modify the movement listener of the map view
                 overrideMapMovementListener(fullMapView)
-
-
-
 
             }
 
-        //Toast.makeText(requireContext(), distance.toString(), Toast.LENGTH_SHORT).show()
-        //fullMapView.loadMap(distance)
     }
+    //---------------------------------------------------------------------------------------------
 
 }
