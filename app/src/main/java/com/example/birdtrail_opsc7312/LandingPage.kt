@@ -73,4 +73,8 @@ class LandingPage : AppCompatActivity() {
 
 
     }
+    override fun onBackPressed() {
+        // Do nothing
+    }
+
 }
