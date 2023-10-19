@@ -71,10 +71,13 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         mapView.gestures.focalPoint = mapView.getMapboxMap().pixelForCoordinate(it)
     }
 
+   // var centerButton : ImageView? = null
+
     //private val onMoveListener = object : OnMoveListener {
     var onMoveListener = object : OnMoveListener {
         override fun onMoveBegin(detector: MoveGestureDetector) {
             onCameraTrackingDismissed()
+
         }
 
         override fun onMove(detector: MoveGestureDetector): Boolean {
@@ -84,7 +87,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         override fun onMoveEnd(detector: MoveGestureDetector) {}
     }
 
-    private lateinit var mapView: MapView
+    lateinit var mapView: MapView
 
     private var _binding: FragmentFullMapBinding? = null
     private val binding get() = _binding!!
@@ -265,6 +268,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
 
     private fun setupGesturesListener() {
+
+
+
         mapView.gestures.addOnMoveListener(onMoveListener)
 
         //----------------------------------------------------------------------------------------------------------------------------
@@ -283,6 +289,54 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         }
         //----------------------------------------------------------------------------------------------------------------------------
     }
+
+
+//    public fun setupGesturesListener(centerButton: ImageView) {
+//
+//        var onMoveListenerOverload = object : OnMoveListener {
+//            override fun onMoveBegin(detector: MoveGestureDetector) {
+//                onCameraTrackingDismissed()
+//                ObjectAnimator.ofFloat( centerButton, View.ALPHA, 0.0f, 1.0f).setDuration(600).start();
+//            }
+//
+//            override fun onMove(detector: MoveGestureDetector): Boolean {
+//                return false
+//            }
+//
+//            override fun onMoveEnd(detector: MoveGestureDetector) {}
+//        }
+//
+//        mapView.gestures.addOnMoveListener(onMoveListenerOverload)
+//
+//        //----------------------------------------------------------------------------------------------------------------------------
+//        mapView.gestures.addOnMapClickListener{ point ->
+//
+//
+//            if (openInFullView)
+//            {
+//                openInFullView = false
+//                //create local fragment controller
+//                val fragmentControl = FragmentHandler()
+//                fragmentControl.replaceFragment(UserFullMapView(), R.id.flContent, parentFragmentManager)
+//            }
+//
+//            true
+//        }
+//        //----------------------------------------------------------------------------------------------------------------------------
+//    }
+
+/*
+    fun manualCenter() {
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .zoom(14.0)
+                .build()
+        )
+    }
+
+ */
+
+
 
     private fun initLocationComponent() {
         val locationComponentPlugin = mapView.location
@@ -402,7 +456,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
     @SuppressLint("MissingPermission", "SetTextI18n")
     public fun addAnnotationsToMap() {
 
-        var counterMap = 0 //88888888888888888888888888888888888888888888
+       // var counterMap = 0 //88888888888888888888888888888888888888888888
 
         removeAllAnnotations()
         //Toast.makeText(requireContext(), checkPermissions().toString(), Toast.LENGTH_SHORT).show()
@@ -426,12 +480,17 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                         // Iterate over each hotspot in the global list
                         for (hotspot in GlobalClass.nearbyHotspots) {
                             // Calculate the distance between the user's location and the hotspot.
-                            val distanceInKm = calculateDistance(
+                            var distanceInKm = calculateDistance(
                                 userLocation!!.latitude,
                                 userLocation!!.longitude,
                                 hotspot.lat!!,
                                 hotspot.lng!!
                             )
+
+                            if (GlobalClass.currentUser.isMetric == false)
+                            {
+                                distanceInKm = kilometersToMiles(distanceInKm)
+                            }
 
                             // Define the date format pattern for your input string
                             val inputPattern = "yyyy-MM-dd HH:mm"
@@ -450,10 +509,10 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
                            // var commonBirdName = hotspot.comName?.lowercase()
 
-                            if (GlobalClass.currentUser.isMetric == false)
-                            {
-                                filterDistance = milesToKilometers(filterDistance)
-                            }
+                         //   if (GlobalClass.currentUser.isMetric == false)
+                          //  {
+                               // filterDistance = milesToKilometers(filterDistance)
+                          //  }
 
                             if (daysBetween <= (filterTimeFrame * 7)) {
                                 if (distanceInKm <= filterDistance) { //200
