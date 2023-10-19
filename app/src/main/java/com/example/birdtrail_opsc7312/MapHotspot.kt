@@ -63,7 +63,7 @@ class MapHotspot : Fragment() {
             {
                 val decimalFormat = DecimalFormat("#.##")
                 val formattedDistance = decimalFormat.format(distance)
-                binding.tvDistance.text = "Distance: ${formattedDistance}km"
+                binding.tvDistance.text = "${getString(R.string.distanceText)}: ${formattedDistance}KM"
             }
             else
             {
@@ -72,7 +72,7 @@ class MapHotspot : Fragment() {
                 }
                 val decimalFormat = DecimalFormat("#.##")
                 val formattedDistance = decimalFormat.format(distance)
-                binding.tvDistance.text = "Distance: ${formattedDistance}mi"
+                binding.tvDistance.text = "${getString(R.string.distanceText)}: ${formattedDistance}mi"
             }
 
             //get bird observations at hotspot
@@ -104,7 +104,7 @@ class MapHotspot : Fragment() {
 
                             birdDisplay.binding.tvDate.text = localDate
 
-                            birdDisplay.binding.tvSighted.text = "Found: ${bird.howMany}"
+                            birdDisplay.binding.tvSighted.text = "${getString(R.string.foundText)}: ${bird.howMany}"
                             activityLayout.addView(birdDisplay)
                             scrollViewTools.generateSpacer(activityLayout, requireActivity(), 14)
                         }
@@ -118,7 +118,7 @@ class MapHotspot : Fragment() {
 
             binding.btnBack.setOnClickListener(){
                 val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.flContent, FullMapFragment())
+                transaction.replace(R.id.flContent, UserFullMapView())
                 transaction.addToBackStack(null)
                 transaction.commit()
             }

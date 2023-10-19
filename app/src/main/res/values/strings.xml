@@ -102,9 +102,8 @@
     <string name="cancelText">Cancel</string>
     <string name="passwordChangedText">Password changed successfully</string>
     <string name="passwordInvalidText">Password Invalid</string>
-
     <string name="selectedImageSaved">Image Selected Saved</string>
-
+    <string name="foundText">Found</string>
 
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic3QxMDA4MTgzOSIsImEiOiJjbG5lank2cmIwZHlyMmp0Y2h1c2VmZ2lkIn0.AU-LAXgDH6jTS1vHM9pfhw</string>
