@@ -60,6 +60,11 @@ class Add_Observation : Fragment() {
         view.addView(loadingProgressBar)
 
 
+        binding.tvSpeciesName.setOnClickListener()
+        {
+            Toast.makeText(requireContext(), binding.tvSpeciesName.text, Toast.LENGTH_SHORT).show()
+        }
+
 
         binding.btnBack.setOnClickListener()
         {
@@ -126,6 +131,8 @@ class Add_Observation : Fragment() {
 
 
                 birdOption.binding.rlSelector.visibility = View.INVISIBLE
+
+
                 birdOption.binding.tvSpecies.text = birdName
                 //birdOption.binding.tvContactRole.text = "Senior Member"
 
