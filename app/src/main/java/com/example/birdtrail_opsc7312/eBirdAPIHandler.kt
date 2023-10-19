@@ -18,7 +18,7 @@ class eBirdAPIHandler
     {
         val url = URL("https://api.ebird.org/v2/data/obs/${regionCode}/recent")
         val connection = url.openConnection() as HttpURLConnection
-        connection.setRequestProperty("X-eBirdApiToken", "q9penhe399qf")
+        connection.setRequestProperty("X-eBirdApiToken", BuildConfig.EBIRD_TOKEN)
         connection.requestMethod = "GET"
 
         val responseCode = connection.responseCode
@@ -51,7 +51,7 @@ class eBirdAPIHandler
     {
         val url = URL("https://api.ebird.org/v2/ref/hotspot/geo?lat=${lat}&lng=${long}&fmt=json&back=21&dist=60")
         val connection = url.openConnection() as HttpURLConnection
-        connection.setRequestProperty("X-eBirdApiToken", "q9penhe399qf")
+        connection.setRequestProperty("X-eBirdApiToken", BuildConfig.EBIRD_TOKEN)
         connection.requestMethod = "GET"
 
         val responseCode = connection.responseCode
@@ -84,7 +84,7 @@ class eBirdAPIHandler
     {
         val url = URL("https://api.ebird.org/v2/data/obs/${regionCode}/recent?hotspot=true&r=$locationCode&back=21")
         val connection = url.openConnection() as HttpURLConnection
-        connection.setRequestProperty("X-eBirdApiToken", "q9penhe399qf")
+        connection.setRequestProperty("X-eBirdApiToken", BuildConfig.EBIRD_TOKEN)
         connection.requestMethod = "GET"
 
         val responseCode = connection.responseCode
