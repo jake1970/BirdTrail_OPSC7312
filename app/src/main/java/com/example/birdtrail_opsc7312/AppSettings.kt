@@ -195,31 +195,31 @@ class AppSettings : Fragment() {
         try
         {
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(R.string.SettingsPassword)
+            builder.setTitle(getString(R.string.SettingsPassword))
 
             val input = EditText(requireContext())
-            input.hint = R.string.NewPassword.toString()
+            input.hint = getString(R.string.NewPassword)
             builder.setView(input)
 
-            builder.setPositiveButton("Change") { dialog, which ->
+            builder.setPositiveButton(getString(R.string.changeText)) { dialog, which ->
                 val newPassword = input.text.toString()
 
                 val validatePassword = UserDataClass().validateUserPassword(newPassword,requireContext())
 
                 if (validatePassword.isEmpty())
                 {
-                    GlobalClass.InformUser("Confirmation","Password changed successfully", requireContext())
+                    GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.passwordChangedText), requireContext())
                     savedPassword = newPassword
 
                     GlobalClass.currentUser.password = savedPassword as String
 
                 } else
                 {
-                    GlobalClass.InformUser("Confirmation","Password Invalid", requireContext())
+                    GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.passwordInvalidText), requireContext())
                 }
             }
 
-            builder.setNegativeButton("Cancel") { dialog, which ->
+            builder.setNegativeButton(getString(R.string.cancelText)) { dialog, which ->
                 dialog.cancel()
             }
 
@@ -255,7 +255,7 @@ class AppSettings : Fragment() {
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null)
         {
             val selectedImageURI = data.data
-            GlobalClass.InformUser("Confirmation","Image Selected Saved", requireContext())
+            GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.selectedImageSaved), requireContext())
             selectedImageBitmap = uriToBitmap(selectedImageURI)
             GlobalClass.currentUser.profilepicture = selectedImageBitmap
         }

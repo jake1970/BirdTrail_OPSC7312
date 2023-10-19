@@ -30,24 +30,23 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Ranking.newInstance] factory method to
- * create an instance of this fragment.
- */
 @Suppress("DEPRECATION")
 class Ranking : Fragment(R.layout.fragment_ranking) {
 
+    //set the binding
     private var _binding: FragmentRankingBinding? = null
     private val binding get() = _binding!!
 
+    //set the spacer size
     private val spacerSize = 14
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        //binding
         _binding = FragmentRankingBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -57,6 +56,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         //Load initial leaderboard View
         populateViewContent(true)
 
+        //when the leaderboard button is clicked
         binding.tvLeaderboard.setOnClickListener()
         {
 
@@ -67,6 +67,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
             populateViewContent(true)
         }
 
+        //when the achievement button is clicked
         binding.tvAchievements.setOnClickListener()
         {
             //Generate the position of the tab indicator bar at the end (right) of the screen
@@ -81,40 +82,48 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
             //set the location for the dynamic components to be searched
             val activityLayout = binding.llRankingList;
 
+            //loop through the achievements in the achievements list view
             for (unlockedAchievement in activityLayout)
             {
+                //if the achievement is unlocked and selected by the user (currently active)
                 if (unlockedAchievement is Card_Achievement && unlockedAchievement.binding.tvDate.visibility != TextView.GONE && unlockedAchievement.badgeID == GlobalClass.currentUser.badgeID) {
 
+                    //call the on click method to select the achievement
                     unlockedAchievement.callOnClick()
+
+                    //exit the loop
                     break
                 }
             }
-
-
         }
 
 
-        //-----------------------------------------------------------------------------------------
-        //populate ranking header
-        //-----------------------------------------------------------------------------------------
 
+        //the amount of achievements the user has unlocked
         var unlockedAchievements = 0
 
+        //loop through the achievements unlocked by all users
         for (userAchievement in GlobalClass.userAchievements)
         {
+            //if the achievement was unlocked by the current user
             if (userAchievement.userID == GlobalClass.currentUser.userID)
             {
+                //increment the users unlocked achievement counter
                 unlockedAchievements++
             }
         }
 
+        //display the users score
         binding.tvScoreValue.text = " ${GlobalClass.currentUser.score}"
+
+        //display the amount of achievements the user has unlocked
         binding.tvAchievementValue.text = "  ${unlockedAchievements} / ${GlobalClass.acheivements.size}"
+
+        //display the users profile picture
         binding.imgMyProfileImage.setImageBitmap(GlobalClass.currentUser.profilepicture)
+
+        //display the users badge
         binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[GlobalClass.currentUser.badgeID])
-
-        //-----------------------------------------------------------------------------------------
-
 
         // Inflate the layout for this fragment
         return view
@@ -145,175 +154,170 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         if (leaderboardView)
         {
 
-            //GlobalClass.userData[1].score = 20
-
+            //holds an instance of the user data list
             var sortedUsers = GlobalClass.userData
+
+            //sort users by their score values
             sortedUsers.sortWith(compareBy { it.score })
+
+            //reverse the list to sort in descending
             sortedUsers.reverse()
 
-
+            //the users position in the ranking
             var userRankingPosition = 0
+
+            //variable to hold the last added users score
             var pastuserScore = -1
+
 
             //loop through users
             for (user in sortedUsers) {
 
-
+                //the amount of achievements the user has
                 var userUnlockedAchievements = 0
 
+                //loop through the user achievements
                 for (userAchievement in GlobalClass.userAchievements)
                 {
+                    //if the achievement belongs to the user
                     if (userAchievement.userID == user.userID)
                     {
+                        //increment the unlocked achievement counter
                         userUnlockedAchievements++
                     }
                 }
 
 
+                //new dynamic component to hold the users leaderboard data
+                var newLeaderboardCard = Card_Leaderboard(activity)
 
-                    //new dynamic component
-                    var newLeaderboardCard = Card_Leaderboard(activity)
-                    newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(user.profilepicture)
-                    newLeaderboardCard.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[user.badgeID])
-                    newLeaderboardCard.binding.tvUsername.text = user.username
-                    newLeaderboardCard.binding.tvScore.text = user.score.toString()
-                    newLeaderboardCard.binding.tvBadges.text = "${userUnlockedAchievements} / ${GlobalClass.acheivements.size}"
+                //set the users leaderboard cards profile image
+                newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(user.profilepicture)
 
-                    if (pastuserScore != user.score) {
-                        userRankingPosition++
-                    }
+                //set the users leaderboard cards badge image
+                newLeaderboardCard.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[user.badgeID])
 
-                    pastuserScore = user.score
+                //set the users leaderboard cards username
+                newLeaderboardCard.binding.tvUsername.text = user.username
 
-                    newLeaderboardCard.binding.tvRankingPlace.text = userRankingPosition.toString()//i.toString()
+                //set the users leaderboard cards score
+                newLeaderboardCard.binding.tvScore.text = user.score.toString()
+
+                //set the users leaderboard cards achievement count information
+                newLeaderboardCard.binding.tvBadges.text = "${userUnlockedAchievements} / ${GlobalClass.acheivements.size}"
+
+                //check if the users score is not the same as the past users score
+                if (pastuserScore != user.score) {
+                    //increment the ranking position
+                    userRankingPosition++
+                }
+
+                //set the prvious users score the the current user score
+                pastuserScore = user.score
+
+                //set the users leaderboard cards ranking
+                newLeaderboardCard.binding.tvRankingPlace.text = userRankingPosition.toString()
+
+                //check if the user is the currently signed in user
+                if (user.userID == GlobalClass.currentUser.userID)
+                {
+                    //set the users leaderboard card to be unique from the other leaderboard cards
+                    newLeaderboardCard.binding.rlIdentityBacking.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
+                }
 
 
-                    if (user.userID == GlobalClass.currentUser.userID)
-                    {
-                        newLeaderboardCard.binding.rlIdentityBacking.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
-                    }
+                //add the dynamic component to the container view
+                activityLayout.addView(newLeaderboardCard)
 
-
-                    //add the dynamic component to the container view
-                    activityLayout.addView(newLeaderboardCard)
-
-                    //call method to generate a space under the dynamic component
-                    scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
+                //call method to generate a space under the dynamic component
+                scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
 
             }
-
-            /*
-            var sortedUsers = GlobalClass.userData
-            sortedUsers.sortWith(compareBy { it.score })
-
-            //loop through the sightings
-            for (i in 1..sortedUsers.size) {
-
-                var user = sortedUsers[i-1]
-
-                if (user.userID != GlobalClass.currentUser.userID) //other users
-                {
-                    //new dynamic component
-                    var newLeaderboardCard = Card_Leaderboard(activity)
-                    newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(user.profilepicture)
-                    newLeaderboardCard.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[user.badgeID])
-                    newLeaderboardCard.binding.tvUsername.text = user.username
-                    newLeaderboardCard.binding.tvScore.text = user.score.toString()
-                    newLeaderboardCard.binding.tvRankingPlace.text = i.toString()
-
-                    //add the dynamic component to the container view
-                    activityLayout.addView(newLeaderboardCard)
-
-                    //call method to generate a space under the dynamic component
-                    scrollViewTools.generateSpacer(activityLayout, requireActivity(), spacerSize)
-                }
-                else //current user
-                {
-                    binding.tvScoreValue.text = GlobalClass.currentUser.score.toString()
-                    binding.tvAchievementValue.text = i.toString()
-                    binding.imgMyProfileImage.setImageBitmap(GlobalClass.currentUser.profilepicture)
-                    binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[GlobalClass.currentUser.badgeID])
-                }
-            }
-
-             */
         }
-        else //get Achievements
+        else
         {
-            //GlobalClass.currentUser.userID = 1
-            //if achievements view must be loaded
+            //if the achievements must be loaded
 
-            //2023-10-17
-/*
-           var  starterAchievement = UserAchievementsDataClass(
-                userID = GlobalClass.currentUser.userID,
-                achID = 0,
-                date = GlobalClass.currentUser.registrationDate,
-            )
-
- */
-
-
-
-
-
+            //the current badge counter
             var currentBadge = 0
 
+            //loop through the achievements
             for (achievement in GlobalClass.acheivements) {
 
 
-
+                //if the achievement is unlocked by the user or not
                 var achievementUnlocked = false
 
                 //new dynamic component
                 var newAchievementCard = Card_Achievement(activity)
 
+                //hide the date component on the achievement card
                 newAchievementCard.binding.tvDate.visibility = EditText.GONE
 
+                //set the achievement card achievement name
                 newAchievementCard.binding.tvAchievementName.text = achievement.name
+
+                //set the achievement card badge image
                 newAchievementCard.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[currentBadge++])
-                newAchievementCard.badgeID = currentBadge-1 //-1
+
+                //set the achievement card badge id
+                newAchievementCard.badgeID = currentBadge-1
+
+                //set the achievement card requirements value
                 newAchievementCard.binding.tvRequirements.text = achievement.requirements
 
+
+                //loop through the unlocked achievements
                 for (unlockedAchievement in GlobalClass.userAchievements)
                 {
 
-
+                    //if the unlocked achievement was unlocked by the user
                     if ((unlockedAchievement.userID == GlobalClass.currentUser.userID && unlockedAchievement.achID == achievement.achID))
                     {
 
-
+                        //call method to set the achievement cards style to be unlocked
                         NewAchievementUnlockedStyle(newAchievementCard, unlockedAchievement.date)
+
+                        //set the achievements unlocked status to true
                         achievementUnlocked = true
 
-
+                        //when the achievement card is clicked
                         newAchievementCard.setOnClickListener()
                         {
-                            //Toast.makeText(activity, "Clicked", Toast.LENGTH_SHORT).show()
 
+                            //loop through the unlocked achievements
                             for (achievement in activityLayout)
                             {
+                                //if the achievement is unlocked
                                 if (achievement is Card_Achievement && achievement.binding.tvDate.visibility != TextView.GONE) {
-                                    //Toast.makeText(activity, "Clicked", Toast.LENGTH_SHORT).show()
+
+                                    //call method to reset the unlocked achievement card style
                                     ExistingAchievementUnlockedStyle(achievement)
                                 }
                             }
 
+                            //call method to reset the style of the achievement card to show its been selected
                             ResetAchievementCard(newAchievementCard)
+
+                            //set the users badge id to the selected achievement badge id
                             GlobalClass.currentUser.badgeID = newAchievementCard.badgeID
+
+                            //set the users badge to the selected achievement badge
                             binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[GlobalClass.currentUser.badgeID])
                         }
 
+                        //exit the loop
                         break
                     }
 
                 }
 
 
+                //if the achievement is not unlocked
                 if (achievementUnlocked == false)
                 {
                     //locked achievement
-
+                    //set styling to locked achievement
 
                     newAchievementCard.binding.tvSelectorText.text = "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
                     newAchievementCard.binding.tvSelectorText.setCompoundDrawables(null,null,null,null);
@@ -321,7 +325,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
                     newAchievementCard.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
                 }
 
-                //default is the select bird
+
 
                 //add the dynamic component to the container view
                 activityLayout.addView(newAchievementCard)
@@ -333,13 +337,15 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
 
 
             }
-
-
-
         }
     }
     //---------------------------------------------------------------------------------------------
 
+
+
+    //---------------------------------------------------------------------------------------------
+    //method to reset the achievement card to show an achievement has been selected
+    //---------------------------------------------------------------------------------------------
     private fun ResetAchievementCard(newAchievementCard : Card_Achievement)
     {
 
@@ -351,16 +357,25 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         newAchievementCard.binding.tvSelectorText.setPadding(0,36,0,0)
         newAchievementCard.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.confirmation_green), android.graphics.PorterDuff.Mode.SRC_IN)
     }
+    //---------------------------------------------------------------------------------------------
 
 
+
+    //---------------------------------------------------------------------------------------------
+    //method to reset the achievement card to show an unlocked achievement that is not currently selected
+    //---------------------------------------------------------------------------------------------
     private fun ExistingAchievementUnlockedStyle(newAchievementCard : Card_Achievement)
     {
         newAchievementCard.binding.tvSelectorText.text = ""
         newAchievementCard.binding.tvSelectorText.setPadding(0,76,0,0)
         newAchievementCard.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
     }
+    //---------------------------------------------------------------------------------------------
 
 
+    //---------------------------------------------------------------------------------------------
+    //method to set the style of a newly unlocked achievement card
+    //---------------------------------------------------------------------------------------------
     private fun NewAchievementUnlockedStyle(newAchievementCard : Card_Achievement, unlockedAchievementDate: LocalDate,)
     {
         // Define the date format pattern for your input string
@@ -383,5 +398,6 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         newAchievementCard.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
 
     }
+    //---------------------------------------------------------------------------------------------
 
 }

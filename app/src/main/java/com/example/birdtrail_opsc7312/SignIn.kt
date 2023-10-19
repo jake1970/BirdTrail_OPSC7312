@@ -40,7 +40,8 @@ class SignIn : AppCompatActivity() {
         //---------------------------------------------------------------------------------------//
         //initial view config
         //---------------------------------------------------------------------------------------//
-        //var binding = SignInBinding.inflate(layoutInflater)
+
+        //binding
         binding = SignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -53,73 +54,56 @@ class SignIn : AppCompatActivity() {
         //---------------------------------------------------------------------------------------//
 
 
-        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
-
-        /*
-        binding.etEmail.setText("user1@gmail.com")
-        binding.etPassword.setText("Password1")
-         */
-
-        binding.etEmail.setText("jake")
-        binding.etPassword.setText("jake")
-
-        //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//
-
-
-
+        //when the sign in button is clicked
         binding.btnSignIn.setOnClickListener()
         {
 
-
+            //attempt to sign the user in
             val attemptSignIn = UserDataClass().validateUser(binding.etEmail.text.toString(), binding.etPassword.text.toString())
 
+            //if the sign in was valid
             if (attemptSignIn == true)
             {
 
+                //instantiate location permission helper
                 locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
+
+                //call check permission and pass the sign in method
                 locationPermissionHelper.checkPermissions {
                     signIn()
                 }
 
-
-                /*
-                 //---------------------------------------------------------------------------------------//
-                //Remember Me
-                //---------------------------------------------------------------------------------------//
-                if (binding.chkRememberMe.isChecked == true) {
-                    getSharedPreferences(myPrefsFile, MODE_PRIVATE)
-                        .edit()
-                        .putString(myUserID, GlobalClass.currentUser.userID.toString())
-                        .commit();
-                }
-                //---------------------------------------------------------------------------------------//
-
-                var intent = Intent(this, Homepage::class.java)
-                startActivity(intent)
-                 */
-
             }
             else
             {
+                //if the sign in was invalid
+
+                //inform the user of the failure to sign in
                 GlobalClass.InformUser(getString(R.string.failedSignIn), getString(R.string.incorrectEmailPassCombo), this)
             }
 
-
         }
 
+
+        //when the back button is clicked
         binding.tvBack.setOnClickListener()
         {
+            //take the user back to the landing page
             var intent = Intent(this, LandingPage::class.java)
             startActivity(intent)
         }
 
 
+        //when forgot password is pressed
         binding.tvForgotPassword.setOnClickListener(){
-            Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
+            //inform the user of the pending feature
+            Toast.makeText(this, getString(R.string.comingSoonText), Toast.LENGTH_SHORT).show()
         }
 
+        //when sign up text is clicked
         binding.tvSignUp.setOnClickListener()
         {
+            //take the user to the sign up page
             var intent = Intent(this, SignUp::class.java)
             startActivity(intent)
         }
