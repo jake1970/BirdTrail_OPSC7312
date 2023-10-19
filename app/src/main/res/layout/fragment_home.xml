@@ -62,7 +62,7 @@
             android:textColor="@color/white"
             android:textSize="24dp"
             android:layout_marginLeft="8dp"
-            android:text="{username}" />
+            android:text="@string/Username" />
 
         <View
             android:id="@+id/vwTitleDivLine"

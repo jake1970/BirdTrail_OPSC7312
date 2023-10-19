@@ -62,7 +62,7 @@
                     android:textColor="@color/black"
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/imgbird"
-                    android:text="TextView" />
+                    android:text="@string/TextView" />
 
             <TextView
                 android:id="@+id/tvSighted"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="TextView" />
+                android:text="@string/TextView" />
 
             </LinearLayout>
 

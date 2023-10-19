@@ -59,7 +59,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:drawableLeft="@drawable/imgbird"
                 android:gravity="center_vertical"
-                android:text="TextView"
+                android:text="@string/TextView"
                 android:layout_weight="1"
                 android:textColor="@color/black" />
 

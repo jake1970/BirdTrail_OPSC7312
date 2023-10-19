@@ -81,7 +81,7 @@
                     android:layout_marginBottom="6dp"
                     android:textColor="@color/black"
                     android:drawableLeft="@drawable/imgbird"
-                    android:text="TextView" />
+                    android:text="@string/TextView" />
 
                 <TextView
                     android:id="@+id/tvDate"
@@ -90,7 +90,7 @@
                     android:textColor="@color/black"
                     android:drawableLeft="@drawable/imgcalendar"
                     android:paddingLeft="1dp"
-                    android:text="TextView" />
+                    android:text="@string/TextView" />
             </LinearLayout>
 
 
@@ -101,7 +101,7 @@
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="@string/TextView" />
 
 
         </LinearLayout>
