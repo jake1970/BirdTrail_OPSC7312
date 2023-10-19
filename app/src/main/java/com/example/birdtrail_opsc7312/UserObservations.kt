@@ -24,6 +24,7 @@ class UserObservations : Fragment() {
     //boolean to control the list of cards being shown to the user
     private var onAllSightings = true
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

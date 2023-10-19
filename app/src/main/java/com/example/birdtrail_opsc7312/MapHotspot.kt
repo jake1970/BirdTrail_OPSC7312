@@ -112,7 +112,7 @@ class MapHotspot : Fragment() {
                 }
                 catch (e : Exception)
                 {
-                    Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT).show()
+                    GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
                 }
             }
 
