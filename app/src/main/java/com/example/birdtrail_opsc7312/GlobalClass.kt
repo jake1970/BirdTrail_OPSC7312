@@ -619,7 +619,7 @@ class GlobalClass: Application()
             user.profilepicture = profileImage
         }
 
-        //add badges#
+        //add badges
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultbadge))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge1))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge2))
