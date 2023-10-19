@@ -5,10 +5,12 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.location.Location
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.ActivityMapDirectionsBinding
 import com.mapbox.api.directions.v5.models.Bearing
@@ -24,6 +26,7 @@ import com.mapbox.navigation.base.TimeFormat
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
 import com.mapbox.navigation.base.extensions.applyLanguageAndVoiceUnitOptions
 import com.mapbox.navigation.base.formatter.DistanceFormatterOptions
+import com.mapbox.navigation.base.formatter.UnitType
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.base.route.NavigationRoute
 import com.mapbox.navigation.base.route.NavigationRouterCallback
@@ -338,6 +341,7 @@ class MapDirectionsActivity : AppCompatActivity()
 
     //---------------------------------------------------------------------------------------------
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -389,8 +393,19 @@ class MapDirectionsActivity : AppCompatActivity()
                 viewportDataSource.followingPadding = followingPadding
             }
 
+            //set unit type for activation
+            var unit: UnitType
+            if (GlobalClass.currentUser.isMetric)
+            {
+                unit = UnitType.METRIC
+            }
+            else
+            {
+                unit = UnitType.IMPERIAL
+            }
+
             // make sure to use the same DistanceFormatterOptions across different features
-            val distanceFormatterOptions = DistanceFormatterOptions.Builder(this).build()
+            val distanceFormatterOptions = DistanceFormatterOptions.Builder(this).unitType(unit).build()
 
             // initialize maneuver api that feeds the data to the top banner maneuver view
             maneuverApi = MapboxManeuverApi(
