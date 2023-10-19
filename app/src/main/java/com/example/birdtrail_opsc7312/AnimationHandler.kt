@@ -3,7 +3,6 @@ package com.example.birdtrail_opsc7312
 import android.animation.ObjectAnimator
 import android.graphics.Point
 import android.util.DisplayMetrics
-import android.util.Size
 import android.view.View
 
 class AnimationHandler {
@@ -14,9 +13,7 @@ class AnimationHandler {
             duration = 300
             start()
         }
-
     }
-
 
     fun getPositionInRelationToScreen(componentToAnimate: View) : Point
     {
@@ -32,6 +29,4 @@ class AnimationHandler {
         return moveToPosition
 
     }
-
-
 }

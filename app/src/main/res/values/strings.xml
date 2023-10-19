@@ -41,6 +41,7 @@
         <item>2 Weeks</item>
         <item>3 Weeks</item>
     </string-array>
+    <string name="NewPassword">Enter new password</string>
     <string name="allSightingsText">All Sightings</string>
     <string name="speciesText">Species</string>
     <string name="SettingsLabel">Settings</string>
