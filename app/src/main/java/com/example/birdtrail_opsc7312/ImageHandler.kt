@@ -12,6 +12,7 @@ import java.net.URLEncoder
 
 class ImageHandler {
 
+    //method to search for image on google images
     suspend fun searchImage(searchTerm: String): String? = withContext(Dispatchers.IO) {
         val encodedSearchTerm = URLEncoder.encode(searchTerm, "UTF-8")
         val searchEngineId = "15355fa7bb6304887"
@@ -29,6 +30,9 @@ class ImageHandler {
         return@withContext null
     }
 
+    //---------------------------------------------------------------------------------------------
+
+    //method to get a bitmap from a specified URL
     suspend fun getBitmapFromURL(src: String): Bitmap? = withContext(Dispatchers.IO) {
         val url = URL(src)
         val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
@@ -38,6 +42,9 @@ class ImageHandler {
         return@withContext BitmapFactory.decodeStream(input)
     }
 
+    //---------------------------------------------------------------------------------------------
+
+    //method to get bitmap image from api
     suspend fun GetImage(searchTerm: String): Bitmap? {
         var URL = searchImage(searchTerm)
         var image = URL?.let { getBitmapFromURL(it) }
