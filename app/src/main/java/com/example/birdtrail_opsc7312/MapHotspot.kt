@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,10 +108,26 @@ class MapHotspot : Fragment() {
                     {
                         var birdDisplay = Card_Observations_All(requireContext())
                         birdDisplay.binding.tvSpecies.text = bird.comName
-                        birdDisplay.binding.tvDate.text = bird.obsDt
-                        birdDisplay.binding.tvSighted.text = bird.howMany.toString()
+
+                        // Define the date format pattern for your input string
+                        val inputPattern = "yyyy-MM-dd HH:mm"
+
+                        // Define the desired date format pattern for the output
+                        val outputPattern = "yyyy-MM-dd"
+
+                        val inputFormat = SimpleDateFormat(inputPattern)
+                        val outputFormat = SimpleDateFormat(outputPattern)
+
+                        var date = inputFormat.parse(bird.obsDt)
+                        var localDate = outputFormat.format(date)
+
+                        birdDisplay.binding.tvDate.text = localDate
+                        //birdDisplay.binding.tvDate.text = bird.obsDt
+
+
+                        birdDisplay.binding.tvSighted.text = "Found: ${bird.howMany}"
                         activityLayout.addView(birdDisplay)
-                        scrollViewTools.generateSpacer(activityLayout, requireActivity(), 20)
+                        scrollViewTools.generateSpacer(activityLayout, requireActivity(), 14)
 
                     }
                 }
