@@ -6,6 +6,7 @@ import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import java.lang.ref.WeakReference
 
+//class to handler asking user for location permissions
 class LocationPermissionHelper(val activity: WeakReference<Activity>)
 {
     private lateinit var permissionsManager: PermissionsManager
@@ -38,8 +39,6 @@ class LocationPermissionHelper(val activity: WeakReference<Activity>)
             permissionsManager.requestLocationPermissions(activity.get())
         }
     }
-
-
 
     fun onRequestPermissionsResult(
         requestCode: Int,
