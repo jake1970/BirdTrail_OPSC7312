@@ -11,7 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import java.time.LocalDate
 
-data class UserDataClass(
+//data class for user data
+
+data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
 
     var userID: Int = -1,
     var email: String = "",
@@ -26,6 +28,10 @@ data class UserDataClass(
     var profilepicture : Bitmap? = null,
     var registrationDate : LocalDate = LocalDate.now()
 ) {
+
+    //---------------------------------------------------------------------------------------------
+    //method to validate that a user exists
+    //---------------------------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
     fun validateUser(userEmail: String, userPassword: String): Boolean
     {
@@ -46,7 +52,13 @@ data class UserDataClass(
 
         return GlobalClass.currentUser.userID != -1
     }
+    //---------------------------------------------------------------------------------------------
 
+
+
+    //---------------------------------------------------------------------------------------------
+    //method to validate the users email
+    //---------------------------------------------------------------------------------------------
     fun validateUserEmail(attemptedEmail: CharSequence?): Boolean {
         return if (TextUtils.isEmpty(attemptedEmail)) {
             false
@@ -54,119 +66,116 @@ data class UserDataClass(
             Patterns.EMAIL_ADDRESS.matcher(attemptedEmail).matches()
         }
     }
+    //---------------------------------------------------------------------------------------------
 
 
+
+    //---------------------------------------------------------------------------------------------
+    //method to validate the users password
+    //---------------------------------------------------------------------------------------------
     fun validateUserPassword(attemptedPassword : String, context : Context): String
     {
 
+        //the errors found with the users password
         var validationErrors = ""
 
+        //check the length of the password
         if (attemptedPassword.length < 8)
         {
             validationErrors += context.getString(R.string.passwordShort) + "\n"
         }
 
+        //check the amount of numbers in the password
         if (attemptedPassword.count(Char::isDigit) == 0)
         {
             validationErrors+=(context.getString(R.string.passwordNeedsNumber))+ "\n"
         }
 
-        if (attemptedPassword.any(Char::isLowerCase))
-        {
-
-        }
-        else
+        //check if the password contains any lower case characters
+        if (!attemptedPassword.any(Char::isLowerCase))
         {
             validationErrors+=(context.getString(R.string.passwordNeedsLowerCase))+ "\n"
         }
 
-        if (attemptedPassword.any(Char::isUpperCase))
-        {
-
-        }
-        else
+        //check if the user password contains any uppercase characters
+        if (!attemptedPassword.any(Char::isUpperCase))
         {
             validationErrors+=(context.getString(R.string.passwordNeedsUpperCase))+ "\n"
         }
 
-
-        if (attemptedPassword[0].isUpperCase())
-        {
-
-        }
-        else
+        //check if the users passwords first character is uppercase
+        if (!attemptedPassword[0].isUpperCase())
         {
             validationErrors+=(context.getString(R.string.passwordNeedsToStartWithUpperCaseLetter))+ "\n"
         }
 
-
-        if (attemptedPassword.any { it in context.getString(R.string.passwordSpecialCharacters) })
-        {
-
-        }
-        else
+        //check if the users password contains a valid special character
+        if (!attemptedPassword.any { it in context.getString(R.string.passwordSpecialCharacters) })
         {
             validationErrors+=(context.getString(R.string.passwordNeedsSpecialCharacter))+ "\n"
         }
 
-
+        //return the password errors
         return validationErrors
 
 
     }
+    //---------------------------------------------------------------------------------------------
 
+
+
+    //---------------------------------------------------------------------------------------------
+    //method to validate the users username
+    //---------------------------------------------------------------------------------------------
     fun validateUserUsername(attemptedUsername : String, context : Context): String
     {
 
+        //the errors found with the users username
         var validationErrors = ""
 
+
+        //check the length of the username
         if (attemptedUsername.length < 8)
         {
             validationErrors += context.getString(R.string.usernameShort) + "\n"
         }
 
-
-        if (attemptedUsername.any(Char::isLowerCase))
-        {
-
-        }
-        else
+        //check if the username contains any lower case characters
+        if (!attemptedUsername.any(Char::isLowerCase))
         {
             validationErrors+=(context.getString(R.string.usernameNeedsLowerCase))+ "\n"
         }
 
-        if (attemptedUsername.any(Char::isUpperCase))
-        {
-
-        }
-        else
+        //check if the user username contains any uppercase characters
+        if (!attemptedUsername.any(Char::isUpperCase))
         {
             validationErrors+=(context.getString(R.string.usernameNeedsUpperCase))+ "\n"
         }
 
-
-        if (attemptedUsername[0].isUpperCase())
-        {
-
-        }
-        else
+        //check if the username first character is uppercase
+        if (!attemptedUsername[0].isUpperCase())
         {
             validationErrors+=(context.getString(R.string.usernameNeedsToStartWithUpperCaseLetter))+ "\n"
         }
 
 
-
-
+        //return the username errors
         return validationErrors
 
 
     }
+    //---------------------------------------------------------------------------------------------
 
+
+
+    //---------------------------------------------------------------------------------------------
+    //method to register a new user
+    //---------------------------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
     fun registerUser(userEmail: String, userUsername: String, userPassword: String, userConfirmPassword: String, securityQuestion: Int, securityAnswer: String, context : Context): String
     {
 
-
+        //the errors found with the users username
         var invalidEntries = ""
 
         //loop through users
@@ -175,41 +184,39 @@ data class UserDataClass(
             //if the entered email matches an existing email
             if (userEmail == indexUser.email) {
 
-                //if user exists
-                //GlobalClass.currentUser = indexUser
-
+                //if email exists
                 invalidEntries += context.getString(R.string.emailAlreadyExists) + "\n"
-
-
             }
 
-            //if the entered email matches an existing email
+
+            //if the entered username matches an existing username
             if (userUsername == indexUser.username) {
 
-                //if user exists
-                //GlobalClass.currentUser = indexUser
-
+                //if username exists
                 invalidEntries += context.getString(R.string.usernameAlreadyExists) + "\n"
-
-
             }
         }
 
-
+        //check if the the email doesn't exist
         if (!invalidEntries.contains(context.getString(R.string.emailAlreadyExists)))
         {
+            //call method to evaluate the email
             var evaluateEmail = validateUserEmail(userEmail)
 
+            //check if the email is not valid
             if (evaluateEmail == false)
             {
                 invalidEntries += context.getString(R.string.emailNotValid) + "\n"
             }
         }
 
+        //check if the the username doesn't exist
         if (!invalidEntries.contains(context.getString(R.string.usernameAlreadyExists)))
         {
+            //call method to evaluate the username
             var evaluateUsername = validateUserUsername(userUsername, context)
 
+            //check if the username is not valid
             if (evaluateUsername != "")
             {
                 invalidEntries += evaluateUsername
@@ -217,14 +224,17 @@ data class UserDataClass(
         }
 
 
+        //check if the password matches the confirm password
         if (userPassword != userConfirmPassword)
         {
             invalidEntries += context.getString(R.string.passwordsNotMatching) + "\n"
         }
         else
         {
+            //call method to validate the password
             var passwordErrors = validateUserPassword(userPassword, context)
 
+            //check if the username is not valid
             if (passwordErrors != "")
             {
                 invalidEntries += passwordErrors
@@ -233,19 +243,20 @@ data class UserDataClass(
 
 
 
-
+        //check if all of the user data is valid
         if (invalidEntries == "") {
 
+            //create a new user
             var newUser = UserDataClass()
 
+            //check if there are any existing users
             if (GlobalClass.userData.count() > 0)
             {
-
+                //set the new users ID as an increment of the previous users ID
                 newUser.userID = GlobalClass.userData.last().userID + 1
-              //  Toast.makeText(context, newUser.userID.toString(), Toast.LENGTH_SHORT).show()
-
             }
 
+            //set the users details
             newUser.email = userEmail
             newUser.username = userUsername
             newUser.password = userPassword
@@ -254,29 +265,16 @@ data class UserDataClass(
             newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgdefaultprofile)?.toBitmap()
             newUser.registrationDate = LocalDate.now()
 
-
+            //add the user to the list of users
             GlobalClass.userData.add(newUser)
-
-            /*
-            var userID: Int = 0,
-            var email: String = "",
-            var password: String = "",
-            var questionID: Int = 0,
-            var securityanswer: String = "",
-            var badgeID : Int = 0,
-            var isMetric: Boolean = true,
-            var defaultdistance : Int = 0,
-            var score : Int = 0,
-            var profilepicture : Bitmap? = null
-             */
 
         }
 
-
+        //return the invalid data responses
         return invalidEntries
 
-        //return Pair(validRegistration, invalidEntries)
     }
+    //---------------------------------------------------------------------------------------------
 
 }
 

@@ -533,20 +533,6 @@ class GlobalClass: Application()
         observations()
         AddAcheivements()
 
-        userData.add(
-            UserDataClass(
-                userID = 3,
-                username = "jake",
-                email = "jake",
-                password = "jake",
-                questionID = 1,
-                securityanswer = "Gordan",
-                badgeID = 0,
-                isMetric = true,
-                defaultdistance = 50,
-                score = 0,
-                registrationDate = LocalDate.now()
-            ))
 
         //set user images
         var profileImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultprofile)
