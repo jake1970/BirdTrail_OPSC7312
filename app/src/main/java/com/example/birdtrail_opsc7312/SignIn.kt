@@ -114,6 +114,10 @@ class SignIn : AppCompatActivity() {
         }
 
 
+        binding.tvForgotPassword.setOnClickListener(){
+            Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
+        }
+
         binding.tvSignUp.setOnClickListener()
         {
             var intent = Intent(this, SignUp::class.java)
