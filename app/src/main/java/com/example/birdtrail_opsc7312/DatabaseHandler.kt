@@ -203,6 +203,7 @@ class DatabaseHandler
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun updateUser(updatedUser: UserDataClass)
     {
         db.collection("Users").document(updatedUser.userID).update(
@@ -214,6 +215,7 @@ class DatabaseHandler
                 "score" to updatedUser.score
             )
         ).await()
+        getAllUsers()
     }
 
 

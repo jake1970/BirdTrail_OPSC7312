@@ -126,6 +126,19 @@ class AppSettings : Fragment() {
             {
                 if (GlobalClass.currentUser.isMetric == false) {
                     GlobalClass.currentUser.isMetric = true
+
+
+                    //update user
+                    MainScope().launch {
+                        withContext(Dispatchers.Default) {
+
+                            var dataHandler = DatabaseHandler()
+                            dataHandler.updateUser(GlobalClass.currentUser)
+                        }
+                    }
+
+
+
                     measurementSymbol = "KM"
 
                     binding.tvDistanceValue.text = "${binding.slDistance.value}$measurementSymbol"
@@ -153,6 +166,16 @@ class AppSettings : Fragment() {
             {
                 if (GlobalClass.currentUser.isMetric == true) {
                     GlobalClass.currentUser.isMetric = false
+
+                    //update user
+                    MainScope().launch {
+                        withContext(Dispatchers.Default) {
+
+                            var dataHandler = DatabaseHandler()
+                            dataHandler.updateUser(GlobalClass.currentUser)
+                        }
+                    }
+
                     measurementSymbol = "mi"
 
                     var convertedBack = kilometersToMiles(binding.slDistance.value.toDouble()).roundToInt().toFloat()
