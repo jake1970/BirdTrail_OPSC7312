@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -7,6 +8,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
@@ -122,11 +124,43 @@ class DatabaseHandler
 
 
 
+    suspend fun AddUser(newUser: UserDataClass)
+    {
+        db.collection("Users")
+            .add(mapOf(
+                "username" to newUser.username,
+                "badgeID" to newUser.badgeID,
+                "defaultDistance" to newUser.defaultdistance,
+                "hasProfile" to newUser.hasProfile,
+                "isMetric" to newUser.isMetric,
+                "questionID" to newUser.questionID,
+                "score" to newUser.score,
+                "securityAnswer" to newUser.securityanswer
+            )).await()
+    }
 
+    suspend fun AddUserObservation(newObservation: UserObservationDataClass)
+    {
+        db.collection("UserObservations")
+            .add(mapOf(
+                "userID" to newObservation.userID,
+                "date" to newObservation.date.toString(),
+                "birdname" to newObservation.birdName,
+                "lat" to newObservation.lat,
+                "long" to newObservation.long,
+                "count" to newObservation.count
+            )).await()
+    }
 
-
-
-
+    suspend fun AddUserAchievements(newUserAchievement: UserAchievementsDataClass)
+    {
+        db.collection("UserAchievements")
+            .add(mapOf(
+                "achID" to newUserAchievement.achID,
+                "userID" to newUserAchievement.userID,
+                "date" to newUserAchievement.date.toString()
+            )).await()
+    }
 
 
 
