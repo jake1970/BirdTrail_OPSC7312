@@ -280,231 +280,231 @@ class GlobalClass: Application()
         }
         //---------------------------------------------------------------------------------------------
 
+//
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        fun User()
+//        {
+//            userData.add(
+//                UserDataClass(
+//                    userID = 0,
+//                    username = "user1",
+//                    email = "user1@gmail.com",
+//                    password = "Password1",
+//                    questionID = 1,
+//                    securityanswer = "Gordan",
+//                    badgeID = 1,
+//                    isMetric = true,
+//                    defaultdistance = 50,
+//                    score = 0,
+//                    registrationDate = LocalDate.now(),
+//                    hasProfile = true
+//                ))
+//
+//            userData.add(
+//                UserDataClass(
+//                    userID = 1,
+//                    username = "user2",
+//                    email = "user2@gmail.com",
+//                    password = "Password2",
+//                    questionID = 1,
+//                    securityanswer = "Jordan",
+//                    badgeID = 4,
+//                    isMetric = true,
+//                    defaultdistance = 50,
+//                    score = 0,
+//                    registrationDate = LocalDate.now()
+//                ))
+//
+//            userData.add(
+//                UserDataClass(
+//                    userID = 2,
+//                    username = "user3",
+//                    email = "user3@gmail.com",
+//                    password = "Password3",
+//                    questionID = 1,
+//                    securityanswer = "Heaven",
+//                    badgeID = 1,
+//                    isMetric = true,
+//                    defaultdistance = 50,
+//                    score = 0,
+//                    registrationDate = LocalDate.now()
+//                ))
+//
+//        }
 
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun User()
-        {
-            userData.add(
-                UserDataClass(
-                    userID = 0,
-                    username = "user1",
-                    email = "user1@gmail.com",
-                    password = "Password1",
-                    questionID = 1,
-                    securityanswer = "Gordan",
-                    badgeID = 1,
-                    isMetric = true,
-                    defaultdistance = 50,
-                    score = 0,
-                    registrationDate = LocalDate.now(),
-                    hasProfile = true
-                ))
-
-            userData.add(
-                UserDataClass(
-                    userID = 1,
-                    username = "user2",
-                    email = "user2@gmail.com",
-                    password = "Password2",
-                    questionID = 1,
-                    securityanswer = "Jordan",
-                    badgeID = 4,
-                    isMetric = true,
-                    defaultdistance = 50,
-                    score = 0,
-                    registrationDate = LocalDate.now()
-                ))
-
-            userData.add(
-                UserDataClass(
-                    userID = 2,
-                    username = "user3",
-                    email = "user3@gmail.com",
-                    password = "Password3",
-                    questionID = 1,
-                    securityanswer = "Heaven",
-                    badgeID = 1,
-                    isMetric = true,
-                    defaultdistance = 50,
-                    score = 0,
-                    registrationDate = LocalDate.now()
-                ))
-
-        }
 
 
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        fun Userachievements()
+//        {
+//            userAchievements.add(
+//                UserAchievementsDataClass(
+//                    userID = 0,
+//                    achID = 1,
+//                    date = LocalDate.now()
+//                )
+//            )
+//
+//            userAchievements.add(
+//                UserAchievementsDataClass(
+//                    userID = 1,
+//                    achID = 2,
+//                    date = LocalDate.now()
+//                )
+//            )
+//
+//            userAchievements.add(
+//                UserAchievementsDataClass(
+//                    userID = 2,
+//                    achID = 3,
+//                    date = LocalDate.now()
+//                )
+//            )
+//        }
 
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun Userachievements()
-        {
-            userAchievements.add(
-                UserAchievementsDataClass(
-                    userID = 0,
-                    achID = 1,
-                    date = LocalDate.now()
-                )
-            )
+//        fun securityquestions()
+//        {
+//
+//            questions.add(
+//                QuestionsDataClass(
+//                    questionID = 1,
+//                    question = "In what city or town did your parents meet?"
+//                ))
+//
+//            questions.add(
+//                QuestionsDataClass(
+//                    questionID = 2,
+//                    question = "What city were you born in?"
+//                ))
+//
+//            questions.add(
+//                QuestionsDataClass(
+//                    questionID = 3,
+//                    question = "What was the first concert you attended?"
+//                ))
+//
+//            questions.add(
+//                QuestionsDataClass(
+//                    questionID = 4,
+//                    question = "What is your mothers maiden name?"
+//                ))
+//
+//        }
 
-            userAchievements.add(
-                UserAchievementsDataClass(
-                    userID = 1,
-                    achID = 2,
-                    date = LocalDate.now()
-                )
-            )
-
-            userAchievements.add(
-                UserAchievementsDataClass(
-                    userID = 2,
-                    achID = 3,
-                    date = LocalDate.now()
-                )
-            )
-        }
-
-        fun securityquestions()
-        {
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 1,
-                    question = "In what city or town did your parents meet?"
-                ))
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 2,
-                    question = "What city were you born in?"
-                ))
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 3,
-                    question = "What was the first concert you attended?"
-                ))
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 4,
-                    question = "What is your mothers maiden name?"
-                ))
-
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun observations()
-        {
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 1,
-                    userID = 0,
-                    lat = 18.432339,
-                    long = -33.989640,
-                    birdName = "Afrikaans",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 2,
-                    userID = 0,
-                    lat = 18.469177,
-                    long = -33.942540,
-                    birdName = "Egyptian Goose",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 3,
-                    userID = 0,
-                    lat = 18.941699,
-                    long = -33.762354,
-                    birdName = "Red-eye Dove",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 4,
-                    userID = 1,
-                    lat = 25.663371,
-                    long = -33.762279,
-                    birdName = "Karoo Prinia",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 5,
-                    userID = 1,
-                    lat = 28.125747,
-                    long = -25.951466,
-                    birdName = "Olive Thrush",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 6,
-                    userID = 1,
-                    lat = 31.015152,
-                    long = -29.567094,
-                    birdName = "Cape-Robin-Chat",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 7,
-                    userID = 2,
-                    lat = 26.280044,
-                    long = -29.126579,
-                    birdName = "Laughing Dove",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 8,
-                    userID = 2,
-                    lat = 19.478346,
-                    long = -33.654693,
-                    birdName = "African Palm Swift",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 9,
-                    userID = 2,
-                    lat = 29.468184,
-                    long = -23.893709,
-                    birdName = "Rose-ringed Parakeet",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 10,
-                    userID = 2,
-                    lat = 28.259314,
-                    long = -25.754180,
-                    birdName = "Cape Sparrow",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-        }
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        fun observations()
+//        {
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 1,
+//                    userID = 0,
+//                    lat = 18.432339,
+//                    long = -33.989640,
+//                    birdName = "Afrikaans",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 2,
+//                    userID = 0,
+//                    lat = 18.469177,
+//                    long = -33.942540,
+//                    birdName = "Egyptian Goose",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 3,
+//                    userID = 0,
+//                    lat = 18.941699,
+//                    long = -33.762354,
+//                    birdName = "Red-eye Dove",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 4,
+//                    userID = 1,
+//                    lat = 25.663371,
+//                    long = -33.762279,
+//                    birdName = "Karoo Prinia",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 5,
+//                    userID = 1,
+//                    lat = 28.125747,
+//                    long = -25.951466,
+//                    birdName = "Olive Thrush",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 6,
+//                    userID = 1,
+//                    lat = 31.015152,
+//                    long = -29.567094,
+//                    birdName = "Cape-Robin-Chat",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 7,
+//                    userID = 2,
+//                    lat = 26.280044,
+//                    long = -29.126579,
+//                    birdName = "Laughing Dove",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 8,
+//                    userID = 2,
+//                    lat = 19.478346,
+//                    long = -33.654693,
+//                    birdName = "African Palm Swift",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 9,
+//                    userID = 2,
+//                    lat = 29.468184,
+//                    long = -23.893709,
+//                    birdName = "Rose-ringed Parakeet",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//            userObservations.add(
+//                UserObservationDataClass(
+//                    observationID = 10,
+//                    userID = 2,
+//                    lat = 28.259314,
+//                    long = -25.754180,
+//                    birdName = "Cape Sparrow",
+//                    date = LocalDate.now(),
+//                    count = 1,
+//                ))
+//
+//        }
 
         fun AddAcheivements()
         {
@@ -606,10 +606,10 @@ class GlobalClass: Application()
         super.onCreate()
 
 
-        User()
-        Userachievements()
-        securityquestions()
-        observations()
+//        User()
+//        Userachievements()
+//        securityquestions()
+//        observations()
         AddAcheivements()
 
 
