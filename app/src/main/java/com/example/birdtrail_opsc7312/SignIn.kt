@@ -59,6 +59,8 @@ class SignIn : AppCompatActivity() {
         binding.btnSignIn.setOnClickListener()
         {
 
+
+
             //------------------------------------------------------------
 
             val firebaseAuth = FirebaseAuth.getInstance()
@@ -66,11 +68,11 @@ class SignIn : AppCompatActivity() {
                 if (it.isSuccessful) {
 
 
-                    var selectedUserIndex = GlobalClass.userData.indexOfLast{it.userID.toString() == firebaseAuth.currentUser?.uid.toString()}
+                    //var selectedUserIndex = GlobalClass.userData.indexOfLast{it.userID.toString() == firebaseAuth.currentUser?.uid.toString()}
 
                     //if user exists
-                    if (selectedUserIndex != -1)
-                    {
+                    //if (selectedUserIndex != -1)
+                    //{
 
 
                         //instantiate location permission helper
@@ -81,8 +83,9 @@ class SignIn : AppCompatActivity() {
                             signIn()
                         }
 
-                        GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
-                    }
+                        GlobalClass.currentUser.userID = firebaseAuth.currentUser?.uid.toString()
+                        //GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
+                    //}
 
 
 
@@ -91,6 +94,7 @@ class SignIn : AppCompatActivity() {
                     //temp code while waiting for test data and data class conversions
                     //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
+                    /*
                     if (selectedUserIndex == -1 && firebaseAuth.currentUser?.uid.toString() == "wnvGrwCcO0OleakiQ9GnNPJj7ro1")
                     {
 
@@ -106,6 +110,7 @@ class SignIn : AppCompatActivity() {
 
                         GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
                     }
+                     */
 
                     //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 

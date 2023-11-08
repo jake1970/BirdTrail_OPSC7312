@@ -29,17 +29,19 @@ class DatabaseHandler
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAllUsers()
     {
+        GlobalClass.userData.clear()
+
         val querySnapshot = db.collection("Users").get().await()
         for (document in querySnapshot){
             val userID: String = document.id
             val username: String = document.data.getValue("username").toString()
             val badgeID: Int = document.data.getValue("badgeID").toString().toInt()
-            val defaultDistance: Int = document.data.getValue("defaultdistance").toString().toInt()
-            val hasProfile: Boolean = document.data.getValue("hasprofile").toString().toBoolean()
-            val ismetric: Boolean = document.data.getValue("ismetric").toString().toBoolean()
+            val defaultDistance: Int = document.data.getValue("defaultDistance").toString().toInt()
+            val hasProfile: Boolean = document.data.getValue("hasProfile").toString().toBoolean()
+            val ismetric: Boolean = document.data.getValue("isMetric").toString().toBoolean()
             val questionID: String = document.data.getValue("questionID").toString()
             val score: Int = document.data.getValue("score").toString().toInt()
-            val securityAnswer: String = document.data.getValue("securityanswer").toString()
+            val securityAnswer: String = document.data.getValue("securityAnswer").toString()
 
             var user = UserDataClass(
                 userID = userID,
@@ -52,13 +54,31 @@ class DatabaseHandler
                 score = score,
                 securityanswer = securityAnswer
             )
+
+            if (userID == GlobalClass.currentUser.userID) {
+                GlobalClass.currentUser = user
+            }
+
             GlobalClass.userData.add(user)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun updateLocalData()
+    {
+
+        getAllUsers()
+        getUserObservations()
+        getUserAchievements()
+        getQuestions()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getUserObservations()
     {
+        GlobalClass.userObservations.clear()
+
         val querySnapshot = db.collection("UserObservations").get().await()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         for (document in querySnapshot)
@@ -88,6 +108,9 @@ class DatabaseHandler
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getUserAchievements()
     {
+
+        GlobalClass.userAchievements.clear()
+
         val querySnapshot = db.collection("UserAchievements").get().await()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         for (document in querySnapshot) {
@@ -107,6 +130,8 @@ class DatabaseHandler
 
     suspend fun getQuestions()
     {
+        GlobalClass.questions.clear()
+
         val querySnapshot = db.collection("Questions").get().await()
         for (document in querySnapshot) {
             val questionID: String = document.id
@@ -182,11 +207,7 @@ class DatabaseHandler
                 defaultUserImage = BitmapFactory.decodeFile(imgFile.absolutePath)
 
             } catch (e: Exception) {
-                GlobalClass.InformUser(
-                    context.getString(R.string.errorText),
-                    "${e.toString()}",
-                    context
-                )
+                defaultUserImage = context.getDrawable(R.drawable.imgdefaultprofile)?.toBitmap()
             }
         }
 

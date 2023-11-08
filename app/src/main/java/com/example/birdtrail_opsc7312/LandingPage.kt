@@ -43,9 +43,10 @@ class LandingPage : AppCompatActivity() {
             if (userID != null) {
 
 
+
                 for (user in GlobalClass.userData)
                 {
-                    if (user.userID == userID.toInt())
+                    if (user.userID == userID)
                     {
                         GlobalClass.currentUser = user
                     }

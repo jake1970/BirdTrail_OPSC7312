@@ -48,6 +48,7 @@ class Homepage : AppCompatActivity() {
                 eBirdHandler.getRecentObservations("ZA")
 
                 val databaseManager = DatabaseHandler()
+                databaseManager.updateLocalData()
 
                 GlobalClass.currentUser.profilepicture = databaseManager.getUserImage(this@Homepage, GlobalClass.currentUser.userID.toString(), GlobalClass.currentUser.hasProfile)
 
