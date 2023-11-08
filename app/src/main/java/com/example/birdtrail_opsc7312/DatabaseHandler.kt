@@ -189,6 +189,20 @@ class DatabaseHandler
     }
 
 
+    suspend fun updateUser(updatedUser: UserDataClass)
+    {
+        db.collection("Users").document(updatedUser.userID).update(
+            mapOf(
+                "badgeID" to updatedUser.badgeID,
+                "defaultDistance" to updatedUser.defaultdistance,
+                "hasProfile" to updatedUser.hasProfile,
+                "isMetric" to updatedUser.isMetric,
+                "score" to updatedUser.score
+            )
+        ).await()
+    }
+
+
 
 
 
