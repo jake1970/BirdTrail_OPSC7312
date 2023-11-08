@@ -66,12 +66,10 @@ class DatabaseHandler
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun updateLocalData()
     {
-
         getAllUsers()
         getUserObservations()
         getUserAchievements()
         getQuestions()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -146,9 +144,6 @@ class DatabaseHandler
     }
 
 
-
-
-
     suspend fun AddUser(newUser: UserDataClass)
     {
         db.collection("Users")
@@ -164,17 +159,19 @@ class DatabaseHandler
             )).await()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun AddUserObservation(newObservation: UserObservationDataClass)
     {
         db.collection("UserObservations")
             .add(mapOf(
                 "userID" to newObservation.userID,
-                "date" to newObservation.date.toString(),
+                "date" to LocalDate.now().toString(),
                 "birdname" to newObservation.birdName,
                 "lat" to newObservation.lat,
                 "long" to newObservation.long,
                 "count" to newObservation.count
             )).await()
+        getUserObservations()
     }
 
     suspend fun AddUserAchievements(newUserAchievement: UserAchievementsDataClass)

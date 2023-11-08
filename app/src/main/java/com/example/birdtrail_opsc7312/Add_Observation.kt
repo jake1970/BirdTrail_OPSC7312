@@ -253,10 +253,9 @@ class Add_Observation : Fragment() {
             try {
                 var newSighting = UserObservationDataClass()
 
-                if (GlobalClass.userObservations.count() > 0) {
-                    newSighting.observationID = (GlobalClass.userObservations.last().observationID + 1)
-                }
-
+//                if (GlobalClass.userObservations.count() > 0) {
+//                    newSighting.observationID = (GlobalClass.userObservations.last().observationID + 1)
+//                }
                 newSighting.userID = GlobalClass.currentUser.userID
 
                 newSighting.lat = userLocation!!.latitude
@@ -267,7 +266,13 @@ class Add_Observation : Fragment() {
                 //date is set by default
                 newSighting.count = binding.tvNumberOfSightings.text.toString().toInt()
 
-                GlobalClass.userObservations.add(newSighting)
+                //Add To Database
+                var databaseHandler = DatabaseHandler()
+
+                MainScope().launch {
+                    databaseHandler.AddUserObservation(newSighting)
+                }
+                //GlobalClass.userObservations.add(newSighting)
 
                 requireActivity().findViewById<View>(R.id.home).callOnClick()
 
