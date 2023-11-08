@@ -70,6 +70,7 @@ class DatabaseHandler
         getUserObservations()
         getUserAchievements()
         getQuestions()
+        GlobalClass.UpdateDataBase = false
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -159,7 +160,10 @@ class DatabaseHandler
                 "questionID" to newUser.questionID,
                 "score" to newUser.score,
                 "securityAnswer" to newUser.securityanswer
-            )).await()
+            )).addOnSuccessListener { GlobalClass.UpdateDataBase = true }
+            .await()
+
+        //getAllUsers()
 
 //        db.collection("Users")
 //            .add(mapOf(
@@ -172,7 +176,6 @@ class DatabaseHandler
 //                "score" to newUser.score,
 //                "securityAnswer" to newUser.securityanswer
 //            )).await()
-        getAllUsers()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -186,8 +189,10 @@ class DatabaseHandler
                 "lat" to newObservation.lat,
                 "long" to newObservation.long,
                 "count" to newObservation.count
-            )).await()
-        getUserObservations()
+            )).addOnSuccessListener { GlobalClass.UpdateDataBase = true }
+            .await()
+        //getUserObservations()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -198,8 +203,9 @@ class DatabaseHandler
                 "achID" to newUserAchievement.achID,
                 "userID" to newUserAchievement.userID,
                 "date" to newUserAchievement.date.toString()
-            )).await()
-        getUserAchievements()
+            )).addOnSuccessListener { GlobalClass.UpdateDataBase = true }
+            .await()
+        //getUserAchievements()
     }
 
 
@@ -214,8 +220,8 @@ class DatabaseHandler
                 "isMetric" to updatedUser.isMetric,
                 "score" to updatedUser.score
             )
-        ).await()
-        getAllUsers()
+        ).addOnSuccessListener { GlobalClass.UpdateDataBase = true }.await()
+        //getAllUsers()
     }
 
 

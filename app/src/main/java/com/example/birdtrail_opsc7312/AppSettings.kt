@@ -138,7 +138,6 @@ class AppSettings : Fragment() {
                     }
 
 
-
                     measurementSymbol = "KM"
 
                     binding.tvDistanceValue.text = "${binding.slDistance.value}$measurementSymbol"

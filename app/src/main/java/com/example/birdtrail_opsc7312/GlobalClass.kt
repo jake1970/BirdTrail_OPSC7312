@@ -27,9 +27,10 @@ class GlobalClass: Application()
 {
     companion object
     {
-        @RequiresApi(Build.VERSION_CODES.O)
+        var UpdateDataBase: Boolean = true
 
         //the currently signed in user
+        @RequiresApi(Build.VERSION_CODES.O)
         var currentUser = UserDataClass()
 
         //the amount of observations made by the current user
