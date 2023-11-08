@@ -144,6 +144,7 @@ class DatabaseHandler
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun AddUser(newUser: UserDataClass)
     {
         db.collection("Users")
@@ -157,6 +158,7 @@ class DatabaseHandler
                 "score" to newUser.score,
                 "securityAnswer" to newUser.securityanswer
             )).await()
+        getAllUsers()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -174,6 +176,7 @@ class DatabaseHandler
         getUserObservations()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun AddUserAchievements(newUserAchievement: UserAchievementsDataClass)
     {
         db.collection("UserAchievements")
@@ -182,6 +185,7 @@ class DatabaseHandler
                 "userID" to newUserAchievement.userID,
                 "date" to newUserAchievement.date.toString()
             )).await()
+        getUserAchievements()
     }
 
 
