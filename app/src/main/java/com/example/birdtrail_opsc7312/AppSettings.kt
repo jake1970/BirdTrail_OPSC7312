@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -103,6 +104,15 @@ class AppSettings : Fragment() {
                     .edit()
                     .putString(myUserID, null)
                     .commit();
+
+
+                //invalidate the users sign in status
+                val firebaseAuth = FirebaseAuth.getInstance()
+                firebaseAuth.signOut()
+
+                //update the db on next login?
+                //prime the database to be read from upon the next sign in
+                //GlobalClass.UpdateDataBase = true
 
                 GlobalClass.currentUser = UserDataClass()
                 var intent = Intent(requireActivity(), LandingPage::class.java)
