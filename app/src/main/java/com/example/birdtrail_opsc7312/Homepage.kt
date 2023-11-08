@@ -44,6 +44,10 @@ class Homepage : AppCompatActivity() {
                 //get bird observations
                 eBirdHandler.getRecentObservations("ZA")
 
+                val databaseManager = DatabaseHandler()
+
+                databaseManager.getUserImage(this@Homepage, GlobalClass.currentUser.userID.toString(), GlobalClass.currentUser.hasProfile)
+
                 withContext(Dispatchers.Main) {
                     loadingProgressBar.visibility = View.GONE
                 }

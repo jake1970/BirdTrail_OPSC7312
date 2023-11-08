@@ -26,7 +26,8 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
     var defaultdistance : Int = 50,
     var score : Int = 0,
     var profilepicture : Bitmap? = null,
-    var registrationDate : LocalDate = LocalDate.now()
+    var registrationDate : LocalDate = LocalDate.now(),
+    var hasProfile : Boolean = false
 ) {
 
     //---------------------------------------------------------------------------------------------

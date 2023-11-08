@@ -15,10 +15,15 @@ import android.view.ViewGroup
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import kotlin.math.roundToInt
 
@@ -35,6 +40,8 @@ class AppSettings : Fragment() {
     private var savedPassword : String? = ""
     private var measurementSymbol = "KM"
 
+    private lateinit var thisView : FrameLayout
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +50,9 @@ class AppSettings : Fragment() {
 
         _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        thisView = view
+
 
         try
         {
@@ -258,8 +268,32 @@ class AppSettings : Fragment() {
             GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.selectedImageSaved), requireContext())
             selectedImageBitmap = uriToBitmap(selectedImageURI)
             GlobalClass.currentUser.profilepicture = selectedImageBitmap
+
+
+
+
+            //Read Data
+            MainScope().launch {
+
+                val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+                thisView.addView(loadingProgressBar)
+
+
+                withContext(Dispatchers.Default) {
+                }
+                val databaseManager = DatabaseHandler()
+
+                if (selectedImageURI != null) {
+                    databaseManager.setUserImage(requireActivity(), GlobalClass.currentUser.userID.toString(), selectedImageURI)
+                }
+
+
+                loadingProgressBar.visibility = View.GONE
+                }
+            }
+
         }
-    }
+
 
     //---------------------------------------------------------------------------------------------
 
