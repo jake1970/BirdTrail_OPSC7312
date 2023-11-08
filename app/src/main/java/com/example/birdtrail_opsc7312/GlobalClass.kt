@@ -16,6 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.example.HotspotJson2KtKotlin
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.internal.notifyAll
 import java.time.LocalDate
 
@@ -184,6 +188,18 @@ class GlobalClass: Application()
                     currentUser.score += 5
                 }
             }
+
+            //update user score in database
+            MainScope().launch {
+                withContext(Dispatchers.Default) {
+
+                    var dataHandler = DatabaseHandler()
+                    dataHandler.updateUser(currentUser)
+                }
+            }
+
+
+
 
             //call method to evaluate the achievements that the user currently has
             evaluateAchievements(context)
