@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.SignInBinding
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import okhttp3.internal.wait
@@ -58,6 +59,69 @@ class SignIn : AppCompatActivity() {
         binding.btnSignIn.setOnClickListener()
         {
 
+            //------------------------------------------------------------
+
+            val firebaseAuth = FirebaseAuth.getInstance()
+            firebaseAuth.signInWithEmailAndPassword(binding.etEmail.text.toString(), binding.etPassword.text.toString()).addOnCompleteListener {
+                if (it.isSuccessful) {
+
+
+                    var selectedUserIndex = GlobalClass.userData.indexOfLast{it.userID.toString() == firebaseAuth.currentUser?.uid.toString()}
+
+                    //if user exists
+                    if (selectedUserIndex != -1)
+                    {
+
+
+                        //instantiate location permission helper
+                        locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
+
+                        //call check permission and pass the sign in method
+                        locationPermissionHelper.checkPermissions {
+                            signIn()
+                        }
+
+                        GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
+                    }
+
+
+
+
+                    //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+                    //temp code while waiting for test data and data class conversions
+                    //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+                    if (selectedUserIndex == -1 && firebaseAuth.currentUser?.uid.toString() == "wnvGrwCcO0OleakiQ9GnNPJj7ro1")
+                    {
+
+                        selectedUserIndex = GlobalClass.userData.indexOfLast{it.userID.toString() == "0"}
+
+                        //instantiate location permission helper
+                        locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
+
+                        //call check permission and pass the sign in method
+                        locationPermissionHelper.checkPermissions {
+                            signIn()
+                        }
+
+                        GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
+                    }
+
+                    //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+
+
+                } else {
+                    Toast.makeText(this, it.exception?.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+                }
+
+
+
+            }
+
+            //------------------------------------------------------------
+
+            /*
             //attempt to sign the user in
             val attemptSignIn = UserDataClass().validateUser(binding.etEmail.text.toString(), binding.etPassword.text.toString())
 
@@ -81,7 +145,7 @@ class SignIn : AppCompatActivity() {
                 //inform the user of the failure to sign in
                 GlobalClass.InformUser(getString(R.string.failedSignIn), getString(R.string.incorrectEmailPassCombo), this)
             }
-
+*/
         }
 
 
@@ -137,6 +201,8 @@ class SignIn : AppCompatActivity() {
                 .commit();
         }
         //---------------------------------------------------------------------------------------//
+
+
 
 
         var userLocation: Location? = null

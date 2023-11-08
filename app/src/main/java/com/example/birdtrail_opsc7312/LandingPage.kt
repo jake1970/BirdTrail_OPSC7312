@@ -41,7 +41,7 @@ class LandingPage : AppCompatActivity() {
             val userID = pref.getString(myUserID, null)
 
             if (userID != null) {
-                Toast.makeText(this, userID, Toast.LENGTH_SHORT)
+
 
                 for (user in GlobalClass.userData)
                 {
