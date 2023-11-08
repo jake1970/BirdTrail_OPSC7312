@@ -145,10 +145,12 @@ class DatabaseHandler
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun AddUser(newUser: UserDataClass)
+    suspend fun AddUser(newUser: UserDataClass, userID: String)
     {
+
         db.collection("Users")
-            .add(mapOf(
+            .document(userID)
+            .set(mapOf(
                 "username" to newUser.username,
                 "badgeID" to newUser.badgeID,
                 "defaultDistance" to newUser.defaultdistance,
@@ -158,6 +160,18 @@ class DatabaseHandler
                 "score" to newUser.score,
                 "securityAnswer" to newUser.securityanswer
             )).await()
+
+//        db.collection("Users")
+//            .add(mapOf(
+//                "username" to newUser.username,
+//                "badgeID" to newUser.badgeID,
+//                "defaultDistance" to newUser.defaultdistance,
+//                "hasProfile" to newUser.hasProfile,
+//                "isMetric" to newUser.isMetric,
+//                "questionID" to newUser.questionID,
+//                "score" to newUser.score,
+//                "securityAnswer" to newUser.securityanswer
+//            )).await()
         getAllUsers()
     }
 

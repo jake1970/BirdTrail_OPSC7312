@@ -9,6 +9,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 //data class for user data
@@ -264,9 +269,30 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
             newUser.username = userUsername
             newUser.password = userPassword
             newUser.questionID = securityQuestion
-            newUser.securityanswer = securityanswer
+            newUser.securityanswer = securityAnswer
             newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgdefaultprofile)?.toBitmap()
             newUser.registrationDate = LocalDate.now()
+
+
+            //**************************************
+            val firebaseAuth = FirebaseAuth.getInstance()
+            firebaseAuth.createUserWithEmailAndPassword(newUser.email, newUser.password)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+
+
+                        val databaseManager = DatabaseHandler()
+
+                        MainScope().launch {
+                            withContext(Dispatchers.Default) {
+                                databaseManager.AddUser(newUser, firebaseAuth.currentUser!!.uid)
+                            }
+                        }
+
+                    }
+
+                    }
+            //*************************************
 
             //add the user to the list of users
             GlobalClass.userData.add(newUser)
