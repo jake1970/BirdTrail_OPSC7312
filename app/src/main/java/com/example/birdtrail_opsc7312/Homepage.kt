@@ -30,6 +30,9 @@ class Homepage : AppCompatActivity() {
 
         try
         {
+            //create local fragment controller
+            val fragmentControl = FragmentHandler()
+
             //load home fragment
             var loadHome = HomeFragment()
 
@@ -46,10 +49,14 @@ class Homepage : AppCompatActivity() {
 
                 val databaseManager = DatabaseHandler()
 
-                databaseManager.getUserImage(this@Homepage, GlobalClass.currentUser.userID.toString(), GlobalClass.currentUser.hasProfile)
+                GlobalClass.currentUser.profilepicture = databaseManager.getUserImage(this@Homepage, GlobalClass.currentUser.userID.toString(), GlobalClass.currentUser.hasProfile)
 
                 withContext(Dispatchers.Main) {
                     loadingProgressBar.visibility = View.GONE
+
+
+
+                    fragmentControl.replaceFragment(loadHome, R.id.flContent, supportFragmentManager)
                 }
             }
 
@@ -62,10 +69,7 @@ class Homepage : AppCompatActivity() {
             //add the default start achievement
             GlobalClass.initStarterAchievement(this)
 
-            //create local fragment controller
-            val fragmentControl = FragmentHandler()
 
-            fragmentControl.replaceFragment(loadHome, R.id.flContent, supportFragmentManager)
 
             //bottom navigation
             binding.bottomNavigationView.selectedItemId = R.id.home

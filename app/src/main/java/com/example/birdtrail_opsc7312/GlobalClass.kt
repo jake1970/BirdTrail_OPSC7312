@@ -296,7 +296,8 @@ class GlobalClass: Application()
                     isMetric = true,
                     defaultdistance = 50,
                     score = 0,
-                    registrationDate = LocalDate.now()
+                    registrationDate = LocalDate.now(),
+                    hasProfile = true
                 ))
 
             userData.add(

@@ -44,13 +44,12 @@ class DatabaseHandler
         return defaultUserImage
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun setUserImage(context: Context, userID: String, selectedImageUri: Uri) {
 
         val imageLocation = "UserImages/$userID"
         val storageReference = FirebaseStorage.getInstance().getReference(imageLocation)
-
-        // binding.ivMyProfileImage.image
 
         storageReference.putFile(selectedImageUri)
             .addOnFailureListener {
