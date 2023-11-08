@@ -7,8 +7,8 @@ import java.time.LocalDate
 //data class for user observations
 
 data class UserObservationDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
-    var observationID: Int = 0,
-    var userID: Int = 0,
+    var observationID: String = "",
+    var userID: String = "",
     var lat: Double = 0.0,
     var long: Double = 0.0,
     var birdName: String = "",

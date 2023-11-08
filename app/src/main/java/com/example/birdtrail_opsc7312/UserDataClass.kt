@@ -15,11 +15,11 @@ import java.time.LocalDate
 
 data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
 
-    var userID: Int = -1,
+    var userID: String = "",
     var email: String = "",
     var username: String = "",
     var password: String = "",
-    var questionID: Int = 0,
+    var questionID: String = "",
     var securityanswer: String = "",
     var badgeID : Int = 0,
     var isMetric: Boolean = true,
