@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.iterator
 import com.example.birdtrail_opsc7312.databinding.ActivitySignUpBinding
+import com.google.firebase.auth.FirebaseAuth
 
 
 class SignUp : AppCompatActivity() {
@@ -70,43 +71,54 @@ class SignUp : AppCompatActivity() {
             //if all components are filled in
             if (allFilled == true) {
 
-                //register the user with the given inputs
-                val attemptRegister = UserDataClass().registerUser(
-                    binding.etEmail.text.toString(),
-                    binding.etUsername.text.toString(),
-                    binding.etPassword.text.toString(),
-                    binding.etConfirmPassword.text.toString(),
-                    (binding.spnSecurityQuestion.selectedItemPosition + 1),
-                    binding.etSecurityAnswer.text.toString(),
-                    this
-                )
+                var selectedQuestionIndex =
+                    GlobalClass.questions.indexOfLast { it.question == binding.spnSecurityQuestion.selectedItem.toString() }
 
-                //if there are no issues with registration
-                if (attemptRegister == "") {
+                //if question exists
+                if (selectedQuestionIndex != -1) {
+
+                    val selectedQuestionID = GlobalClass.questions[selectedQuestionIndex].questionID
+
+                    //register the user with the given inputs
+                    val attemptRegister = UserDataClass().registerUser(
+                        binding.etEmail.text.toString(),
+                        binding.etUsername.text.toString(),
+                        binding.etPassword.text.toString(),
+                        binding.etConfirmPassword.text.toString(),
+                        (selectedQuestionID),
+                        binding.etSecurityAnswer.text.toString(),
+                        this
+                    )
+
+                    //if there are no issues with registration
+                    if (attemptRegister == "") {
+
+                        //new alert dialog to inform the user that their registration was successful
+                        val alert = AlertDialog.Builder(this)
+                        alert.setTitle(getString(R.string.completedSignUp))
+                        alert.setMessage(getString(R.string.instructToSignIn))
+                        alert.setPositiveButton(getString(R.string.okText)) { dialog, which ->
+
+                            //take the user back to the landing page once the dialog is dismissed
+                            var intent = Intent(this, LandingPage::class.java)
+                            startActivity(intent)
+
+                        }
+                        //show the dialog
+                        alert.show()
 
 
-                    //new alert dialog to inform the user that their registration was successful
-                    val alert = AlertDialog.Builder(this)
-                    alert.setTitle(getString(R.string.completedSignUp))
-                    alert.setMessage(getString(R.string.instructToSignIn))
-                    alert.setPositiveButton(getString(R.string.okText)){ dialog, which ->
+                    } else {
 
-                        //take the user back to the landing page once the dialog is dismissed
-                        var intent = Intent(this, LandingPage::class.java)
-                        startActivity(intent)
+                        //if the registration is invalid
 
+                        //show the user what information is invalid
+                        GlobalClass.InformUser(
+                            getString(R.string.failedSignUp),
+                            attemptRegister,
+                            this
+                        )
                     }
-                    //show the dialog
-                    alert.show()
-
-
-
-                } else {
-
-                    //if the registration is invalid
-
-                    //show the user what information is invalid
-                    GlobalClass.InformUser(getString(R.string.failedSignUp), attemptRegister, this)
                 }
             }
 

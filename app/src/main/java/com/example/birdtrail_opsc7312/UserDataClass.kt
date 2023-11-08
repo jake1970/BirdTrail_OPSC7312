@@ -33,6 +33,7 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
     //---------------------------------------------------------------------------------------------
     //method to validate that a user exists
     //---------------------------------------------------------------------------------------------
+    /*
     @RequiresApi(Build.VERSION_CODES.O)
     fun validateUser(userEmail: String, userPassword: String): Boolean
     {
@@ -53,6 +54,7 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
 
         return GlobalClass.currentUser.userID != -1
     }
+     */
     //---------------------------------------------------------------------------------------------
 
 
@@ -173,7 +175,7 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
     //method to register a new user
     //---------------------------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
-    fun registerUser(userEmail: String, userUsername: String, userPassword: String, userConfirmPassword: String, securityQuestion: Int, securityAnswer: String, context : Context): String
+    fun registerUser(userEmail: String, userUsername: String, userPassword: String, userConfirmPassword: String, securityQuestion: String, securityAnswer: String, context : Context): String
     {
 
         //the errors found with the users username
