@@ -90,8 +90,8 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
                 databaseManager.updateUser(GlobalClass.currentUser)
 
                 withContext(Dispatchers.Main) {
-
                 }
+
             }
         }
         super.onDestroyView()
@@ -228,6 +228,11 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
 
             //loop through users
             for (user in sortedUsers) {
+
+                if (user.userID == GlobalClass.currentUser.userID)
+                {
+                    user.score = GlobalClass.currentUser.score
+                }
 
                 //the amount of achievements the user has
                 var userUnlockedAchievements = 0

@@ -662,13 +662,15 @@ class GlobalClass: Application()
 //        observations()
         AddAcheivements()
 
-
+/*
         //set user images
         var profileImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultprofile)
         for (user in userData)
         {
             user.profilepicture = profileImage
         }
+
+ */
 
         //add badges
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultbadge))
