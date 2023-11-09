@@ -256,7 +256,7 @@ class MapDirectionsActivity : AppCompatActivity()
             routeArrowView.renderManeuverUpdate(style, maneuverArrowResult)
         }
 
-// update top banner with maneuver instructions
+        // update top banner with maneuver instructions
         val maneuvers = maneuverApi.getManeuvers(routeProgress)
         maneuvers.fold(
             { error ->

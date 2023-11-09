@@ -64,6 +64,7 @@ class GlobalClass: Application()
         var badgeImages = arrayListOf<Bitmap>()
 
 
+
         //---------------------------------------------------------------------------------------------
         //method to show a feedback dialog to the user
         //---------------------------------------------------------------------------------------------
@@ -198,8 +199,6 @@ class GlobalClass: Application()
                     dataHandler.updateUser(currentUser)
                 }
             }
-
-
 
 
             //call method to evaluate the achievements that the user currently has
