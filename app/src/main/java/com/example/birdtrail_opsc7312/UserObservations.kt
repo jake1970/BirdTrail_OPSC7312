@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserObservationsBinding
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -59,8 +61,6 @@ class UserObservations : Fragment() {
             updateUI()
         }
 
-
-
         // Inflate the layout for this fragment
         return view
     }
@@ -68,6 +68,7 @@ class UserObservations : Fragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUI()
     {
 
@@ -218,8 +219,43 @@ class UserObservations : Fragment() {
                             requireActivity(),
                             spacerSize
                         )
-                    }
 
+
+                        var userLocation: Location? = null
+                        var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                        mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                            userLocation = task.result
+                            if (userLocation != null) {
+
+                                birdOption.setOnClickListener(){
+
+                                    val index = GlobalClass.userObservations.indexOfFirst { it.observationID == sighting.observationID }
+
+                                    val mapHotspotView = MapHotspot()
+                                    val args = Bundle()
+
+                                    val distanceInKm = calculateDistance(
+                                        userLocation!!.latitude,
+                                        userLocation!!.longitude,
+                                        sighting.lat,
+                                        sighting.long
+                                    )
+                                    args.putInt("observationIndex", index)
+                                    args.putDouble("distance", distanceInKm)
+                                    args.putBoolean("isHotspot", false)
+
+                                    mapHotspotView.arguments = args
+
+
+                                    val transaction = parentFragmentManager.beginTransaction()
+                                    transaction.replace(R.id.flContent, mapHotspotView)
+                                    transaction.addToBackStack(null)
+                                    transaction.commit()
+
+                                }
+                            }
+                        }
+                    }
                 }
 
                 onAllSightings = true
@@ -349,5 +385,21 @@ class UserObservations : Fragment() {
     //---------------------------------------------------------------------------------------------
 
 
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val earthRadiusKm = 6371.0
+
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        var measurement = earthRadiusKm * c
+        return measurement
+    }
 
 }

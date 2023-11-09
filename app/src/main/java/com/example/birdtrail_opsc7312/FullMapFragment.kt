@@ -494,6 +494,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                 )
                                 args.putInt("observationIndex", clickedobservationIndex)
                                 args.putDouble("distance", distanceInKm)
+                                args.putBoolean("isHotspot", false)
 
                                 mapHotspotView.arguments = args
 
