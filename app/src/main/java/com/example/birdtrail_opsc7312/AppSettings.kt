@@ -41,6 +41,9 @@ class AppSettings : Fragment() {
     private var savedPassword : String? = ""
     private var measurementSymbol = "KM"
 
+    private var startingDistance: Int = 0
+    private var startingMetric: Boolean = false
+
     private lateinit var thisView : FrameLayout
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -52,8 +55,11 @@ class AppSettings : Fragment() {
         _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        thisView = view
+        startingDistance = GlobalClass.currentUser.defaultdistance
+        startingMetric = GlobalClass.currentUser.isMetric
 
+
+        thisView = view
 
         try
         {
@@ -359,4 +365,16 @@ class AppSettings : Fragment() {
         private const val REQUEST_PICK_IMAGE = 123
 
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    public override fun onDestroyView() {
+        if ((startingMetric != GlobalClass.currentUser.isMetric) || startingDistance != GlobalClass.currentUser.defaultdistance )
+        {
+            GlobalClass.UpdateDataBase = true
+        }
+        super.onDestroyView()
+    }
+
+
+
 }
