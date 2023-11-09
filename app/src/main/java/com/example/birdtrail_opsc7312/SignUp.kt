@@ -6,14 +6,13 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.iterator
+import com.example.birdtrail_opsc7312.GlobalClass.Companion.questions
 import com.example.birdtrail_opsc7312.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +44,19 @@ class SignUp : AppCompatActivity() {
 
         //---------------------------------------------------------------------------------------//
 
+        //populate spinner from database
+        MainScope().launch {
+            withContext(Dispatchers.Default) {
+
+                var dataHandler = DatabaseHandler()
+                dataHandler.getQuestions()
+            }
+            //set up spinner
+            val adapter = ArrayAdapter(this@SignUp, android.R.layout.simple_spinner_item, GlobalClass.questions.map { it.question })
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spnSecurityQuestion.adapter = adapter
+        }
+
 
         //when the sign up button is clicked
         binding.btnSignUp.setOnClickListener()
@@ -75,13 +87,13 @@ class SignUp : AppCompatActivity() {
             //if all components are filled in
             if (allFilled == true) {
 
+
                 val databaseManager = DatabaseHandler()
 
                 MainScope().launch {
                     withContext(Dispatchers.Default) {
                         databaseManager.getQuestions()
                     }
-
 
                     var selectedQuestionIndex =
                         GlobalClass.questions.indexOfLast { it.question == binding.spnSecurityQuestion.selectedItem.toString() }
@@ -91,6 +103,7 @@ class SignUp : AppCompatActivity() {
 
                         val selectedQuestionID =
                             GlobalClass.questions[selectedQuestionIndex].questionID
+
 
                         //register the user with the given inputs
                         val attemptRegister = UserDataClass().registerUser(
