@@ -159,7 +159,7 @@ class GlobalClass: Application()
                    val initialAchievement = UserAchievementsDataClass(
                         userID = currentUser.userID,
                         achID = 0,
-                        date = currentUser.registrationDate,
+                        date = LocalDate.now(),
                     )
                 //)
 
