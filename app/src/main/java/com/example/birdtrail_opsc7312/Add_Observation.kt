@@ -274,7 +274,6 @@ class Add_Observation : Fragment() {
                         //requireActivity().findViewById<RelativeLayout>(R.id.rlLoadingCover).visibility = View.VISIBLE
 
                         withContext(Dispatchers.Default) {
-
                             //Add To Database
                             var databaseHandler = DatabaseHandler()
                             databaseHandler.AddUserObservation(newSighting)

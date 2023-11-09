@@ -200,7 +200,6 @@ class GlobalClass: Application()
                 }
             }
 
-
             //call method to evaluate the achievements that the user currently has
             evaluateAchievements(context)
         }
@@ -288,6 +287,16 @@ class GlobalClass: Application()
 
                     //add the score multiplier boost to the users score
                     currentUser.score = currentUser.score + (scoreMultiplier)
+
+
+                    //update user score in database
+                    MainScope().launch {
+                        withContext(Dispatchers.Default) {
+
+                            var dataHandler = DatabaseHandler()
+                            dataHandler.updateUser(currentUser)
+                        }
+                    }
 
                     //inform the user of their new achievement
                     InformUser(acheivements[currentUserAchievementListAchID.last().toInt()+1].name, context.getString(R.string.newBadgeText),  context )
