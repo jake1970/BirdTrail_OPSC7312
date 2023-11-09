@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.drawToBitmap
 import androidx.core.view.forEach
@@ -223,6 +224,10 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
                 {
                     //set the users leaderboard card to be unique from the other leaderboard cards
                     newLeaderboardCard.binding.rlIdentityBacking.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
+                }
+                else
+                {
+                    newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(requireActivity().getDrawable(R.drawable.imgdefaultprofile)?.toBitmap())
                 }
 
 

@@ -29,6 +29,8 @@ class Add_Observation : Fragment() {
 
     private var selectedOption = ""
 
+    private lateinit var loadingProgressBar : ViewGroup
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     override fun onCreateView(
@@ -41,10 +43,30 @@ class Add_Observation : Fragment() {
 
         //---------------------------------------------------------------------------------------------------------
 
-        val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+        loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
         view.addView(loadingProgressBar)
 
         //---------------------------------------------------------------------------------------------------------
+
+        MainScope().launch {
+
+            if (GlobalClass.UpdateDataBase == true) {
+
+                withContext(Dispatchers.Default) {
+                    val databaseManager = DatabaseHandler()
+                    databaseManager.updateLocalData()
+                }
+
+            }
+            updateUI()
+        }
+
+        // Inflate the layout for this fragment
+        return view
+    }
+
+    private fun updateUI()
+    {
 
         binding.tvSpeciesName.setOnClickListener()
         {
@@ -83,89 +105,7 @@ class Add_Observation : Fragment() {
             }
         }
 
-        //---------------------------------------------------------------------------------------------
-        //Populate list of birds to choose from
-        //---------------------------------------------------------------------------------------------
-        fun populateBirdOptions(searchList: ArrayList<String>) {
 
-            try
-            {
-                //bird option container
-                val activityLayout = binding.llBirdList;
-
-                for (birdName in searchList)
-                {
-                    var birdOption = Card_SpeciesSelector(activity)
-
-                    birdOption.binding.rlSelector.visibility = View.INVISIBLE
-
-                    birdOption.binding.tvSpecies.text = birdName
-
-                    //add the new view
-                    activityLayout.addView(birdOption)
-
-                    birdOption.setOnClickListener()
-                    {
-                        activityLayout.forEach { childView ->
-
-                            if (childView is Card_SpeciesSelector) {
-                                childView.binding.rlSelector.visibility = View.INVISIBLE
-                            }
-                        }
-
-                        birdOption.binding.rlSelector.visibility = View.VISIBLE
-                        binding.tvSpeciesName.text = birdOption.binding.tvSpecies.text
-
-                        //bird selected
-                        if (selectedOption != birdOption.binding.tvSpecies.text.toString()) {
-
-                            loadingProgressBar.visibility = View.VISIBLE
-
-                            //load the image
-                            lifecycleScope.launch {
-
-                                try {
-                                    var imageHandler = ImageHandler()
-                                    var image = imageHandler.GetImage(
-                                        birdOption.binding.tvSpecies.text.toString()
-                                    )
-                                    binding.imgBirdImageExpanded.setImageBitmap(image)
-                                }
-                                catch (e : Exception)
-                                {
-                                    Toast.makeText(activity, getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
-                                }
-                            }
-
-                            loadingProgressBar.visibility = View.GONE
-
-                        }
-
-                        selectedOption = birdOption.binding.tvSpecies.text.toString()
-
-                    }
-
-                    val scale = requireActivity().resources.displayMetrics.density
-                    val pixels = (14 * scale + 0.5f)
-
-                    val spacer = Space(activity)
-                    spacer.minimumHeight = pixels.toInt()
-                    activityLayout.addView(spacer)
-                }
-
-                for (option in activityLayout)
-                {
-                    if (option is Card_SpeciesSelector && option.binding.tvSpecies.text == selectedOption)
-                    {
-                        option.callOnClick()
-                    }
-                }
-            }
-            catch (e: Exception)
-            {
-                GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
-            }
-        }
 
         var uniqueBirdList =  ArrayList<String>()
 
@@ -270,13 +210,18 @@ class Add_Observation : Fragment() {
                 var databaseHandler = DatabaseHandler()
 
                 MainScope().launch {
-                    databaseHandler.AddUserObservation(newSighting)
+
+                    withContext(Dispatchers.Default) {
+                        databaseHandler.AddUserObservation(newSighting)
+                    }
+
+                    requireActivity().findViewById<View>(R.id.home).callOnClick()
+
+                    GlobalClass.evaluateObservations(requireActivity())
                 }
                 //GlobalClass.userObservations.add(newSighting)
 
-                requireActivity().findViewById<View>(R.id.home).callOnClick()
 
-                GlobalClass.evaluateObservations(requireActivity())
 
             }
             catch (e: Exception)
@@ -284,8 +229,89 @@ class Add_Observation : Fragment() {
                 GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
             }
         }
+    }
 
-        // Inflate the layout for this fragment
-        return view
+    //---------------------------------------------------------------------------------------------
+    //Populate list of birds to choose from
+    //---------------------------------------------------------------------------------------------
+    private fun populateBirdOptions(searchList: ArrayList<String>) {
+
+        try
+        {
+            //bird option container
+            val activityLayout = binding.llBirdList;
+
+            for (birdName in searchList)
+            {
+                var birdOption = Card_SpeciesSelector(activity)
+
+                birdOption.binding.rlSelector.visibility = View.INVISIBLE
+
+                birdOption.binding.tvSpecies.text = birdName
+
+                //add the new view
+                activityLayout.addView(birdOption)
+
+                birdOption.setOnClickListener()
+                {
+                    activityLayout.forEach { childView ->
+
+                        if (childView is Card_SpeciesSelector) {
+                            childView.binding.rlSelector.visibility = View.INVISIBLE
+                        }
+                    }
+
+                    birdOption.binding.rlSelector.visibility = View.VISIBLE
+                    binding.tvSpeciesName.text = birdOption.binding.tvSpecies.text
+
+                    //bird selected
+                    if (selectedOption != birdOption.binding.tvSpecies.text.toString()) {
+
+                        loadingProgressBar.visibility = View.VISIBLE
+
+                        //load the image
+                        lifecycleScope.launch {
+
+                            try {
+                                var imageHandler = ImageHandler()
+                                var image = imageHandler.GetImage(
+                                    birdOption.binding.tvSpecies.text.toString()
+                                )
+                                binding.imgBirdImageExpanded.setImageBitmap(image)
+                            }
+                            catch (e : Exception)
+                            {
+                                // Toast.makeText(activity, getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        loadingProgressBar.visibility = View.GONE
+
+                    }
+
+                    selectedOption = birdOption.binding.tvSpecies.text.toString()
+
+                }
+
+                val scale = requireActivity().resources.displayMetrics.density
+                val pixels = (14 * scale + 0.5f)
+
+                val spacer = Space(activity)
+                spacer.minimumHeight = pixels.toInt()
+                activityLayout.addView(spacer)
+            }
+
+            for (option in activityLayout)
+            {
+                if (option is Card_SpeciesSelector && option.binding.tvSpecies.text == selectedOption)
+                {
+                    option.callOnClick()
+                }
+            }
+        }
+        catch (e: Exception)
+        {
+            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
+        }
     }
 }

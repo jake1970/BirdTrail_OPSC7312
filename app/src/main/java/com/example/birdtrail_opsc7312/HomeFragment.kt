@@ -12,6 +12,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -22,6 +26,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val spacerSize = 20
     private lateinit var fullMapView: FullMapFragment
+
+    private lateinit var loadingProgressBar : ViewGroup
 
     //---------------------------------------------------------------------------------------------
 
@@ -34,6 +40,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        MainScope().launch {
+
+            loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+            view.addView(loadingProgressBar)
+
+            if (GlobalClass.UpdateDataBase == true) {
+
+                withContext(Dispatchers.Default) {
+                    val databaseManager = DatabaseHandler()
+                    databaseManager.updateLocalData()
+                }
+
+            }
+            updateUI()
+        }
+
+
+        return view
+    }
+
+    private fun updateUI()
+    {
         try
         {
             //show user info
@@ -162,6 +190,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         {
             GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
         }
-        return view
+
+        loadingProgressBar.visibility = View.GONE
     }
 }

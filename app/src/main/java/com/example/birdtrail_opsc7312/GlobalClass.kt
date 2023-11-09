@@ -149,13 +149,26 @@ class GlobalClass: Application()
             if (containsInitial == false)
             {
                 //add the starter achievement
-                userAchievements.add(
-                    UserAchievementsDataClass(
+                //userAchievements.add(
+                   val initialAchievement = UserAchievementsDataClass(
                         userID = currentUser.userID,
                         achID = 0,
                         date = currentUser.registrationDate,
                     )
-                )
+                //)
+
+
+
+                MainScope().launch {
+
+                    val databaseManager = DatabaseHandler()
+                    withContext(Dispatchers.Default) {
+                        databaseManager.AddUserAchievements(initialAchievement)
+                    }
+
+                }
+
+
             }
 
             //call method to get the total observation amount
