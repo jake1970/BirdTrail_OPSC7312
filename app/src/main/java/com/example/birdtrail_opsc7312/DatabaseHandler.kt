@@ -192,7 +192,6 @@ class DatabaseHandler
             )).addOnSuccessListener { GlobalClass.UpdateDataBase = true }
             .await()
         //getUserObservations()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
