@@ -1,8 +1,8 @@
 package com.example.birdtrail_opsc7312
 
 
+
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -15,8 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserFullMapViewBinding
 import com.mapbox.android.gestures.MoveGestureDetector
+import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.plugin.gestures.OnMoveListener
-
 
 
 class UserFullMapView : Fragment() {
@@ -37,7 +37,7 @@ class UserFullMapView : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         //view binding
@@ -163,11 +163,33 @@ class UserFullMapView : Fragment() {
         binding.imgZoomIn.setOnClickListener()
         {
             //code to zoom in on map
+
+            val loadedMap = fragmentManager?.findFragmentById(R.id.cvFullMapFragmentContainer)
+
+            val mapFragment = (loadedMap as FullMapFragment)
+
+            val currentZoom = mapFragment.mapView.getMapboxMap().cameraState.zoom
+
+            mapFragment.mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(currentZoom + 1)
+                    .build())
         }
 
         binding.imgZoomOut.setOnClickListener()
         {
             //code to zoom out
+
+            val loadedMap = fragmentManager?.findFragmentById(R.id.cvFullMapFragmentContainer)
+
+            val mapFragment = (loadedMap as FullMapFragment)
+
+            val currentZoom = mapFragment.mapView.getMapboxMap().cameraState.zoom
+
+            mapFragment.mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(currentZoom - 1)
+                    .build())
         }
 
 
@@ -179,7 +201,7 @@ class UserFullMapView : Fragment() {
                 parent: AdapterView<*>?,
                 view: View,
                 position: Int,
-                id: Long
+                id: Long,
             ) {
                 (view as TextView).setTextColor(Color.BLACK) //Change selected text color
             }
