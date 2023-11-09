@@ -159,7 +159,7 @@ class GlobalClass: Application()
                    val initialAchievement = UserAchievementsDataClass(
                         userID = currentUser.userID,
                         achID = 0,
-                        date = currentUser.registrationDate,
+                        date = LocalDate.now(),
                     )
                 //)
 
@@ -662,13 +662,15 @@ class GlobalClass: Application()
 //        observations()
         AddAcheivements()
 
-
+/*
         //set user images
         var profileImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultprofile)
         for (user in userData)
         {
             user.profilepicture = profileImage
         }
+
+ */
 
         //add badges
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultbadge))

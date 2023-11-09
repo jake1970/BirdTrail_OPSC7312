@@ -54,7 +54,7 @@ class Homepage : AppCompatActivity() {
                 val databaseManager = DatabaseHandler()
                 databaseManager.updateLocalData()
 
-                GlobalClass.currentUser.profilepicture = databaseManager.getUserImage(this@Homepage, GlobalClass.currentUser.userID.toString(), GlobalClass.currentUser.hasProfile)
+                GlobalClass.currentUser.profilepicture = databaseManager.getUserImage(this@Homepage, GlobalClass.currentUser.userID, GlobalClass.currentUser.hasProfile)
 
                 withContext(Dispatchers.Main) {
                     initUI()

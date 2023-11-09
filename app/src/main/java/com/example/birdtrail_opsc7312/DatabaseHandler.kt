@@ -56,7 +56,13 @@ class DatabaseHandler
             )
 
             if (userID == GlobalClass.currentUser.userID) {
-                GlobalClass.currentUser = user
+
+
+                if (GlobalClass.currentUser.profilepicture == null)
+                {
+                    GlobalClass.currentUser = user
+                }
+
             }
 
             GlobalClass.userData.add(user)

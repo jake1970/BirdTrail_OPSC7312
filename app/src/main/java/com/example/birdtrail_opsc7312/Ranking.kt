@@ -25,10 +25,7 @@ import androidx.core.view.iterator
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentRankingBinding
 import com.mapbox.common.location.GetLocationCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -46,6 +43,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
     private val spacerSize = 14
 
     private lateinit var loadingProgressBar : ViewGroup
+    private var initialBadgeID : Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -81,10 +79,30 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
     }
 
 
+    override fun onDestroyView() {
+        if ((initialBadgeID != GlobalClass.currentUser.badgeID))
+        {
+
+            val databaseManager = DatabaseHandler()
+
+            GlobalScope.launch {
+
+                databaseManager.updateUser(GlobalClass.currentUser)
+
+                withContext(Dispatchers.Main) {
+                }
+
+            }
+        }
+        super.onDestroyView()
+
+    }
 
 
     private fun updateUI()
     {
+
+        initialBadgeID = GlobalClass.currentUser.badgeID
 
         //New Animation Handler Object
         val animationManager = AnimationHandler()
@@ -210,6 +228,11 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
 
             //loop through users
             for (user in sortedUsers) {
+
+                if (user.userID == GlobalClass.currentUser.userID)
+                {
+                    user.score = GlobalClass.currentUser.score
+                }
 
                 //the amount of achievements the user has
                 var userUnlockedAchievements = 0

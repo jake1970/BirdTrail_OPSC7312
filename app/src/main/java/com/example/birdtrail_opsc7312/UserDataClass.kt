@@ -271,7 +271,6 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
             newUser.questionID = securityQuestion
             newUser.securityanswer = securityAnswer
             newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgdefaultprofile)?.toBitmap()
-            newUser.registrationDate = LocalDate.now()
 
 
             //**************************************
