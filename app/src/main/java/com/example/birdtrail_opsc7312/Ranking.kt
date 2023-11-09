@@ -230,7 +230,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
                 var newLeaderboardCard = Card_Leaderboard(activity)
 
                 //set the users leaderboard cards profile image
-                newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(user.profilepicture)
+               // newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(user.profilepicture)
 
                 //set the users leaderboard cards badge image
                 newLeaderboardCard.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[user.badgeID])
@@ -261,6 +261,8 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
                 {
                     //set the users leaderboard card to be unique from the other leaderboard cards
                     newLeaderboardCard.binding.rlIdentityBacking.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_blue), android.graphics.PorterDuff.Mode.SRC_IN)
+                    newLeaderboardCard.binding.imgMyProfileImage.setImageBitmap(GlobalClass.currentUser.profilepicture)
+
                 }
                 else
                 {

@@ -159,6 +159,20 @@ class UserFullMapView : Fragment() {
 
 
 
+
+        binding.imgZoomIn.setOnClickListener()
+        {
+            //code to zoom in on map
+        }
+
+        binding.imgZoomOut.setOnClickListener()
+        {
+            //code to zoom out
+        }
+
+
+
+
         //fix for spinner not showing text in correct color
         binding.spnTimeFrame.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(

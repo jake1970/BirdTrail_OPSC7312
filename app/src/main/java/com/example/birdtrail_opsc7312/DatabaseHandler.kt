@@ -231,7 +231,7 @@ class DatabaseHandler
 
         var defaultUserImage = context.getDrawable(R.drawable.imgdefaultprofile)?.toBitmap()
 
-        if (userHasImage) {
+        if (userHasImage == true) {
             try {
 
                 val storageReference = FirebaseStorage.getInstance().reference.child("UserImages/$userID")
