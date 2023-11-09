@@ -25,6 +25,10 @@ import androidx.core.view.iterator
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
 import com.example.birdtrail_opsc7312.databinding.FragmentRankingBinding
 import com.mapbox.common.location.GetLocationCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -41,6 +45,8 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
     //set the spacer size
     private val spacerSize = 14
 
+    private lateinit var loadingProgressBar : ViewGroup
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +56,33 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         //binding
         _binding = FragmentRankingBinding.inflate(inflater, container, false)
         val view = binding.root
+
+
+        MainScope().launch {
+
+            loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+            view.addView(loadingProgressBar)
+
+            if (GlobalClass.UpdateDataBase == true) {
+
+                withContext(Dispatchers.Default) {
+                    val databaseManager = DatabaseHandler()
+                    databaseManager.updateLocalData()
+                }
+
+            }
+            updateUI()
+        }
+
+        // Inflate the layout for this fragment
+        return view
+    }
+
+
+
+
+    private fun updateUI()
+    {
 
         //New Animation Handler Object
         val animationManager = AnimationHandler()
@@ -72,7 +105,7 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         binding.tvAchievements.setOnClickListener()
         {
             //Generate the position of the tab indicator bar at the end (right) of the screen
-           val moveToPosition = animationManager.getPositionInRelationToScreen(binding.vwSelectedView)
+            val moveToPosition = animationManager.getPositionInRelationToScreen(binding.vwSelectedView)
 
             //Animate the bar to the right side of the screen
             animationManager.animateX(binding.vwSelectedView, -moveToPosition.x.toFloat())
@@ -126,9 +159,11 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         //display the users badge
         binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[GlobalClass.currentUser.badgeID])
 
-        // Inflate the layout for this fragment
-        return view
+        loadingProgressBar.visibility = View.GONE
+
     }
+
+
 
     //---------------------------------------------------------------------------------------------
     //Swap Ranking Views

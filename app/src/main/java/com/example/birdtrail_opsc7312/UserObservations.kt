@@ -10,6 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserObservationsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class UserObservations : Fragment() {
@@ -24,6 +28,8 @@ class UserObservations : Fragment() {
     //boolean to control the list of cards being shown to the user
     private var onAllSightings = true
 
+    private lateinit var loadingProgressBar : ViewGroup
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +39,35 @@ class UserObservations : Fragment() {
         //view binding
         _binding = FragmentUserObservationsBinding.inflate(inflater, container, false)
         val view = binding.root
+
+
+        MainScope().launch {
+
+            loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+            view.addView(loadingProgressBar)
+
+            if (GlobalClass.UpdateDataBase == true) {
+
+                withContext(Dispatchers.Default) {
+                    val databaseManager = DatabaseHandler()
+                    databaseManager.updateLocalData()
+                }
+
+            }
+            updateUI()
+        }
+
+
+
+        // Inflate the layout for this fragment
+        return view
+    }
+
+
+
+
+    private fun updateUI()
+    {
 
         //New Animation Handler Object
         val animationManager = AnimationHandler()
@@ -129,11 +164,10 @@ class UserObservations : Fragment() {
 
         //---------------------------------------------------------------------------------------------
 
+        loadingProgressBar.visibility = View.GONE
 
-
-        // Inflate the layout for this fragment
-        return view
     }
+
 
 
     //---------------------------------------------------------------------------------------------

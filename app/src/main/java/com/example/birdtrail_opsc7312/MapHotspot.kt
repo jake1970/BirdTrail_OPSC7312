@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentMapHotspotBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
@@ -22,6 +23,8 @@ class MapHotspot : Fragment() {
     private var _binding: FragmentMapHotspotBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var loadingProgressBar : ViewGroup
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +34,36 @@ class MapHotspot : Fragment() {
         _binding = FragmentMapHotspotBinding.inflate(inflater, container, false)
         val view = binding.root
 
+
+
+        MainScope().launch {
+
+            loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+            view.addView(loadingProgressBar)
+
+            if (GlobalClass.UpdateDataBase == true) {
+
+                withContext(Dispatchers.Default) {
+                    val databaseManager = DatabaseHandler()
+                    databaseManager.updateLocalData()
+                }
+
+            }
+            updateUI()
+        }
+
+
+
+        // Inflate the layout for this fragment
+        return view
+    }
+
+
+
+
+
+    private fun updateUI()
+    {
 
         try
         {
@@ -138,7 +171,9 @@ class MapHotspot : Fragment() {
             GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
         }
 
-        // Inflate the layout for this fragment
-        return view
+        loadingProgressBar.visibility = View.GONE
+
     }
+
+
 }
