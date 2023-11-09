@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 class Homepage : AppCompatActivity() {
 
     lateinit var binding : ActivityHomepageBinding
+    private lateinit var loadingProgressBar : ViewGroup
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?)
@@ -25,16 +26,19 @@ class Homepage : AppCompatActivity() {
         binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+
+        //Hide the action bar
+        supportActionBar?.hide()
+
+        //set status bar color
+        window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+
+        loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
         binding.root.addView(loadingProgressBar)
 
         try
         {
-            //create local fragment controller
-            val fragmentControl = FragmentHandler()
 
-            //load home fragment
-            var loadHome = HomeFragment()
 
             var lat = intent.getDoubleExtra("lat", 0.0)
             var long = intent.getDoubleExtra("long", 0.0)
@@ -53,22 +57,18 @@ class Homepage : AppCompatActivity() {
                 GlobalClass.currentUser.profilepicture = databaseManager.getUserImage(this@Homepage, GlobalClass.currentUser.userID.toString(), GlobalClass.currentUser.hasProfile)
 
                 withContext(Dispatchers.Main) {
-                    loadingProgressBar.visibility = View.GONE
-
-
-
-                    fragmentControl.replaceFragment(loadHome, R.id.flContent, supportFragmentManager)
+                    initUI()
                 }
             }
 
-            //Hide the action bar
-            supportActionBar?.hide()
 
-            //set status bar color
-            window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+            //create local fragment controller
+            val fragmentControl = FragmentHandler()
 
-            //add the default start achievement
-            GlobalClass.initStarterAchievement(this)
+            //load home fragment
+            var loadHome = HomeFragment()
+
+            fragmentControl.replaceFragment(loadHome, R.id.flContent, supportFragmentManager)
 
 
 
@@ -102,6 +102,20 @@ class Homepage : AppCompatActivity() {
             GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", this)
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initUI()
+    {
+
+
+
+        //add the default start achievement
+        GlobalClass.initStarterAchievement(this)
+
+        loadingProgressBar.visibility = View.GONE
+
+    }
+
 
     override fun onBackPressed() {
         //disable back button

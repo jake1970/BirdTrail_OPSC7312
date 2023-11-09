@@ -48,6 +48,8 @@ class UserObservations : Fragment() {
 
             if (GlobalClass.UpdateDataBase == true) {
 
+
+
                 withContext(Dispatchers.Default) {
                     val databaseManager = DatabaseHandler()
                     databaseManager.updateLocalData()

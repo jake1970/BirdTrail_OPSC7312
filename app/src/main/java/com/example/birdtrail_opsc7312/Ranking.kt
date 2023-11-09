@@ -57,13 +57,15 @@ class Ranking : Fragment(R.layout.fragment_ranking) {
         _binding = FragmentRankingBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+        loadingProgressBar.visibility = View.GONE
+        view.addView(loadingProgressBar)
 
         MainScope().launch {
 
-            loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
-            view.addView(loadingProgressBar)
-
             if (GlobalClass.UpdateDataBase == true) {
+
+                loadingProgressBar.visibility = View.VISIBLE
 
                 withContext(Dispatchers.Default) {
                     val databaseManager = DatabaseHandler()

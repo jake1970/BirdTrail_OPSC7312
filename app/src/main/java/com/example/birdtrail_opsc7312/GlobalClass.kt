@@ -148,6 +148,9 @@ class GlobalClass: Application()
             //if the current user does not have the initial starter achievement
             if (containsInitial == false)
             {
+
+                Toast.makeText(context, "run", Toast.LENGTH_SHORT).show()
+
                 //add the starter achievement
                 //userAchievements.add(
                    val initialAchievement = UserAchievementsDataClass(
@@ -287,7 +290,7 @@ class GlobalClass: Application()
 
 
                 //if must unlock a new achievement
-                if (unlockNew == true)
+                if (unlockNew == true && !GlobalClass.acheivements.isNullOrEmpty())
                 {
                     //add the users new achievement
                     userAchievements.add(
