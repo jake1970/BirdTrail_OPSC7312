@@ -413,6 +413,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                 )
                                 args.putInt("hotspotIndex", clickedHotspotIndex)
                                 args.putDouble("distance", distanceInKm)
+                                args.putBoolean("isHotspot", true)
 
                                 mapHotspotView.arguments = args
 
@@ -478,6 +479,34 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                     pointAnnotationManager?.create(pointAnnotationOptions)
                                 }
                             }
+                            pointAnnotationManager?.addClickListener { pointAnnotation ->
+
+                                val clickedobservationIndex = GlobalClass.userObservations.indexOfFirst { it.long == pointAnnotation.point.longitude() && it.lat == pointAnnotation.point.latitude() }
+
+                                val mapHotspotView = MapHotspot()
+                                val args = Bundle()
+
+                                val distanceInKm = calculateDistance(
+                                    userLocation!!.latitude,
+                                    userLocation!!.longitude,
+                                    pointAnnotation.point.latitude(),
+                                    pointAnnotation.point.longitude()
+                                )
+                                args.putInt("observationIndex", clickedobservationIndex)
+                                args.putDouble("distance", distanceInKm)
+
+                                mapHotspotView.arguments = args
+
+
+                                val transaction = parentFragmentManager.beginTransaction()
+                                transaction.replace(R.id.flContent, mapHotspotView)
+                                transaction.addToBackStack(null)
+                                transaction.commit()
+
+                                false
+
+                            }
+
                         }
                     }
                 }
