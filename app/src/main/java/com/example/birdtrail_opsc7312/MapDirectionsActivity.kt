@@ -469,11 +469,15 @@ class MapDirectionsActivity : AppCompatActivity()
             // initialize view interactions
             binding.btnBack.setOnClickListener {
 
+                finish()
+
+                /*
                 //back to home screen
                 val intent = Intent(this, Homepage::class.java).apply {
                     // Pass any data to Homepage Activity if needed
                 }
                 startActivity(intent)
+                 */
             }
 
             binding.recenter.setOnClickListener {
