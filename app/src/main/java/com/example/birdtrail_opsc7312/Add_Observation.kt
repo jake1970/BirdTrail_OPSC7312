@@ -266,15 +266,23 @@ class Add_Observation : Fragment() {
                 //date is set by default
                 newSighting.count = binding.tvNumberOfSightings.text.toString().toInt()
 
-                //Add To Database
-                var databaseHandler = DatabaseHandler()
+
 
                 MainScope().launch {
-                    databaseHandler.AddUserObservation(newSighting)
+                    if (GlobalClass.UpdateDataBase == true) {
+
+                        //requireActivity().findViewById<RelativeLayout>(R.id.rlLoadingCover).visibility = View.VISIBLE
+
+                        withContext(Dispatchers.Default) {
+
+                            //Add To Database
+                            var databaseHandler = DatabaseHandler()
+                            databaseHandler.AddUserObservation(newSighting)
+                        }
+                    }
+                    requireActivity().findViewById<View>(R.id.home).callOnClick()
                 }
                 //GlobalClass.userObservations.add(newSighting)
-
-                requireActivity().findViewById<View>(R.id.home).callOnClick()
 
                 GlobalClass.evaluateObservations(requireActivity())
 
