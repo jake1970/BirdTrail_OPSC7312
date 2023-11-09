@@ -22,6 +22,7 @@ class MapHotspot : Fragment() {
 
     private var _binding: FragmentMapHotspotBinding? = null
     private val binding get() = _binding!!
+    private var isHotspot: Boolean? = true
 
     private lateinit var loadingProgressBar : ViewGroup
 
@@ -34,7 +35,7 @@ class MapHotspot : Fragment() {
         _binding = FragmentMapHotspotBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
+        isHotspot = arguments?.getBoolean("isHotspot")
 
         MainScope().launch {
 
@@ -49,20 +50,24 @@ class MapHotspot : Fragment() {
                 }
 
             }
-            updateUI()
+
+            if (isHotspot == true)
+            {
+                updateUIForHotspot()
+            }
+            else
+            {
+                updateUIForObservation()
+            }
         }
-
-
 
         // Inflate the layout for this fragment
         return view
     }
 
 
-
-
-
-    private fun updateUI()
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateUIForHotspot()
     {
 
         try
@@ -175,5 +180,95 @@ class MapHotspot : Fragment() {
 
     }
 
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateUIForObservation()
+    {
+        val observationIndex = arguments?.getInt("observationIndex")
+        var distance = arguments?.getDouble("distance")
+
+        var observation = GlobalClass.userObservations[observationIndex!!]
+
+        //create local fragment controller
+        val fragmentControl = FragmentHandler()
+
+        var fullMapView = FullMapFragment()
+        fullMapView.openInFullView = false
+        fullMapView.centerOnHotspot = true
+
+        val args = Bundle()
+
+        observation.long?.let { args.putDouble("hotspotLong", it) }
+        observation.lat?.let { args.putDouble("hotspotLat", it) }
+        args.putBoolean("hotspotCamera", true)
+
+        fullMapView.arguments = args
+
+        fragmentControl.replaceFragment(fullMapView, R.id.cvHotspotMapFragmentContainer, requireActivity().supportFragmentManager)
+
+        binding.tvHotspot.text = "Observation"
+        binding.tvHotspotDate.text = observation.date.toString()
+        binding.tvHotspotLocation.text = "${observation.lat},  ${observation.long}"
+
+        if (GlobalClass.currentUser.isMetric)
+        {
+            val decimalFormat = DecimalFormat("#.##")
+            val formattedDistance = decimalFormat.format(distance)
+            binding.tvDistance.text = "${getString(R.string.distanceText)}: ${formattedDistance}KM"
+        }
+        else
+        {
+            if (distance != null) {
+                distance *= 0.62137119
+            }
+            val decimalFormat = DecimalFormat("#.##")
+            val formattedDistance = decimalFormat.format(distance)
+            binding.tvDistance.text = "${getString(R.string.distanceText)}: ${formattedDistance}mi"
+        }
+
+        //show bird
+        val scrollViewTools = ScrollViewHandler()
+        val activityLayout = binding.llBirdList;
+
+        var birdDisplay = Card_Observations_All(requireContext())
+        birdDisplay.binding.tvSpecies.text = observation.birdName
+
+        // Define the date format pattern for your input string
+        val inputPattern = "yyyy-MM-dd"
+
+        // Define the desired date format pattern for the output
+        val outputPattern = "yyyy-MM-dd"
+
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        var date = inputFormat.parse(observation.date.toString())
+        var localDate = outputFormat.format(date)
+
+        birdDisplay.binding.tvDate.text = localDate
+
+        birdDisplay.binding.tvSighted.text = "${getString(R.string.foundText)}: ${observation.count}"
+        activityLayout.addView(birdDisplay)
+        scrollViewTools.generateSpacer(activityLayout, requireActivity(), 14)
+
+        binding.btnBack.setOnClickListener(){
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.flContent, UserFullMapView())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        binding.btnDirections.setOnClickListener(){
+
+            val intent = Intent(requireContext(), MapDirectionsActivity::class.java).apply {
+                putExtra("long", observation.long)
+                putExtra("lat", observation.lat)
+            }
+            startActivity(intent)
+        }
+
+        loadingProgressBar.visibility = View.GONE
+    }
 
 }
