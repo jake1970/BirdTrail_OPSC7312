@@ -67,7 +67,7 @@ class Homepage : AppCompatActivity() {
 
         }catch (e: Exception)
         {
-            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", this)
+            GlobalClass.InformUser(getString(R.string.errorText),"$e", this)
         }
     }
 

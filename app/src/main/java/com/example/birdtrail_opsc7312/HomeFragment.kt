@@ -148,9 +148,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             var observationlist = arrayListOf<UserObservationDataClass>()
             //get latest sighting
 
+            /*
             for (i in 1..GlobalClass.userObservations.size) {
                 if (GlobalClass.userObservations[i - 1].userID == GlobalClass.currentUser.userID) {
                     observationlist.add(GlobalClass.userObservations[i - 1])
+                }
+            }
+             */
+
+            for (userObservation in GlobalClass.userObservations)
+            {
+                if (userObservation.userID == GlobalClass.currentUser.userID)
+                {
+                    observationlist.add(userObservation)
                 }
             }
 
