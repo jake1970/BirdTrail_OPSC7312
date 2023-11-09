@@ -21,10 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.IOException
 import kotlin.math.roundToInt
 
@@ -300,37 +297,54 @@ class AppSettings : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null)
-        {
+        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageURI = data.data
-            GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.selectedImageSaved), requireContext())
+            GlobalClass.InformUser(
+                getString(R.string.confirmationText),
+                getString(R.string.selectedImageSaved),
+                requireContext()
+            )
             selectedImageBitmap = uriToBitmap(selectedImageURI)
             GlobalClass.currentUser.profilepicture = selectedImageBitmap
 
 
+            if (selectedImageURI != null) {
+
+                //Read Data
+                MainScope().launch {
+
+                    val loadingProgressBar =
+                        layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+                    thisView.addView(loadingProgressBar)
 
 
-            //Read Data
-            MainScope().launch {
 
-                val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
-                thisView.addView(loadingProgressBar)
+                    withContext(Dispatchers.Default) {
+                        val databaseManager = DatabaseHandler()
 
+                        val currentImageState = GlobalClass.currentUser.hasProfile
 
-                withContext(Dispatchers.Default) {
-                }
-                val databaseManager = DatabaseHandler()
-
-                if (selectedImageURI != null) {
-                    databaseManager.setUserImage(requireActivity(), GlobalClass.currentUser.userID.toString(), selectedImageURI)
-                }
+                        databaseManager.setUserImage(
+                            requireActivity(),
+                            GlobalClass.currentUser.userID,
+                            selectedImageURI
+                        )
 
 
-                loadingProgressBar.visibility = View.GONE
+                        if (currentImageState == false)
+                        {
+                            databaseManager.updateUser(GlobalClass.currentUser)
+                        }
+
+                    }
+
+
+                    loadingProgressBar.visibility = View.GONE
                 }
             }
 
         }
+    }
 
 
     //---------------------------------------------------------------------------------------------
@@ -367,12 +381,26 @@ class AppSettings : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    public override fun onDestroyView() {
+    override fun onDestroyView() {
         if ((startingMetric != GlobalClass.currentUser.isMetric) || startingDistance != GlobalClass.currentUser.defaultdistance )
         {
-            GlobalClass.UpdateDataBase = true
+
+            val databaseManager = DatabaseHandler()
+
+            GlobalScope.launch {
+
+                databaseManager.updateUser(GlobalClass.currentUser)
+
+                withContext(Dispatchers.Main) {
+
+                }
+
+            }
+
         }
+
         super.onDestroyView()
+
     }
 
 
