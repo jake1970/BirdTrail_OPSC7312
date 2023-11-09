@@ -65,6 +65,9 @@ class GlobalClass: Application()
 
 
 
+
+
+
         //---------------------------------------------------------------------------------------------
         //method to show a feedback dialog to the user
         //---------------------------------------------------------------------------------------------
@@ -167,6 +170,7 @@ class GlobalClass: Application()
                     val databaseManager = DatabaseHandler()
                     withContext(Dispatchers.Default) {
                         databaseManager.AddUserAchievements(initialAchievement)
+                        userAchievements.add(initialAchievement)
                     }
 
                 }
@@ -214,10 +218,12 @@ class GlobalClass: Application()
                     var dataHandler = DatabaseHandler()
                     dataHandler.updateUser(currentUser)
                 }
+
+                //call method to evaluate the achievements that the user currently has
+                evaluateAchievements(context)
             }
 
-            //call method to evaluate the achievements that the user currently has
-            evaluateAchievements(context)
+
         }
         //---------------------------------------------------------------------------------------------
 
@@ -290,15 +296,17 @@ class GlobalClass: Application()
 
 
                 //if must unlock a new achievement
-                if (unlockNew == true && !GlobalClass.acheivements.isNullOrEmpty())
+                if (unlockNew == true && !acheivements.isNullOrEmpty())
                 {
+                    val newAch = UserAchievementsDataClass(
+                        userID = currentUser.userID,
+                        achID = acheivements[currentUserAchievementListAchID.last().toInt()+1].achID,
+                        date = LocalDate.now(),
+                    )
+
                     //add the users new achievement
                     userAchievements.add(
-                        UserAchievementsDataClass(
-                            userID = currentUser.userID,
-                            achID = acheivements[currentUserAchievementListAchID.last().toInt()+1].achID,
-                            date = LocalDate.now(),
-                        )
+                        newAch
                     )
 
                     //add the score multiplier boost to the users score
@@ -311,6 +319,7 @@ class GlobalClass: Application()
 
                             var dataHandler = DatabaseHandler()
                             dataHandler.updateUser(currentUser)
+                            dataHandler.AddUserAchievements(newAch)
                         }
                     }
 

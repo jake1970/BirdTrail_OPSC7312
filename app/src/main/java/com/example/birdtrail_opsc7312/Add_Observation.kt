@@ -213,11 +213,15 @@ class Add_Observation : Fragment() {
 
                     withContext(Dispatchers.Default) {
                         databaseHandler.AddUserObservation(newSighting)
+                        GlobalClass.userObservations.add(newSighting)
+
                     }
 
-                    requireActivity().findViewById<View>(R.id.home).callOnClick()
 
                     GlobalClass.evaluateObservations(requireActivity())
+                    requireActivity().findViewById<View>(R.id.home).callOnClick()
+
+
                 }
                 //GlobalClass.userObservations.add(newSighting)
 
