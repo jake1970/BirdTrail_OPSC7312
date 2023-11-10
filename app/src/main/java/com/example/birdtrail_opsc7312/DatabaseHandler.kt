@@ -19,6 +19,7 @@ import java.io.File
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class DatabaseHandler
@@ -96,6 +97,7 @@ class DatabaseHandler
             var date = LocalDate.parse(datestring, formatter)
             var lat: Double = document.data.getValue("lat").toString().toDouble()
             var long: Double = document.data.getValue("long").toString().toDouble()
+            var time: String = document.data.getValue("time").toString()
 
             var observation = UserObservationDataClass(
                 observationID = observationID,
@@ -104,7 +106,8 @@ class DatabaseHandler
                 long = long,
                 birdName = birdname,
                 count = count,
-                date = date
+                date = date,
+                time = time
             )
             GlobalClass.userObservations.add(observation)
         }
@@ -191,6 +194,7 @@ class DatabaseHandler
             .add(mapOf(
                 "userID" to newObservation.userID,
                 "date" to LocalDate.now().toString(),
+                "time" to getCurrentTime(),
                 "birdname" to newObservation.birdName,
                 "lat" to newObservation.lat,
                 "long" to newObservation.long,
@@ -230,6 +234,13 @@ class DatabaseHandler
     }
 
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentTime(): String {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        return current.format(formatter)
+    }
 
 
 

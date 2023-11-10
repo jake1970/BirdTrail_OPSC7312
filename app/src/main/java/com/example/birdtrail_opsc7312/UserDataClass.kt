@@ -32,7 +32,7 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
     var score : Int = 0,
     var profilepicture : Bitmap? = null,
     var registrationDate : LocalDate = LocalDate.now(),
-    var hasProfile : Boolean = false
+    var hasProfile : Boolean = false,
 ) {
 
     //---------------------------------------------------------------------------------------------

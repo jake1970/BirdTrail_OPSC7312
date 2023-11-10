@@ -60,6 +60,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUI()
     {
         try
@@ -173,24 +174,27 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
             else
             {
-                var userSighting = observationlist.last()
+                var userSighting = GlobalClass.getLastestObservation()
 
-                latestUserSighting.binding.tvSpecies.text = userSighting.birdName
-                latestUserSighting.binding.tvSighted.text = userSighting.date.toString()
+                if (userSighting != null)
+                {
+                    latestUserSighting.binding.tvSpecies.text = userSighting.birdName
+                    latestUserSighting.binding.tvSighted.text = userSighting.date.toString()
 
-                // Create a TextView
-                val latestObservationText = TextView(requireContext()).apply {
-                    text = "Your Latest Observation" // replace with actual username
-                    textSize = 18f // this is in SP (scale-independent pixels), not DP
-                    setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
-                    setPadding(8, 0, 0, 12) // assuming you want the left margin to be padding here
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
+                    // Create a TextView
+                    val latestObservationText = TextView(requireContext()).apply {
+                        text = "Your Latest Observation" // replace with actual username
+                        textSize = 18f // this is in SP (scale-independent pixels), not DP
+                        setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
+                        setPadding(8, 0, 0, 12) // assuming you want the left margin to be padding here
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                    }
+                    activityLayout.addView(latestObservationText)
+                    activityLayout.addView(latestUserSighting)
                 }
-                activityLayout.addView(latestObservationText)
-                activityLayout.addView(latestUserSighting)
             }
 
             //call method to generate a space under the dynamic component

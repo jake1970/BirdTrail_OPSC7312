@@ -13,7 +13,8 @@ data class UserObservationDataClass @RequiresApi(Build.VERSION_CODES.O) construc
     var long: Double = 0.0,
     var birdName: String = "",
     var date: LocalDate = LocalDate.now(),
-    var count: Int = 0
+    var count: Int = 0,
+    var time: String = ""
 )
 
 

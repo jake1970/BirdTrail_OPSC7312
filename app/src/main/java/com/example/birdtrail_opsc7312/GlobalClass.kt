@@ -22,6 +22,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.notifyAll
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class GlobalClass: Application()
 {
@@ -329,6 +331,38 @@ class GlobalClass: Application()
             }
         }
         //---------------------------------------------------------------------------------------------
+
+
+
+        //---------------------------------------------------------------------------------------------
+        //method to calculate the achievements that the current user has unlocked
+        //---------------------------------------------------------------------------------------------
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getLastestObservation(): UserObservationDataClass?
+        {
+            val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+            // Filter the observations for the current user
+            val currentUserObservations = userObservations.filter { it.userID == currentUser.userID }
+
+            // Get the observation with the latest time
+            val latestObservation = currentUserObservations.maxByOrNull { LocalTime.parse(it.time, formatter) }
+
+            // Return the time of the latest observation, or null if there are no observations for the current user
+            return latestObservation
+        }
+        //---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 //
 //        @RequiresApi(Build.VERSION_CODES.O)

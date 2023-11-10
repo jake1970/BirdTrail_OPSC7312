@@ -65,6 +65,7 @@ class Add_Observation : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUI()
     {
 
