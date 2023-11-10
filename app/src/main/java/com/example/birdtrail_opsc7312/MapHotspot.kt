@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.FragmentMapHotspotBinding
@@ -72,6 +73,7 @@ class MapHotspot : Fragment() {
 
         try
         {
+            binding.llObservationDetails.visibility = View.GONE
             val hotspotIndex = arguments?.getInt("hotspotIndex")
             var distance = arguments?.getDouble("distance")
 
@@ -185,6 +187,7 @@ class MapHotspot : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUIForObservation()
     {
+        binding.svBirdList.visibility = View.GONE
         val observationIndex = arguments?.getInt("observationIndex")
         var distance = arguments?.getDouble("distance")
 
@@ -227,6 +230,32 @@ class MapHotspot : Fragment() {
             binding.tvDistance.text = "${getString(R.string.distanceText)}: ${formattedDistance}mi"
         }
 
+
+        binding.tvBirdname.text = observation.birdName
+        binding.tvCount.text = observation.count.toString()
+
+        //load the image
+        lifecycleScope.launch {
+
+            try {
+                var imageHandler = ImageHandler()
+                var image = imageHandler.GetImage(
+                    observation.birdName
+                )
+                binding.imgBirdImageExpanded.setImageBitmap(image)
+            }
+            catch (e : Exception)
+            {
+                Toast.makeText(activity, getString(R.string.failedToLoadImage), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
+
+
+
+        /*
         //show bird
         val scrollViewTools = ScrollViewHandler()
         val activityLayout = binding.llBirdList;
@@ -267,6 +296,7 @@ class MapHotspot : Fragment() {
             }
             startActivity(intent)
         }
+        */
 
         loadingProgressBar.visibility = View.GONE
     }
