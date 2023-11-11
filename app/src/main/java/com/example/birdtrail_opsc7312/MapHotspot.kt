@@ -211,7 +211,7 @@ class MapHotspot : Fragment() {
         fragmentControl.replaceFragment(fullMapView, R.id.cvHotspotMapFragmentContainer, requireActivity().supportFragmentManager)
 
         binding.tvHotspot.text = "Observation"
-        binding.tvHotspotDate.text = observation.date.toString()
+        binding.tvHotspotDate.text = " " + observation.date.toString()
         binding.tvHotspotLocation.text = "${observation.lat},  ${observation.long}"
 
         if (GlobalClass.currentUser.isMetric)
