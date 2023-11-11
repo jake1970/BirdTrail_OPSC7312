@@ -41,34 +41,48 @@ class LandingPage : AppCompatActivity() {
             //---------------------------------------------------------------------------------------//
             //Remember Me
             //---------------------------------------------------------------------------------------//
+
+            //define preference file
             val pref = getSharedPreferences(myPrefsFile, MODE_PRIVATE)
+
+            //get the stored user ID
             val userID = pref.getString(myUserID, null)
 
-
+            //if the stored user ID is not null aka exists
             if (userID != null) {
 
+                //new loading cover screen
                 val loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
                 binding.root.addView(loadingProgressBar)
 
+                //users current location
                 var userLocation: Location? = null
                 lifecycleScope.launch {
 
                     val databaseManager = DatabaseHandler()
+
+                    //load all users from database
                     databaseManager.getAllUsers()
 
+                    //set users location
                     userLocation = getUserLocation()
 
                     withContext(Dispatchers.Main) {
 
+                        //loop through users
                         for (user in GlobalClass.userData) {
 
+                            //if the loops user id matches the stored user id
                             if (user.userID == userID) {
 
-
+                                //set the active users user id to the stored user id
                                 GlobalClass.currentUser.userID = user.userID
 
+                                //hide the loading screen
                                 loadingProgressBar.visibility = View.GONE
 
+
+                                //navigate the user into the app and pass the location coordinates
                                 var intent =
                                     Intent(this@LandingPage, Homepage::class.java)
                                 userLocation?.let {
@@ -93,12 +107,14 @@ class LandingPage : AppCompatActivity() {
 
             binding.btnSignIn.setOnClickListener()
             {
+                //open sign in screen
                 var intent = Intent(this, SignIn::class.java)
                 startActivity(intent)
             }
 
             binding.btnSignUp.setOnClickListener()
             {
+                //open sign up screen
                 var intent = Intent(this, SignUp::class.java)
                 startActivity(intent)
             }
@@ -111,14 +127,19 @@ class LandingPage : AppCompatActivity() {
     //method to get user current location
     suspend fun getUserLocation(): Location? {
 
+        //store users location
         var userLocation: Location? = null
 
+        //location services client
         var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        //wait to get the last location
         mFusedLocationClient.lastLocation
             .addOnSuccessListener(this) { task ->
                 userLocation = task
             }.await()
 
+        //return the location
         return userLocation
     }
 
