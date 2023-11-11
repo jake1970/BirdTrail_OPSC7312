@@ -92,7 +92,7 @@
     <string name="PasswordIncorrect">Password Invalid</string>
     <string name="noObservations">No Observations, click here to add</string>
     <string name="TextView">TextView</string>
-    <string name="Username">{username}</string>
+    <string name="Username">You</string>
     <string name="HotspotLocation">{hotspot location}</string>
     <string name="HotspotDate">{hotspot date}</string>
     <string name="Filter">Filter</string>
