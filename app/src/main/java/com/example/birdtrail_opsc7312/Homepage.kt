@@ -26,7 +26,6 @@ class Homepage : AppCompatActivity() {
         binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         //Hide the action bar
         supportActionBar?.hide()
 
@@ -38,12 +37,8 @@ class Homepage : AppCompatActivity() {
 
         try
         {
-
-
             var lat = intent.getDoubleExtra("lat", 0.0)
             var long = intent.getDoubleExtra("long", 0.0)
-
-            //GlobalClass.InformUser(lat.toString(), long.toString(), this )
 
             GlobalScope.launch {
                 //get nearby hotspots
@@ -62,8 +57,6 @@ class Homepage : AppCompatActivity() {
                     initUI()
                 }
             }
-
-
         }
         catch (e: Exception)
         {
@@ -74,14 +67,10 @@ class Homepage : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initUI()
     {
-
-
-
         //add the default start achievement
         GlobalClass.initStarterAchievement(this)
 
         loadingProgressBar.visibility = View.GONE
-
 
         //create local fragment controller
         val fragmentControl = FragmentHandler()
@@ -90,8 +79,6 @@ class Homepage : AppCompatActivity() {
         var loadHome = HomeFragment()
 
         fragmentControl.replaceFragment(loadHome, R.id.flContent, supportFragmentManager)
-
-
 
         //bottom navigation
         binding.bottomNavigationView.selectedItemId = R.id.home
@@ -116,9 +103,7 @@ class Homepage : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.placeholder).isClickable = false
-
     }
-
 
     override fun onBackPressed() {
         //disable back button

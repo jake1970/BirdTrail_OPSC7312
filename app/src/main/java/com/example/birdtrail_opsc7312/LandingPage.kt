@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -17,7 +16,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 class LandingPage : AppCompatActivity() {
-
 
     private val myPrefsFile = "MyPrefsFile";
     private val myUserID = "";
@@ -105,12 +103,12 @@ class LandingPage : AppCompatActivity() {
                 startActivity(intent)
             }
 
-
         } catch (e: Exception) {
             GlobalClass.InformUser(getString(R.string.errorText), "${e.toString()}", this)
         }
     }
 
+    //method to get user current location
     suspend fun getUserLocation(): Location? {
 
         var userLocation: Location? = null
@@ -122,11 +120,9 @@ class LandingPage : AppCompatActivity() {
             }.await()
 
         return userLocation
-
     }
 
     override fun onBackPressed() {
         //disable back button
     }
-
 }
