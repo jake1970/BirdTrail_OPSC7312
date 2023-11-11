@@ -56,15 +56,15 @@ class DatabaseHandler
                 securityanswer = securityAnswer
             )
 
+
+
             if (userID == GlobalClass.currentUser.userID) {
-
-
                 if (GlobalClass.currentUser.profilepicture == null)
                 {
                     GlobalClass.currentUser = user
                 }
-
             }
+
 
             GlobalClass.userData.add(user)
         }

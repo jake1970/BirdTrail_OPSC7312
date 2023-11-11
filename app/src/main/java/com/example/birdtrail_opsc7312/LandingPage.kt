@@ -3,11 +3,17 @@ package com.example.birdtrail_opsc7312
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.LandingPageBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LandingPage : AppCompatActivity() {
 
@@ -40,20 +46,39 @@ class LandingPage : AppCompatActivity() {
             val pref = getSharedPreferences(myPrefsFile, MODE_PRIVATE)
             val userID = pref.getString(myUserID, null)
 
+            GlobalClass.InformUser("", userID.toString(), this@LandingPage)
+
             if (userID != null) {
 
+                GlobalScope.launch {
 
 
-                for (user in GlobalClass.userData)
-                {
-                    if (user.userID == userID)
-                    {
-                        GlobalClass.currentUser = user
+                    val databaseManager = DatabaseHandler()
+                    databaseManager.getAllUsers()
+
+
+                    withContext(Dispatchers.Main) {
+
+
+
+                        for (user in GlobalClass.userData)
+                        {
+                            if (user.userID == userID)
+                            {
+                                GlobalClass.currentUser.userID = user.userID
+
+                                var intent = Intent(this@LandingPage, Homepage::class.java)
+                                startActivity(intent)
+                            }
+                        }
+
+
                     }
+
                 }
 
-                var intent = Intent(this, Homepage::class.java)
-                startActivity(intent)
+
+
             }
             //---------------------------------------------------------------------------------------//
 
