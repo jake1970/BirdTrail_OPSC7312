@@ -468,11 +468,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
     //method to add user sightings to map
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission", "SetTextI18n")
-    private fun addSightingAnnotationsToMap() {
-        try
-        {
-            if (checkPermissions())
-            {
+    public fun addSightingAnnotationsToMap() {
+        try {
+            if (checkPermissions()) {
                 // Create an instance of the Annotation API and get the PointAnnotationManager.
                 bitmapFromDrawableRes(
                     requireContext(),
@@ -486,10 +484,45 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                     mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                         userLocation = task.result
                         if (userLocation != null) {
+                            // Create a bitmap for the bird
+                            val bitmapPin = bitmapFromDrawableRes(requireContext(), R.drawable.imgbird)
+
+                            // Create a paint object
+                            val paint = Paint()
+
+                            // Create a canvas for the black base
+                            val tintedBitmapBase = Bitmap.createBitmap(bitmapPin!!.width, bitmapPin.height, Bitmap.Config.ARGB_8888)
+                            val canvasBase = Canvas(tintedBitmapBase)
+
+                            // Apply the color filter to the paint object for the black base
+                            val colorFilterBase: ColorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                            paint.colorFilter = colorFilterBase
+
+                            // Draw the black base
+                            canvasBase.drawBitmap(bitmapPin, 0f, 0f, paint)
+
+                            // Create a canvas for the white overlay
+                            val tintedBitmapOverlay = Bitmap.createScaledBitmap(bitmapPin, bitmapPin.width + 2, bitmapPin.height + 2, false)
+                            val canvasOverlay = Canvas(tintedBitmapOverlay)
+
+                            // Apply the color filter to the paint object for the white overlay
+                            val colorFilterOverlay: ColorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+                            paint.colorFilter = colorFilterOverlay
+
+                            // Draw the white overlay
+                            canvasOverlay.drawBitmap(bitmapPin, 0f, 0f, paint)
+
+                            // Draw the base bitmap first, then the overlay bitmap
+                            val combinedBitmap = Bitmap.createBitmap(tintedBitmapBase.width, tintedBitmapBase.height, Bitmap.Config.ARGB_8888)
+                            val canvasCombined = Canvas(combinedBitmap)
+                            canvasCombined.drawBitmap(tintedBitmapBase, 0f, 0f, null)
+                            canvasCombined.drawBitmap(tintedBitmapOverlay, 1.5f, 1.5f, null)
+
                             // Iterate over each hotspot in the global list
                             for (sighting in GlobalClass.userObservations) {
                                 if (sighting.userID == GlobalClass.currentUser.userID) {
                                     // Calculate the distance between the user's location and the hotspot.
+
                                     val pointAnnotationOptions: PointAnnotationOptions =
                                         PointAnnotationOptions()
                                             // Define a geographic coordinate from the hotspot's lat and lng.
@@ -501,7 +534,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                             )
                                             // Specify the bitmap you assigned to the point annotation
                                             // The bitmap will be added to map style automatically.
-                                            .withIconImage(bitmap)
+                                            .withIconImage(combinedBitmap)
                                     // Add the resulting pointAnnotation to the map.
                                     pointAnnotationManager?.create(pointAnnotationOptions)
                                 }
@@ -537,9 +570,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                     }
                 }
             }
-        }catch (e: Exception)
-        {
-            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
+        } catch (e: Exception) {
+            GlobalClass.InformUser(getString(R.string.errorText), "${e.toString()}", requireContext())
         }
     }
 
