@@ -60,6 +60,13 @@ class MapHotspot : Fragment() {
             {
                 updateUIForObservation()
             }
+
+            binding.btnBack.setOnClickListener(){
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.replace(R.id.flContent, UserFullMapView())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         }
 
         // Inflate the layout for this fragment
@@ -154,13 +161,6 @@ class MapHotspot : Fragment() {
                 {
                     GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
                 }
-            }
-
-            binding.btnBack.setOnClickListener(){
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.flContent, UserFullMapView())
-                transaction.addToBackStack(null)
-                transaction.commit()
             }
 
             binding.btnDirections.setOnClickListener(){
@@ -297,6 +297,15 @@ class MapHotspot : Fragment() {
             startActivity(intent)
         }
         */
+
+        binding.btnDirections.setOnClickListener(){
+
+            val intent = Intent(requireContext(), MapDirectionsActivity::class.java).apply {
+                putExtra("long", observation.long)
+                putExtra("lat", observation.lat)
+            }
+            startActivity(intent)
+        }
 
         loadingProgressBar.visibility = View.GONE
     }
