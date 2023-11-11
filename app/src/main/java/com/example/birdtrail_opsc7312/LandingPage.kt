@@ -46,7 +46,6 @@ class LandingPage : AppCompatActivity() {
             val pref = getSharedPreferences(myPrefsFile, MODE_PRIVATE)
             val userID = pref.getString(myUserID, null)
 
-            GlobalClass.InformUser("", userID.toString(), this@LandingPage)
 
             if (userID != null) {
 
