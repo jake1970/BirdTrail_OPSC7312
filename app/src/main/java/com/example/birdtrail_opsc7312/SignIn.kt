@@ -123,7 +123,7 @@ class SignIn : AppCompatActivity() {
                 val alert = AlertDialog.Builder(this)
 
                 alert.setTitle("Enter your email")
-                alert.setMessage("Please enter your accounts email address below, an email containing a link to reset your password will be sent shortly after.")
+                alert.setMessage("Please enter your accounts email address below, an email containing a link to reset your password will be sent shortly after.\n\nPlease note the email may appear in the junk folder.")
 
                 // Set an EditText view to get user input
                 val input = EditText(this)
