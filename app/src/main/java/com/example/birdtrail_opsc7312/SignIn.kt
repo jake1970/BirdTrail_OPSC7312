@@ -75,15 +75,18 @@ class SignIn : AppCompatActivity() {
                     //{
 
 
+                        GlobalClass.currentUser.userID = firebaseAuth.currentUser?.uid.toString()
+
                         //instantiate location permission helper
                         locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
+
 
                         //call check permission and pass the sign in method
                         locationPermissionHelper.checkPermissions {
                             signIn()
                         }
 
-                        GlobalClass.currentUser.userID = firebaseAuth.currentUser?.uid.toString()
+
                         //GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
                     //}
 
@@ -224,6 +227,7 @@ class SignIn : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
