@@ -37,6 +37,7 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.plugin.scalebar.scalebar
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -96,6 +97,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         {
             mapView = MapView(requireContext())
             view.addView(mapView) // Add the MapView to your layout
+
+            mapView.scalebar.isMetricUnits = GlobalClass.currentUser.isMetric
 
             //Hide the compass
             mapView.compass.enabled = false
