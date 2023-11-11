@@ -8,6 +8,3 @@ data class AchievementsDataClass(
     var badgeIndex : Int = 0,
     var observationsRequired : Int = 0
 )
-
-
-

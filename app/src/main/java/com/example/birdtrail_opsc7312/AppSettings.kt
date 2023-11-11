@@ -25,7 +25,6 @@ import kotlinx.coroutines.*
 import java.io.IOException
 import kotlin.math.roundToInt
 
-
 class AppSettings : Fragment() {
 
     private val myPrefsFile = "MyPrefsFile";
@@ -52,14 +51,15 @@ class AppSettings : Fragment() {
         _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //starting values
         startingDistance = GlobalClass.currentUser.defaultdistance
         startingMetric = GlobalClass.currentUser.isMetric
-
 
         thisView = view
 
         try
         {
+            //load current settings
             if (GlobalClass.currentUser.isMetric == false)
             {
                 measurementSymbol = "mi"
@@ -115,8 +115,6 @@ class AppSettings : Fragment() {
 
                 //update the db on next login?
                 //prime the database to be read from upon the next sign in
-                //GlobalClass.UpdateDataBase = true
-
                 GlobalClass.currentUser = UserDataClass()
                 var intent = Intent(requireActivity(), LandingPage::class.java)
                 startActivity(intent)
@@ -130,7 +128,6 @@ class AppSettings : Fragment() {
                 if (GlobalClass.currentUser.isMetric == false) {
                     GlobalClass.currentUser.isMetric = true
 
-
                     //update user
                     MainScope().launch {
                         withContext(Dispatchers.Default) {
@@ -139,7 +136,6 @@ class AppSettings : Fragment() {
                             dataHandler.updateUser(GlobalClass.currentUser)
                         }
                     }
-
 
                     measurementSymbol = "KM"
 
@@ -276,7 +272,7 @@ class AppSettings : Fragment() {
             GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
         }
     }
-    //method to access gallery on your phone
+    //method to access gallery on user's phone
     private fun Gallery()
     {
         try
@@ -297,55 +293,59 @@ class AppSettings : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-            val selectedImageURI = data.data
-            GlobalClass.InformUser(
-                getString(R.string.confirmationText),
-                getString(R.string.selectedImageSaved),
-                requireContext()
-            )
-            selectedImageBitmap = uriToBitmap(selectedImageURI)
-            GlobalClass.currentUser.profilepicture = selectedImageBitmap
+        try
+        {
+            if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+                val selectedImageURI = data.data
+                GlobalClass.InformUser(
+                    getString(R.string.confirmationText),
+                    getString(R.string.selectedImageSaved),
+                    requireContext()
+                )
+                selectedImageBitmap = uriToBitmap(selectedImageURI)
+                GlobalClass.currentUser.profilepicture = selectedImageBitmap
+
+                if (selectedImageURI != null) {
+
+                    //Read Data
+                    MainScope().launch {
+
+                        val loadingProgressBar =
+                            layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+                        thisView.addView(loadingProgressBar)
 
 
-            if (selectedImageURI != null) {
 
-                //Read Data
-                MainScope().launch {
+                        withContext(Dispatchers.Default) {
+                            val databaseManager = DatabaseHandler()
 
-                    val loadingProgressBar =
-                        layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
-                    thisView.addView(loadingProgressBar)
+                            val currentImageState = GlobalClass.currentUser.hasProfile
 
-
-
-                    withContext(Dispatchers.Default) {
-                        val databaseManager = DatabaseHandler()
-
-                        val currentImageState = GlobalClass.currentUser.hasProfile
-
-                        databaseManager.setUserImage(
-                            requireActivity(),
-                            GlobalClass.currentUser.userID,
-                            selectedImageURI
-                        )
+                            databaseManager.setUserImage(
+                                requireActivity(),
+                                GlobalClass.currentUser.userID,
+                                selectedImageURI
+                            )
 
 
-                        if (currentImageState == false)
-                        {
-                            databaseManager.updateUser(GlobalClass.currentUser)
+                            if (currentImageState == false)
+                            {
+                                databaseManager.updateUser(GlobalClass.currentUser)
+                            }
+
                         }
 
+
+                        loadingProgressBar.visibility = View.GONE
                     }
-
-
-                    loadingProgressBar.visibility = View.GONE
                 }
             }
-
+        }
+        catch (e: Exception)
+        {
+            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
         }
     }
-
 
     //---------------------------------------------------------------------------------------------
 
@@ -377,32 +377,32 @@ class AppSettings : Fragment() {
 
     companion object {
         private const val REQUEST_PICK_IMAGE = 123
-
     }
 
+    //method to destroy fragment view
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onDestroyView() {
         if ((startingMetric != GlobalClass.currentUser.isMetric) || startingDistance != GlobalClass.currentUser.defaultdistance )
         {
+            try
+            {
+                val databaseManager = DatabaseHandler()
 
-            val databaseManager = DatabaseHandler()
+                //update user data in database
+                GlobalScope.launch {
 
-            GlobalScope.launch {
+                    databaseManager.updateUser(GlobalClass.currentUser)
 
-                databaseManager.updateUser(GlobalClass.currentUser)
+                    withContext(Dispatchers.Main) {
 
-                withContext(Dispatchers.Main) {
-
+                    }
                 }
-
             }
-
+            catch (e: Exception)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
+            }
         }
-
         super.onDestroyView()
-
     }
-
-
-
 }
