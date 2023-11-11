@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -210,7 +212,69 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
                     activityLayout.addView(latestObservationText)
                     activityLayout.addView(latestUserSighting)
+
+
+                    //88
+
+                    //the users current location
+                    var userLocation: Location? = null
+
+                    //new location client
+                    var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+                    //get the last known user location
+                    mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+
+                        //set the location
+                        userLocation = task.result
+
+                        //if the location is actually set
+                        if (userLocation != null) {
+
+                            //when the dynamic compoenent is clicked
+                            latestUserSighting.setOnClickListener(){
+
+                                //get the index of the associated observation
+                                val index = GlobalClass.userObservations.indexOfFirst { it.observationID == userSighting.observationID }
+
+                                //new map hotspot fragment instance
+                                val mapHotspotView = MapHotspot()
+
+                                //new arguments
+                                val args = Bundle()
+
+                                //calculate the distance to the point
+                                val distanceInKm = calculateDistance(
+                                    userLocation!!.latitude,
+                                    userLocation!!.longitude,
+                                    userSighting.lat,
+                                    userSighting.long
+                                )
+
+                                //set the fragment arguments
+                                args.putInt("observationIndex", index)
+                                args.putDouble("distance", distanceInKm)
+                                args.putBoolean("isHotspot", false)
+
+                                //set the arguments to the fragment instance
+                                mapHotspotView.arguments = args
+
+
+                                //open the fragment
+                                val transaction = parentFragmentManager.beginTransaction()
+                                transaction.replace(R.id.flContent, mapHotspotView)
+                                transaction.addToBackStack(null)
+                                transaction.commit()
+
+                            }
+                        }
+                    }
+
+                    //88
                 }
+
+
+
             }
 
             //call method to generate a space under the dynamic component
@@ -223,4 +287,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         loadingProgressBar.visibility = View.GONE
     }
+
+    //---------------------------------------------------------------------------------------------
+    //Method to get the distance between two points
+    //---------------------------------------------------------------------------------------------
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val earthRadiusKm = 6371.0
+
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        var measurement = earthRadiusKm * c
+        return measurement
+    }
+    //---------------------------------------------------------------------------------------------
 }

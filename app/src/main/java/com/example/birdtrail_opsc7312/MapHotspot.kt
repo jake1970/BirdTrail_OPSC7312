@@ -75,10 +75,11 @@ class MapHotspot : Fragment() {
 
             //when the back button is clicked
             binding.btnBack.setOnClickListener(){
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.flContent, UserFullMapView())
-                transaction.addToBackStack(null)
-                transaction.commit()
+
+                //navigate two fragment backwards in the stack
+                fragmentManager?.popBackStackImmediate()
+                fragmentManager?.popBackStackImmediate()
+
             }
         }
 
