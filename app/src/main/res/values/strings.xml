@@ -108,23 +108,25 @@
     <string name="Directions">Directions</string>
     <string name="BirdName">Bird Name</string>
 
-
-
-
-
     <string name="EnterEmail">Enter your email</string>
     <string name="EmailMessage">Please enter your accounts email address below, an email containing a link to reset your password will be sent shortly after.
-    Please note the email may appear in the junk folder.</string>
+        Please note the email may appear in the junk folder.</string>
     <string name="Observation">Observation</string>
     <string name="LatestObservationLabel">Your Latest Observation</string>
-
-
-
+    <string name="lonText">Lon</string>
+    <string name="latText">Lat</string>
+    <string name="passwordResetPrefix">Password reset sent to: </string>
+    <string name="uploadCompleteText">Updated Profile Image</string>
+    <string name="uploadFailedText">Image Failed To Upload</string>
 
 
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic3QxMDA4MTgzOSIsImEiOiJjbG5lank2cmIwZHlyMmp0Y2h1c2VmZ2lkIn0.AU-LAXgDH6jTS1vHM9pfhw</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+
 
 </resources>

@@ -182,7 +182,7 @@ class Add_Observation : Fragment() {
 
                     binding.llBirdList.children.first().callOnClick()
 
-                    binding.tvCurrentLocation.text = " Lon: " + userLocation!!.longitude.toString() + " Lat: " + userLocation!!.latitude.toString()
+                    binding.tvCurrentLocation.text = " ${getString(R.string.lonText)}: " + userLocation!!.longitude.toString() + " ${getString(R.string.latText)}: " + userLocation!!.latitude.toString()
 
                     loadingProgressBar.visibility = View.GONE
 

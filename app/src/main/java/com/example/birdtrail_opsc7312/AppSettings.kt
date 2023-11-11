@@ -84,7 +84,7 @@ class AppSettings : Fragment() {
 
                 val firebaseAuth = FirebaseAuth.getInstance()
                 firebaseAuth.sendPasswordResetEmail(firebaseAuth.currentUser!!.email.toString())
-                Toast.makeText(requireActivity(), "Password reset sent to: " + firebaseAuth.currentUser!!.email.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), getString(R.string.passwordResetPrefix) + firebaseAuth.currentUser!!.email.toString(), Toast.LENGTH_SHORT).show()
 
             }
 

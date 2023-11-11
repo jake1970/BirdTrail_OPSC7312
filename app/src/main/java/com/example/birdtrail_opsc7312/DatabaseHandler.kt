@@ -287,11 +287,11 @@ class DatabaseHandler
 
         storageReference.putFile(selectedImageUri)
             .addOnFailureListener {
-                Toast.makeText(context, "Imaged Failed To Upload", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.uploadFailedText), Toast.LENGTH_SHORT).show()
             }
             .addOnSuccessListener {
                 GlobalClass.currentUser.hasProfile = true
-                Toast.makeText(context, "Updated Profile Image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.uploadCompleteText), Toast.LENGTH_SHORT).show()
             }.await()
     }
 }
