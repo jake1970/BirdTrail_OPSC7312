@@ -17,7 +17,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     //binding
@@ -41,22 +40,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val view = binding.root
 
         MainScope().launch {
-
             loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
             view.addView(loadingProgressBar)
 
             if (GlobalClass.UpdateDataBase == true) {
 
-                withContext(Dispatchers.Default) {
-                    val databaseManager = DatabaseHandler()
-                    databaseManager.updateLocalData()
+                try
+                {
+                    withContext(Dispatchers.Default) {
+                        val databaseManager = DatabaseHandler()
+                        databaseManager.updateLocalData()
+                    }
                 }
-
+                catch (e: Exception)
+                {
+                    GlobalClass.InformUser(getString(R.string.errorText),"$e", requireContext())
+                }
             }
             updateUI()
         }
-
-
         return view
     }
 
@@ -148,14 +150,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             var observationlist = arrayListOf<UserObservationDataClass>()
             //get latest sighting
-
-            /*
-            for (i in 1..GlobalClass.userObservations.size) {
-                if (GlobalClass.userObservations[i - 1].userID == GlobalClass.currentUser.userID) {
-                    observationlist.add(GlobalClass.userObservations[i - 1])
-                }
-            }
-             */
 
             for (userObservation in GlobalClass.userObservations)
             {

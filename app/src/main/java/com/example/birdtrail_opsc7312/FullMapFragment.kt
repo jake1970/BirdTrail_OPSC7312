@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
@@ -46,6 +45,7 @@ import java.util.*
 
 class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
+    //location permission helper
     private lateinit var locationPermissionHelper: LocationPermissionHelper
 
     private val onIndicatorBearingChangedListener = OnIndicatorBearingChangedListener {
@@ -130,7 +130,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         {
             if (centerOnHotspot == true)
             {
-
                 val hotspotLong = arguments?.getDouble("hotspotLong")
                 val hotspotLat = arguments?.getDouble("hotspotLat")
 
@@ -143,7 +142,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
                 // set camera position
                 mapView.getMapboxMap().setCamera(cameraPosition)
-
             }
             else
             {
@@ -154,7 +152,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                 )
             }
             loadMap()
-
         }catch (e: Exception)
         {
             GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
@@ -220,7 +217,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                     val fragmentControl = FragmentHandler()
                     fragmentControl.replaceFragment(UserFullMapView(), R.id.flContent, parentFragmentManager)
                 }
-
                 true
             }
 
@@ -366,59 +362,49 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                 if (daysBetween <= (filterTimeFrame * 7)) {
                                     if (distanceInKm <= filterDistance) { //200
 
-
-
+                                        //set colour of pin based on distance
                                         var tintColor = when {
-                                            distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green) //red
+                                            distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green)
                                             distanceInKm <= filterDistance/2 -> resources.getColor(R.color.mediumOrange)
-                                            //distanceInKm <= filterDistance -> resources.getColor(R.color.farRed)
                                             else -> {resources.getColor(R.color.farRed)}
                                         }
-
 
                                         // Create a bitmap for the colored pin
                                         val bitmapColored = bitmapFromDrawableRes(requireContext(),R.drawable.imglocation_pin)
 
-                                        val paintColored = Paint()
-                                        val colorFilterColored: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
-                                        paintColored.colorFilter = colorFilterColored
-                                        val tintedBitmapColored = Bitmap.createBitmap(bitmapColored!!.width, bitmapColored.height, Bitmap.Config.ARGB_8888)
+                                        // Create a bitmap for the pin
+                                        val bitmapPin = bitmapFromDrawableRes(requireContext(), R.drawable.imglocation_pin)
+
+                                        // Create a paint object
+                                        val paint = Paint()
+
+                                        // Create a canvas for the colored pin
+                                        val tintedBitmapColored = Bitmap.createBitmap(bitmapPin!!.width, bitmapPin.height, Bitmap.Config.ARGB_8888)
                                         val canvasColored = Canvas(tintedBitmapColored)
-                                        if (bitmapColored != null) {
-                                            canvasColored.drawBitmap(bitmapColored, 0f, 0f, paintColored)
-                                        }
 
-                                        // Create a bitmap for the black outline
-                                        val bitmapOutline = bitmapFromDrawableRes(requireContext(),R.drawable.imglocation_pin)
+                                        // Apply the color filter to the paint object
+                                        val colorFilterColored: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
+                                        paint.colorFilter = colorFilterColored
 
-                                        val paintOutline = Paint()
-                                        val colorFilterOutline: ColorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
-                                        paintOutline.colorFilter = colorFilterOutline
-                                        val tintedBitmapOutline = Bitmap.createScaledBitmap(bitmapOutline!!, bitmapOutline.width + 2, bitmapOutline.height + 2, false)
+                                        // Draw the colored pin
+                                        canvasColored.drawBitmap(bitmapPin, 0f, 0f, paint)
+
+                                        // Create a canvas for the black outline
+                                        val tintedBitmapOutline = Bitmap.createScaledBitmap(bitmapPin, bitmapPin.width + 2, bitmapPin.height + 2, false)
                                         val canvasOutline = Canvas(tintedBitmapOutline)
-                                        canvasOutline.drawBitmap(bitmapOutline, 0f, 0f, paintOutline)
+
+                                        // Apply the color filter to the paint object
+                                        val colorFilterOutline: ColorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+                                        paint.colorFilter = colorFilterOutline
+
+                                        // Draw the black outline
+                                        canvasOutline.drawBitmap(bitmapPin, 0f, 0f, paint)
 
                                         // Draw the outline bitmap first, then the colored bitmap
                                         val combinedBitmap = Bitmap.createBitmap(tintedBitmapOutline.width, tintedBitmapOutline.height, Bitmap.Config.ARGB_8888)
                                         val canvasCombined = Canvas(combinedBitmap)
                                         canvasCombined.drawBitmap(tintedBitmapOutline, 0f, 0f, null)
                                         canvasCombined.drawBitmap(tintedBitmapColored, 1.5f, 1.5f, null)
-
-                                        /*
-
-                                        val paint = Paint()
-                                        val colorFilter: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
-                                        paint.colorFilter = colorFilter
-
-                                        val tintedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-                                        val canvas = Canvas(tintedBitmap)
-                                        canvas.drawBitmap(bitmap, 0f, 0f, paint)
-
-                                         */
-
-
-
-
 
                                         // Set options for the resulting symbol layer.
                                         val pointAnnotationOptions: PointAnnotationOptions =
@@ -458,7 +444,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
                                 mapHotspotView.arguments = args
 
-
+                                //display hotspot view
                                 val transaction = parentFragmentManager.beginTransaction()
                                 transaction.replace(R.id.flContent, mapHotspotView)
                                 transaction.addToBackStack(null)
@@ -539,16 +525,14 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
                                 mapHotspotView.arguments = args
 
-
+                                //display observation
                                 val transaction = parentFragmentManager.beginTransaction()
                                 transaction.replace(R.id.flContent, mapHotspotView)
                                 transaction.addToBackStack(null)
                                 transaction.commit()
 
                                 false
-
                             }
-
                         }
                     }
                 }
