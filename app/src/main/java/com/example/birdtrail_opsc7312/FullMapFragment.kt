@@ -366,12 +366,45 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                 if (daysBetween <= (filterTimeFrame * 7)) {
                                     if (distanceInKm <= filterDistance) { //200
 
+
+
                                         var tintColor = when {
                                             distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green) //red
                                             distanceInKm <= filterDistance/2 -> resources.getColor(R.color.mediumOrange)
                                             //distanceInKm <= filterDistance -> resources.getColor(R.color.farRed)
                                             else -> {resources.getColor(R.color.farRed)}
                                         }
+
+
+                                        // Create a bitmap for the colored pin
+                                        val bitmapColored = bitmapFromDrawableRes(requireContext(),R.drawable.imglocation_pin)
+
+                                        val paintColored = Paint()
+                                        val colorFilterColored: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
+                                        paintColored.colorFilter = colorFilterColored
+                                        val tintedBitmapColored = Bitmap.createBitmap(bitmapColored!!.width, bitmapColored.height, Bitmap.Config.ARGB_8888)
+                                        val canvasColored = Canvas(tintedBitmapColored)
+                                        if (bitmapColored != null) {
+                                            canvasColored.drawBitmap(bitmapColored, 0f, 0f, paintColored)
+                                        }
+
+                                        // Create a bitmap for the black outline
+                                        val bitmapOutline = bitmapFromDrawableRes(requireContext(),R.drawable.imglocation_pin)
+
+                                        val paintOutline = Paint()
+                                        val colorFilterOutline: ColorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+                                        paintOutline.colorFilter = colorFilterOutline
+                                        val tintedBitmapOutline = Bitmap.createScaledBitmap(bitmapOutline!!, bitmapOutline.width + 2, bitmapOutline.height + 2, false)
+                                        val canvasOutline = Canvas(tintedBitmapOutline)
+                                        canvasOutline.drawBitmap(bitmapOutline, 0f, 0f, paintOutline)
+
+                                        // Draw the outline bitmap first, then the colored bitmap
+                                        val combinedBitmap = Bitmap.createBitmap(tintedBitmapOutline.width, tintedBitmapOutline.height, Bitmap.Config.ARGB_8888)
+                                        val canvasCombined = Canvas(combinedBitmap)
+                                        canvasCombined.drawBitmap(tintedBitmapOutline, 0f, 0f, null)
+                                        canvasCombined.drawBitmap(tintedBitmapColored, 1.5f, 1.5f, null)
+
+                                        /*
 
                                         val paint = Paint()
                                         val colorFilter: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
@@ -380,6 +413,11 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                         val tintedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
                                         val canvas = Canvas(tintedBitmap)
                                         canvas.drawBitmap(bitmap, 0f, 0f, paint)
+
+                                         */
+
+
+
 
 
                                         // Set options for the resulting symbol layer.
@@ -394,7 +432,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                                 )
                                                 // Specify the bitmap you assigned to the point annotation
                                                 // The bitmap will be added to map style automatically.
-                                                .withIconImage(tintedBitmap/*bitmap*/)
+                                                .withIconImage(combinedBitmap/*bitmap*/)
                                         // Add the resulting pointAnnotation to the map.
                                         pointAnnotationManager?.create(pointAnnotationOptions)
                                     }
