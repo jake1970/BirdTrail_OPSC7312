@@ -80,6 +80,28 @@ https://github.com/jake1970/BirdTrail_OPSC7312
 
 https://github.com/jake1970/BirdTrail_OPSC7312.git
 
+-------------------------------------------------------------------------------------------
+
+Release Notes
+---------------------------
+
+Updates
+-------
+- Map Zoom In and Out button map functionality added
+- Navigate back to user past observations added
+- Changed appearance of map anotations
+- Metric/Imperial conversion algorithm was changed and fixed.
+- Fixed Score and Achievements.
+- App connected to Firebase services (database, authentication, storage)
+- Remember Me functionality added
+- Password Reset added
+
+Innovative Features Added
+-------------------------
+Leaderboard - leaderboard will show a ranking of the application users based on the amount of points each user has accumulated. 
+UserAchievements/Badges - Reward system with badges based on the current number of points or the number of observations the user has made.
+                        - Each badge will also reward the user with a certain number of points.
+                        - The user will be able to select one badge to display next to their profile picture.
 
 
 
