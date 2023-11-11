@@ -46,11 +46,19 @@ class SignUp : AppCompatActivity() {
 
         //populate spinner from database
         MainScope().launch {
-            withContext(Dispatchers.Default) {
 
-                var dataHandler = DatabaseHandler()
-                dataHandler.getQuestions()
+            try {
+                withContext(Dispatchers.Default) {
+
+                    var dataHandler = DatabaseHandler()
+                    dataHandler.getQuestions()
+                }
             }
+            catch (e :Exception)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
+            }
+
             //set up spinner
             val adapter = ArrayAdapter(this@SignUp, android.R.layout.simple_spinner_item, GlobalClass.questions.map { it.question })
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -69,18 +77,25 @@ class SignUp : AppCompatActivity() {
             val container = binding.llFields
 
 
-            //loop through the inputs
-            for (component in container.children)
+            try
             {
-                //check that the current component is a text edit and that it doesn't contain a value
-                if (component is EditText && component.text.isNullOrEmpty())
-                {
-                    //set the components error text
-                    component.error = getString(R.string.missingField)
+                //loop through the inputs
+                for (component in container.children) {
 
-                    //set the filled status to false
-                    allFilled = false
+                    //check that the current component is a text edit and that it doesn't contain a value
+                    if (component is EditText && component.text.isNullOrEmpty()) {
+
+                        //set the components error text
+                        component.error = getString(R.string.missingField)
+
+                        //set the filled status to false
+                        allFilled = false
+                    }
                 }
+            }
+            catch (e :Exception)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
             }
 
 
@@ -91,9 +106,18 @@ class SignUp : AppCompatActivity() {
                 val databaseManager = DatabaseHandler()
 
                 MainScope().launch {
-                    withContext(Dispatchers.Default) {
-                        databaseManager.getQuestions()
+
+                    try {
+                        withContext(Dispatchers.Default) {
+                            databaseManager.getQuestions()
+                        }
                     }
+                    catch (e :Exception)
+                    {
+                        GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
+                    }
+
+
 
                     var selectedQuestionIndex =
                         GlobalClass.questions.indexOfLast { it.question == binding.spnSecurityQuestion.selectedItem.toString() }
@@ -101,49 +125,57 @@ class SignUp : AppCompatActivity() {
                     //if question exists
                     if (selectedQuestionIndex != -1) {
 
+                        try {
+
                         val selectedQuestionID =
                             GlobalClass.questions[selectedQuestionIndex].questionID
 
 
-                        //register the user with the given inputs
-                        val attemptRegister = UserDataClass().registerUser(
-                            binding.etEmail.text.toString(),
-                            binding.etUsername.text.toString(),
-                            binding.etPassword.text.toString(),
-                            binding.etConfirmPassword.text.toString(),
-                            (selectedQuestionID),
-                            binding.etSecurityAnswer.text.toString(),
-                            this@SignUp
-                        )
-
-                        //if there are no issues with registration
-                        if (attemptRegister == "") {
-
-                            //new alert dialog to inform the user that their registration was successful
-                            val alert = AlertDialog.Builder(this@SignUp)
-                            alert.setTitle(getString(R.string.completedSignUp))
-                            alert.setMessage(getString(R.string.instructToSignIn))
-                            alert.setPositiveButton(getString(R.string.okText)) { dialog, which ->
-
-                                //take the user back to the landing page once the dialog is dismissed
-                                var intent = Intent(this@SignUp, LandingPage::class.java)
-                                startActivity(intent)
-
-                            }
-                            //show the dialog
-                            alert.show()
-
-
-                        } else {
-
-                            //if the registration is invalid
-
-                            //show the user what information is invalid
-                            GlobalClass.InformUser(
-                                getString(R.string.failedSignUp),
-                                attemptRegister,
+                            //register the user with the given inputs
+                            val attemptRegister = UserDataClass().registerUser(
+                                binding.etEmail.text.toString(),
+                                binding.etUsername.text.toString(),
+                                binding.etPassword.text.toString(),
+                                binding.etConfirmPassword.text.toString(),
+                                (selectedQuestionID),
+                                binding.etSecurityAnswer.text.toString(),
                                 this@SignUp
                             )
+
+
+                            //if there are no issues with registration
+                            if (attemptRegister == "") {
+
+                                //new alert dialog to inform the user that their registration was successful
+                                val alert = AlertDialog.Builder(this@SignUp)
+                                alert.setTitle(getString(R.string.completedSignUp))
+                                alert.setMessage(getString(R.string.instructToSignIn))
+                                alert.setPositiveButton(getString(R.string.okText)) { dialog, which ->
+
+                                    //take the user back to the landing page once the dialog is dismissed
+                                    var intent = Intent(this@SignUp, LandingPage::class.java)
+                                    startActivity(intent)
+
+                                }
+                                //show the dialog
+                                alert.show()
+
+
+                            } else {
+
+                                //if the registration is invalid
+
+                                //show the user what information is invalid
+                                GlobalClass.InformUser(
+                                    getString(R.string.failedSignUp),
+                                    attemptRegister,
+                                    this@SignUp
+                                )
+                            }
+                        }
+                        catch (e :Exception)
+                        {
+                            GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
                         }
                     }
                 }

@@ -159,37 +159,21 @@ class UserFullMapView : Fragment() {
 
 
 
-
+        //when the zoom in "+" button is clicked
         binding.imgZoomIn.setOnClickListener()
         {
             //code to zoom in on map
 
-            val loadedMap = fragmentManager?.findFragmentById(R.id.cvFullMapFragmentContainer)
-
-            val mapFragment = (loadedMap as FullMapFragment)
-
-            val currentZoom = mapFragment.mapView.getMapboxMap().cameraState.zoom
-
-            mapFragment.mapView.getMapboxMap().setCamera(
-                CameraOptions.Builder()
-                    .zoom(currentZoom + 1)
-                    .build())
+            modifyMapZoom(true)
         }
 
+
+        //when the zoom out "-" button is clicked
         binding.imgZoomOut.setOnClickListener()
         {
             //code to zoom out
 
-            val loadedMap = fragmentManager?.findFragmentById(R.id.cvFullMapFragmentContainer)
-
-            val mapFragment = (loadedMap as FullMapFragment)
-
-            val currentZoom = mapFragment.mapView.getMapboxMap().cameraState.zoom
-
-            mapFragment.mapView.getMapboxMap().setCamera(
-                CameraOptions.Builder()
-                    .zoom(currentZoom - 1)
-                    .build())
+            modifyMapZoom(false)
         }
 
 
@@ -224,6 +208,43 @@ class UserFullMapView : Fragment() {
         // Inflate the layout for this fragment
         return view
     }
+
+
+    //---------------------------------------------------------------------------------------------
+    //method to modify the maps zoom
+    //---------------------------------------------------------------------------------------------
+    private fun modifyMapZoom(increase: Boolean)
+    {
+        //get the currently loaded map view fragment
+        val loadedMap = fragmentManager?.findFragmentById(R.id.cvFullMapFragmentContainer)
+
+        //get the fragment as fullmap fragment instance
+        val mapFragment = (loadedMap as FullMapFragment)
+
+        //get the current zoom level
+        val currentZoom = mapFragment.mapView.getMapboxMap().cameraState.zoom
+
+        //check whether to zoom in or out
+        if (increase == true)
+        {
+            //zoom in
+            mapFragment.mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(currentZoom + 1)
+                    .build())
+        }
+        else
+        {
+            //zoom out
+            mapFragment.mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(currentZoom - 1)
+                    .build())
+        }
+
+
+    }
+    //---------------------------------------------------------------------------------------------
 
 
     //---------------------------------------------------------------------------------------------

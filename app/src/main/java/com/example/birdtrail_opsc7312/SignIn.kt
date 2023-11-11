@@ -1,17 +1,14 @@
 package com.example.birdtrail_opsc7312
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.motion.widget.Debug.getLocation
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.birdtrail_opsc7312.databinding.SignInBinding
@@ -19,7 +16,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import okhttp3.internal.wait
 import java.lang.ref.WeakReference
 
 
@@ -37,6 +33,7 @@ class SignIn : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_in)
+
 
         //---------------------------------------------------------------------------------------//
         //initial view config
@@ -59,22 +56,21 @@ class SignIn : AppCompatActivity() {
         binding.btnSignIn.setOnClickListener()
         {
 
+            try {
 
+                //firebase auth
+                val firebaseAuth = FirebaseAuth.getInstance()
 
-            //------------------------------------------------------------
+                //try signing in with the given information
+                firebaseAuth.signInWithEmailAndPassword(
+                    binding.etEmail.text.toString(),
+                    binding.etPassword.text.toString()
+                ).addOnCompleteListener {
 
-            val firebaseAuth = FirebaseAuth.getInstance()
-            firebaseAuth.signInWithEmailAndPassword(binding.etEmail.text.toString(), binding.etPassword.text.toString()).addOnCompleteListener {
-                if (it.isSuccessful) {
+                    //if the sign in data is valid and successful
+                    if (it.isSuccessful) {
 
-
-                    //var selectedUserIndex = GlobalClass.userData.indexOfLast{it.userID.toString() == firebaseAuth.currentUser?.uid.toString()}
-
-                    //if user exists
-                    //if (selectedUserIndex != -1)
-                    //{
-
-
+                        //set the users id
                         GlobalClass.currentUser.userID = firebaseAuth.currentUser?.uid.toString()
 
                         //instantiate location permission helper
@@ -87,73 +83,26 @@ class SignIn : AppCompatActivity() {
                         }
 
 
-                        //GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
-                    //}
+                    } else {
 
+                        //if sign in fails
 
-
-
-                    //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-                    //temp code while waiting for test data and data class conversions
-                    //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-
-                    /*
-                    if (selectedUserIndex == -1 && firebaseAuth.currentUser?.uid.toString() == "wnvGrwCcO0OleakiQ9GnNPJj7ro1")
-                    {
-
-                        selectedUserIndex = GlobalClass.userData.indexOfLast{it.userID.toString() == "0"}
-
-                        //instantiate location permission helper
-                        locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
-
-                        //call check permission and pass the sign in method
-                        locationPermissionHelper.checkPermissions {
-                            signIn()
-                        }
-
-                        GlobalClass.currentUser = GlobalClass.userData[selectedUserIndex]
+                        //show the user why the sign in failed
+                        Toast.makeText(
+                            this,
+                            it.exception?.localizedMessage.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                     */
-
-                    //888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
 
-
-                } else {
-                    Toast.makeText(this, it.exception?.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
                 }
-
-
-
             }
-
-            //------------------------------------------------------------
-
-            /*
-            //attempt to sign the user in
-            val attemptSignIn = UserDataClass().validateUser(binding.etEmail.text.toString(), binding.etPassword.text.toString())
-
-            //if the sign in was valid
-            if (attemptSignIn == true)
+            catch (e :Exception)
             {
-
-                //instantiate location permission helper
-                locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
-
-                //call check permission and pass the sign in method
-                locationPermissionHelper.checkPermissions {
-                    signIn()
-                }
-
+                GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignIn)
             }
-            else
-            {
-                //if the sign in was invalid
 
-                //inform the user of the failure to sign in
-                GlobalClass.InformUser(getString(R.string.failedSignIn), getString(R.string.incorrectEmailPassCombo), this)
-            }
-*/
         }
 
 
@@ -168,8 +117,44 @@ class SignIn : AppCompatActivity() {
 
         //when forgot password is pressed
         binding.tvForgotPassword.setOnClickListener(){
-            //inform the user of the pending feature
-            Toast.makeText(this, getString(R.string.comingSoonText), Toast.LENGTH_SHORT).show()
+
+            try {
+
+                val alert = AlertDialog.Builder(this)
+
+                alert.setTitle("Enter your email")
+                alert.setMessage("Please enter your accounts email address below, an email containing a link to reset your password will be sent shortly after.")
+
+                // Set an EditText view to get user input
+                val input = EditText(this)
+                input.hint = "email"
+                alert.setView(input)
+
+                alert.setPositiveButton("Send") { dialog, whichButton ->
+                    val value: String = input.text.toString()
+                    // Do something with value!
+
+                    if (!value.isNullOrEmpty()) {
+                        val firebaseAuth = FirebaseAuth.getInstance()
+                        firebaseAuth.sendPasswordResetEmail(value)
+                        Toast.makeText(this, "Password reset sent to: $value", Toast.LENGTH_SHORT)
+                            .show()
+
+                    }
+                }
+
+                alert.setNegativeButton(
+                    "Cancel"
+                ) { dialog, whichButton ->
+                    // Canceled.
+                }
+
+                alert.show()
+            }
+            catch (e :Exception)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignIn)
+            }
         }
 
         //when sign up text is clicked
@@ -209,7 +194,6 @@ class SignIn : AppCompatActivity() {
                 .commit();
         }
         //---------------------------------------------------------------------------------------//
-
 
 
 

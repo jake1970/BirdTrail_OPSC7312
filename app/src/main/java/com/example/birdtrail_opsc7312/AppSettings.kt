@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
@@ -80,7 +81,11 @@ class AppSettings : Fragment() {
             //button change password
             binding.btnChangePassword.setOnClickListener()
             {
-                showPasswordChangeDialog()
+
+                val firebaseAuth = FirebaseAuth.getInstance()
+                firebaseAuth.sendPasswordResetEmail(firebaseAuth.currentUser!!.email.toString())
+                Toast.makeText(requireActivity(), "Password reset sent to: " + firebaseAuth.currentUser!!.email.toString(), Toast.LENGTH_SHORT).show()
+
             }
 
             //get slider default distance
@@ -228,50 +233,7 @@ class AppSettings : Fragment() {
     }
 
 
-    //---------------------------------------------------------------------------------------------
-    //Password Change Dialog, this method will prompt the user as they have elected to change password
-    //User will enter a password and then go through the validation method before telling the user if the password has been changed
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showPasswordChangeDialog() {
-        try
-        {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(getString(R.string.SettingsPassword))
 
-            val input = EditText(requireContext())
-            input.hint = getString(R.string.NewPassword)
-            builder.setView(input)
-
-            builder.setPositiveButton(getString(R.string.changeText)) { dialog, which ->
-                val newPassword = input.text.toString()
-
-                val validatePassword = UserDataClass().validateUserPassword(newPassword,requireContext())
-
-                if (validatePassword.isEmpty())
-                {
-                    GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.passwordChangedText), requireContext())
-                    savedPassword = newPassword
-
-                    GlobalClass.currentUser.password = savedPassword as String
-
-                } else
-                {
-                    GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.passwordInvalidText), requireContext())
-                }
-            }
-
-            builder.setNegativeButton(getString(R.string.cancelText)) { dialog, which ->
-                dialog.cancel()
-            }
-
-            builder.show()
-
-
-        }catch (e: Exception)
-        {
-            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
-        }
-    }
     //method to access gallery on user's phone
     private fun Gallery()
     {

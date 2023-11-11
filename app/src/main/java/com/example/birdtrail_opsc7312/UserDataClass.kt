@@ -35,34 +35,6 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
     var hasProfile : Boolean = false,
 ) {
 
-    //---------------------------------------------------------------------------------------------
-    //method to validate that a user exists
-    //---------------------------------------------------------------------------------------------
-    /*
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun validateUser(userEmail: String, userPassword: String): Boolean
-    {
-        //loop through users
-        for (indexUser in GlobalClass.userData) {
-
-            //if the entered email matches an existing email
-            if (userEmail == indexUser.email && userPassword == indexUser.password) {
-
-                //if user exists
-                GlobalClass.currentUser = indexUser
-
-                //exit loop
-                break
-
-            }
-        }
-
-        return GlobalClass.currentUser.userID != -1
-    }
-     */
-    //---------------------------------------------------------------------------------------------
-
-
 
     //---------------------------------------------------------------------------------------------
     //method to validate the users email
@@ -75,7 +47,6 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
         }
     }
     //---------------------------------------------------------------------------------------------
-
 
 
     //---------------------------------------------------------------------------------------------
@@ -273,7 +244,6 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
             newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgdefaultprofile)?.toBitmap()
 
 
-            //**************************************
             val firebaseAuth = FirebaseAuth.getInstance()
             firebaseAuth.createUserWithEmailAndPassword(newUser.email, newUser.password)
                 .addOnCompleteListener {
@@ -291,7 +261,6 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
                     }
 
                     }
-            //*************************************
 
             //add the user to the list of users
             GlobalClass.userData.add(newUser)
