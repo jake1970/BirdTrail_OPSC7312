@@ -43,6 +43,8 @@ class Homepage : AppCompatActivity() {
             var lat = intent.getDoubleExtra("lat", 0.0)
             var long = intent.getDoubleExtra("long", 0.0)
 
+            //GlobalClass.InformUser(lat.toString(), long.toString(), this )
+
             GlobalScope.launch {
                 //get nearby hotspots
                 var eBirdHandler = eBirdAPIHandler()
