@@ -9,51 +9,31 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 //data class for user data
 
 data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
 
-    var userID: Int = -1,
+    var userID: String = "",
     var email: String = "",
     var username: String = "",
     var password: String = "",
-    var questionID: Int = 0,
+    var questionID: String = "",
     var securityanswer: String = "",
     var badgeID : Int = 0,
     var isMetric: Boolean = true,
     var defaultdistance : Int = 50,
     var score : Int = 0,
     var profilepicture : Bitmap? = null,
-    var registrationDate : LocalDate = LocalDate.now()
+    var registrationDate : LocalDate = LocalDate.now(),
+    var hasProfile : Boolean = false,
 ) {
-
-    //---------------------------------------------------------------------------------------------
-    //method to validate that a user exists
-    //---------------------------------------------------------------------------------------------
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun validateUser(userEmail: String, userPassword: String): Boolean
-    {
-        //loop through users
-        for (indexUser in GlobalClass.userData) {
-
-            //if the entered email matches an existing email
-            if (userEmail == indexUser.email && userPassword == indexUser.password) {
-
-                //if user exists
-                GlobalClass.currentUser = indexUser
-
-                //exit loop
-                break
-
-            }
-        }
-
-        return GlobalClass.currentUser.userID != -1
-    }
-    //---------------------------------------------------------------------------------------------
-
 
 
     //---------------------------------------------------------------------------------------------
@@ -67,7 +47,6 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
         }
     }
     //---------------------------------------------------------------------------------------------
-
 
 
     //---------------------------------------------------------------------------------------------
@@ -172,7 +151,7 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
     //method to register a new user
     //---------------------------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
-    fun registerUser(userEmail: String, userUsername: String, userPassword: String, userConfirmPassword: String, securityQuestion: Int, securityAnswer: String, context : Context): String
+    fun registerUser(userEmail: String, userUsername: String, userPassword: String, userConfirmPassword: String, securityQuestion: String, securityAnswer: String, context : Context): String
     {
 
         //the errors found with the users username
@@ -261,9 +240,27 @@ data class UserDataClass @RequiresApi(Build.VERSION_CODES.O) constructor(
             newUser.username = userUsername
             newUser.password = userPassword
             newUser.questionID = securityQuestion
-            newUser.securityanswer = securityanswer
+            newUser.securityanswer = securityAnswer
             newUser.profilepicture = ContextCompat.getDrawable(context, R.drawable. imgdefaultprofile)?.toBitmap()
-            newUser.registrationDate = LocalDate.now()
+
+
+            val firebaseAuth = FirebaseAuth.getInstance()
+            firebaseAuth.createUserWithEmailAndPassword(newUser.email, newUser.password)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+
+
+                        val databaseManager = DatabaseHandler()
+
+                        MainScope().launch {
+                            withContext(Dispatchers.Default) {
+                                databaseManager.AddUser(newUser, firebaseAuth.currentUser!!.uid)
+                            }
+                        }
+
+                    }
+
+                    }
 
             //add the user to the list of users
             GlobalClass.userData.add(newUser)

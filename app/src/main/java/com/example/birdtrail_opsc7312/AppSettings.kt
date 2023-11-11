@@ -15,13 +15,16 @@ import android.view.ViewGroup
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.example.birdtrail_opsc7312.databinding.FragmentAppSettingsBinding
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.*
 import java.io.IOException
 import kotlin.math.roundToInt
-
 
 class AppSettings : Fragment() {
 
@@ -35,6 +38,11 @@ class AppSettings : Fragment() {
     private var savedPassword : String? = ""
     private var measurementSymbol = "KM"
 
+    private var startingDistance: Int = 0
+    private var startingMetric: Boolean = false
+
+    private lateinit var thisView : FrameLayout
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +52,15 @@ class AppSettings : Fragment() {
         _binding = FragmentAppSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //starting values
+        startingDistance = GlobalClass.currentUser.defaultdistance
+        startingMetric = GlobalClass.currentUser.isMetric
+
+        thisView = view
+
         try
         {
+            //load current settings
             if (GlobalClass.currentUser.isMetric == false)
             {
                 measurementSymbol = "mi"
@@ -66,7 +81,11 @@ class AppSettings : Fragment() {
             //button change password
             binding.btnChangePassword.setOnClickListener()
             {
-                showPasswordChangeDialog()
+
+                val firebaseAuth = FirebaseAuth.getInstance()
+                firebaseAuth.sendPasswordResetEmail(firebaseAuth.currentUser!!.email.toString())
+                Toast.makeText(requireActivity(), getString(R.string.passwordResetPrefix) + firebaseAuth.currentUser!!.email.toString(), Toast.LENGTH_SHORT).show()
+
             }
 
             //get slider default distance
@@ -94,6 +113,13 @@ class AppSettings : Fragment() {
                     .putString(myUserID, null)
                     .commit();
 
+
+                //invalidate the users sign in status
+                val firebaseAuth = FirebaseAuth.getInstance()
+                firebaseAuth.signOut()
+
+                //update the db on next login?
+                //prime the database to be read from upon the next sign in
                 GlobalClass.currentUser = UserDataClass()
                 var intent = Intent(requireActivity(), LandingPage::class.java)
                 startActivity(intent)
@@ -106,6 +132,16 @@ class AppSettings : Fragment() {
             {
                 if (GlobalClass.currentUser.isMetric == false) {
                     GlobalClass.currentUser.isMetric = true
+
+                    //update user
+                    MainScope().launch {
+                        withContext(Dispatchers.Default) {
+
+                            var dataHandler = DatabaseHandler()
+                            dataHandler.updateUser(GlobalClass.currentUser)
+                        }
+                    }
+
                     measurementSymbol = "KM"
 
                     binding.tvDistanceValue.text = "${binding.slDistance.value}$measurementSymbol"
@@ -133,6 +169,16 @@ class AppSettings : Fragment() {
             {
                 if (GlobalClass.currentUser.isMetric == true) {
                     GlobalClass.currentUser.isMetric = false
+
+                    //update user
+                    MainScope().launch {
+                        withContext(Dispatchers.Default) {
+
+                            var dataHandler = DatabaseHandler()
+                            dataHandler.updateUser(GlobalClass.currentUser)
+                        }
+                    }
+
                     measurementSymbol = "mi"
 
                     var convertedBack = kilometersToMiles(binding.slDistance.value.toDouble()).roundToInt().toFloat()
@@ -187,51 +233,8 @@ class AppSettings : Fragment() {
     }
 
 
-    //---------------------------------------------------------------------------------------------
-    //Password Change Dialog, this method will prompt the user as they have elected to change password
-    //User will enter a password and then go through the validation method before telling the user if the password has been changed
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showPasswordChangeDialog() {
-        try
-        {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(getString(R.string.SettingsPassword))
 
-            val input = EditText(requireContext())
-            input.hint = getString(R.string.NewPassword)
-            builder.setView(input)
-
-            builder.setPositiveButton(getString(R.string.changeText)) { dialog, which ->
-                val newPassword = input.text.toString()
-
-                val validatePassword = UserDataClass().validateUserPassword(newPassword,requireContext())
-
-                if (validatePassword.isEmpty())
-                {
-                    GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.passwordChangedText), requireContext())
-                    savedPassword = newPassword
-
-                    GlobalClass.currentUser.password = savedPassword as String
-
-                } else
-                {
-                    GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.passwordInvalidText), requireContext())
-                }
-            }
-
-            builder.setNegativeButton(getString(R.string.cancelText)) { dialog, which ->
-                dialog.cancel()
-            }
-
-            builder.show()
-
-
-        }catch (e: Exception)
-        {
-            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
-        }
-    }
-    //method to access gallery on your phone
+    //method to access gallery on user's phone
     private fun Gallery()
     {
         try
@@ -252,12 +255,57 @@ class AppSettings : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null)
+        try
         {
-            val selectedImageURI = data.data
-            GlobalClass.InformUser(getString(R.string.confirmationText),getString(R.string.selectedImageSaved), requireContext())
-            selectedImageBitmap = uriToBitmap(selectedImageURI)
-            GlobalClass.currentUser.profilepicture = selectedImageBitmap
+            if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+                val selectedImageURI = data.data
+                GlobalClass.InformUser(
+                    getString(R.string.confirmationText),
+                    getString(R.string.selectedImageSaved),
+                    requireContext()
+                )
+                selectedImageBitmap = uriToBitmap(selectedImageURI)
+                GlobalClass.currentUser.profilepicture = selectedImageBitmap
+
+                if (selectedImageURI != null) {
+
+                    //Read Data
+                    MainScope().launch {
+
+                        val loadingProgressBar =
+                            layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+                        thisView.addView(loadingProgressBar)
+
+
+
+                        withContext(Dispatchers.Default) {
+                            val databaseManager = DatabaseHandler()
+
+                            val currentImageState = GlobalClass.currentUser.hasProfile
+
+                            databaseManager.setUserImage(
+                                requireActivity(),
+                                GlobalClass.currentUser.userID,
+                                selectedImageURI
+                            )
+
+
+                            if (currentImageState == false)
+                            {
+                                databaseManager.updateUser(GlobalClass.currentUser)
+                            }
+
+                        }
+
+
+                        loadingProgressBar.visibility = View.GONE
+                    }
+                }
+            }
+        }
+        catch (e: Exception)
+        {
+            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
         }
     }
 
@@ -291,6 +339,32 @@ class AppSettings : Fragment() {
 
     companion object {
         private const val REQUEST_PICK_IMAGE = 123
+    }
 
+    //method to destroy fragment view
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onDestroyView() {
+        if ((startingMetric != GlobalClass.currentUser.isMetric) || startingDistance != GlobalClass.currentUser.defaultdistance )
+        {
+            try
+            {
+                val databaseManager = DatabaseHandler()
+
+                //update user data in database
+                GlobalScope.launch {
+
+                    databaseManager.updateUser(GlobalClass.currentUser)
+
+                    withContext(Dispatchers.Main) {
+
+                    }
+                }
+            }
+            catch (e: Exception)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
+            }
+        }
+        super.onDestroyView()
     }
 }

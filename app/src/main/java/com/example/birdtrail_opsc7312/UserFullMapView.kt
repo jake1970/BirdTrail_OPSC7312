@@ -1,8 +1,8 @@
 package com.example.birdtrail_opsc7312
 
 
+
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -15,8 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentUserFullMapViewBinding
 import com.mapbox.android.gestures.MoveGestureDetector
+import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.plugin.gestures.OnMoveListener
-
 
 
 class UserFullMapView : Fragment() {
@@ -37,7 +37,7 @@ class UserFullMapView : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         //view binding
@@ -159,13 +159,33 @@ class UserFullMapView : Fragment() {
 
 
 
+        //when the zoom in "+" button is clicked
+        binding.imgZoomIn.setOnClickListener()
+        {
+            //code to zoom in on map
+
+            modifyMapZoom(true)
+        }
+
+
+        //when the zoom out "-" button is clicked
+        binding.imgZoomOut.setOnClickListener()
+        {
+            //code to zoom out
+
+            modifyMapZoom(false)
+        }
+
+
+
+
         //fix for spinner not showing text in correct color
         binding.spnTimeFrame.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View,
                 position: Int,
-                id: Long
+                id: Long,
             ) {
                 (view as TextView).setTextColor(Color.BLACK) //Change selected text color
             }
@@ -188,6 +208,43 @@ class UserFullMapView : Fragment() {
         // Inflate the layout for this fragment
         return view
     }
+
+
+    //---------------------------------------------------------------------------------------------
+    //method to modify the maps zoom
+    //---------------------------------------------------------------------------------------------
+    private fun modifyMapZoom(increase: Boolean)
+    {
+        //get the currently loaded map view fragment
+        val loadedMap = fragmentManager?.findFragmentById(R.id.cvFullMapFragmentContainer)
+
+        //get the fragment as fullmap fragment instance
+        val mapFragment = (loadedMap as FullMapFragment)
+
+        //get the current zoom level
+        val currentZoom = mapFragment.mapView.getMapboxMap().cameraState.zoom
+
+        //check whether to zoom in or out
+        if (increase == true)
+        {
+            //zoom in
+            mapFragment.mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(currentZoom + 1)
+                    .build())
+        }
+        else
+        {
+            //zoom out
+            mapFragment.mapView.getMapboxMap().setCamera(
+                CameraOptions.Builder()
+                    .zoom(currentZoom - 1)
+                    .build())
+        }
+
+
+    }
+    //---------------------------------------------------------------------------------------------
 
 
     //---------------------------------------------------------------------------------------------

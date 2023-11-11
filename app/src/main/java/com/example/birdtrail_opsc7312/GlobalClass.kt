@@ -12,20 +12,25 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.example.HotspotJson2KtKotlin
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import okhttp3.internal.notifyAll
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class GlobalClass: Application()
 {
     companion object
     {
-        @RequiresApi(Build.VERSION_CODES.O)
+        var UpdateDataBase: Boolean = true
 
         //the currently signed in user
+        @RequiresApi(Build.VERSION_CODES.O)
         var currentUser = UserDataClass()
 
         //the amount of observations made by the current user
@@ -73,7 +78,6 @@ class GlobalClass: Application()
         //---------------------------------------------------------------------------------------------
 
 
-
         //---------------------------------------------------------------------------------------------
         //method to show a custom card informing the user that they have no recorded options
         //---------------------------------------------------------------------------------------------
@@ -91,12 +95,9 @@ class GlobalClass: Application()
             addDataCard.binding.tvSpecies.visibility = View.GONE
             addDataCard.binding.tvSighted.text = context.getString(R.string.noObservations)
 
-
             //when the card is clicked
             addDataCard.setOnClickListener()
             {
-
-
                 //create local fragment controller
                 val fragmentControl = FragmentHandler()
 
@@ -105,16 +106,12 @@ class GlobalClass: Application()
 
                 //show the add observation screen
                 fragmentControl.replaceFragment(Add_Observation(), R.id.flContent, fragmentManager)
-
-
-
             }
 
             //add the custom card to the view
             activityLayout.addView(addDataCard)
         }
         //---------------------------------------------------------------------------------------------
-
 
 
         //---------------------------------------------------------------------------------------------
@@ -142,21 +139,27 @@ class GlobalClass: Application()
             //if the current user does not have the initial starter achievement
             if (containsInitial == false)
             {
+
                 //add the starter achievement
-                userAchievements.add(
-                    UserAchievementsDataClass(
+                   val initialAchievement = UserAchievementsDataClass(
                         userID = currentUser.userID,
                         achID = 0,
-                        date = currentUser.registrationDate,
+                        date = LocalDate.now(),
                     )
-                )
-            }
 
+                MainScope().launch {
+
+                    val databaseManager = DatabaseHandler()
+                    withContext(Dispatchers.Default) {
+                        databaseManager.AddUserAchievements(initialAchievement)
+                        userAchievements.add(initialAchievement)
+                    }
+                }
+            }
             //call method to get the total observation amount
             evaluateObservations(context)
         }
         //---------------------------------------------------------------------------------------------
-
 
 
         //---------------------------------------------------------------------------------------------
@@ -185,11 +188,18 @@ class GlobalClass: Application()
                 }
             }
 
-            //call method to evaluate the achievements that the user currently has
-            evaluateAchievements(context)
+            //update user score in database
+            MainScope().launch {
+                withContext(Dispatchers.Default) {
+
+                    var dataHandler = DatabaseHandler()
+                    dataHandler.updateUser(currentUser)
+                }
+                //call method to evaluate the achievements that the user currently has
+                evaluateAchievements(context)
+            }
         }
         //---------------------------------------------------------------------------------------------
-
 
 
         //---------------------------------------------------------------------------------------------
@@ -204,7 +214,6 @@ class GlobalClass: Application()
             //list of achievements IDs that the has unlocked
             var currentUserAchievementListAchID = arrayListOf<Int>()
 
-
             //loop through all user achievements
             for (achievement in userAchievements)
             {
@@ -218,7 +227,6 @@ class GlobalClass: Application()
 
             //sort the list of achievement ids
             currentUserAchievementListAchID.sort()
-
 
             //check if the user hasn't unlocked all achievements
             if (currentUserAchievementListAchID.count() != acheivements.count())
@@ -246,10 +254,8 @@ class GlobalClass: Application()
                             //exit the loop
                             break
                         }
-
                     }
                 }
-
 
                 //calculate the amount of points that are added due to unlocked achievements
                 val scoreBooster = scoreMultiplier*currentUserAchievementListAchID.count()
@@ -257,21 +263,33 @@ class GlobalClass: Application()
                 //set the current users score
                 currentUser.score = currentUser.score + (scoreBooster)
 
-
                 //if must unlock a new achievement
-                if (unlockNew == true)
+                if (unlockNew == true && !acheivements.isNullOrEmpty())
                 {
+                    val newAch = UserAchievementsDataClass(
+                        userID = currentUser.userID,
+                        achID = acheivements[currentUserAchievementListAchID.last().toInt()+1].achID,
+                        date = LocalDate.now(),
+                    )
+
                     //add the users new achievement
                     userAchievements.add(
-                        UserAchievementsDataClass(
-                            userID = currentUser.userID,
-                            achID = acheivements[currentUserAchievementListAchID.last().toInt()+1].achID,
-                            date = LocalDate.now(),
-                        )
+                        newAch
                     )
 
                     //add the score multiplier boost to the users score
                     currentUser.score = currentUser.score + (scoreMultiplier)
+
+
+                    //update user score in database
+                    MainScope().launch {
+                        withContext(Dispatchers.Default) {
+
+                            var dataHandler = DatabaseHandler()
+                            dataHandler.updateUser(currentUser)
+                            dataHandler.AddUserAchievements(newAch)
+                        }
+                    }
 
                     //inform the user of their new achievement
                     InformUser(acheivements[currentUserAchievementListAchID.last().toInt()+1].name, context.getString(R.string.newBadgeText),  context )
@@ -281,230 +299,24 @@ class GlobalClass: Application()
         //---------------------------------------------------------------------------------------------
 
 
+        //---------------------------------------------------------------------------------------------
+        //method to get the user's latest observation
+        //---------------------------------------------------------------------------------------------
         @RequiresApi(Build.VERSION_CODES.O)
-        fun User()
+        fun getLastestObservation(): UserObservationDataClass?
         {
-            userData.add(
-                UserDataClass(
-                    userID = 0,
-                    username = "user1",
-                    email = "user1@gmail.com",
-                    password = "Password1",
-                    questionID = 1,
-                    securityanswer = "Gordan",
-                    badgeID = 1,
-                    isMetric = true,
-                    defaultdistance = 50,
-                    score = 0,
-                    registrationDate = LocalDate.now()
-                ))
+            val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
 
-            userData.add(
-                UserDataClass(
-                    userID = 1,
-                    username = "user2",
-                    email = "user2@gmail.com",
-                    password = "Password2",
-                    questionID = 1,
-                    securityanswer = "Jordan",
-                    badgeID = 4,
-                    isMetric = true,
-                    defaultdistance = 50,
-                    score = 0,
-                    registrationDate = LocalDate.now()
-                ))
+            val currentUserObservations = userObservations.filter { it.userID == currentUser.userID }
+            val latestObservation = currentUserObservations.maxByOrNull { LocalDateTime.of(it.date, LocalTime.parse(it.time, formatter)) }
 
-            userData.add(
-                UserDataClass(
-                    userID = 2,
-                    username = "user3",
-                    email = "user3@gmail.com",
-                    password = "Password3",
-                    questionID = 1,
-                    securityanswer = "Heaven",
-                    badgeID = 1,
-                    isMetric = true,
-                    defaultdistance = 50,
-                    score = 0,
-                    registrationDate = LocalDate.now()
-                ))
-
+            return latestObservation
         }
+        //---------------------------------------------------------------------------------------------
 
-
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun Userachievements()
-        {
-            userAchievements.add(
-                UserAchievementsDataClass(
-                    userID = 0,
-                    achID = 1,
-                    date = LocalDate.now()
-                )
-            )
-
-            userAchievements.add(
-                UserAchievementsDataClass(
-                    userID = 1,
-                    achID = 2,
-                    date = LocalDate.now()
-                )
-            )
-
-            userAchievements.add(
-                UserAchievementsDataClass(
-                    userID = 2,
-                    achID = 3,
-                    date = LocalDate.now()
-                )
-            )
-        }
-
-        fun securityquestions()
-        {
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 1,
-                    question = "In what city or town did your parents meet?"
-                ))
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 2,
-                    question = "What city were you born in?"
-                ))
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 3,
-                    question = "What was the first concert you attended?"
-                ))
-
-            questions.add(
-                QuestionsDataClass(
-                    questionID = 4,
-                    question = "What is your mothers maiden name?"
-                ))
-
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun observations()
-        {
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 1,
-                    userID = 0,
-                    lat = 18.432339,
-                    long = -33.989640,
-                    birdName = "Afrikaans",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 2,
-                    userID = 0,
-                    lat = 18.469177,
-                    long = -33.942540,
-                    birdName = "Egyptian Goose",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 3,
-                    userID = 0,
-                    lat = 18.941699,
-                    long = -33.762354,
-                    birdName = "Red-eye Dove",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 4,
-                    userID = 1,
-                    lat = 25.663371,
-                    long = -33.762279,
-                    birdName = "Karoo Prinia",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 5,
-                    userID = 1,
-                    lat = 28.125747,
-                    long = -25.951466,
-                    birdName = "Olive Thrush",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 6,
-                    userID = 1,
-                    lat = 31.015152,
-                    long = -29.567094,
-                    birdName = "Cape-Robin-Chat",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 7,
-                    userID = 2,
-                    lat = 26.280044,
-                    long = -29.126579,
-                    birdName = "Laughing Dove",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 8,
-                    userID = 2,
-                    lat = 19.478346,
-                    long = -33.654693,
-                    birdName = "African Palm Swift",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 9,
-                    userID = 2,
-                    lat = 29.468184,
-                    long = -23.893709,
-                    birdName = "Rose-ringed Parakeet",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-            userObservations.add(
-                UserObservationDataClass(
-                    observationID = 10,
-                    userID = 2,
-                    lat = 28.259314,
-                    long = -25.754180,
-                    birdName = "Cape Sparrow",
-                    date = LocalDate.now(),
-                    count = 1,
-                ))
-
-        }
-
+        //---------------------------------------------------------------------------------------------
+        //method to load achievements
+        //---------------------------------------------------------------------------------------------
         fun AddAcheivements()
         {
             acheivements.add(
@@ -595,31 +407,18 @@ class GlobalClass: Application()
                     badgeIndex = 10,
                     observationsRequired = 45,
                 ))
-
         }
-
     }
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate()
     {
         super.onCreate()
 
-
-        User()
-        Userachievements()
-        securityquestions()
-        observations()
         AddAcheivements()
 
-
-        //set user images
-        var profileImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultprofile)
-        for (user in userData)
-        {
-            user.profilepicture = profileImage
-        }
-
-        //add badges
+        //add badge images
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgdefaultbadge))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge1))
         badgeImages.add(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.imgbrozebadge2))

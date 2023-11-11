@@ -75,7 +75,7 @@
                         android:drawableTint="@color/white"
                         android:textSize="16dp"
                         android:textColor="@color/white"
-                        android:text="@string/TextView" />
+                        android:text=" 0" />
 
                     <TextView
                         android:id="@+id/tvAchievementValue"
@@ -86,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:text="@string/TextView" />
+                        android:text=" 0 / 0" />
 
                 </LinearLayout>
 
@@ -113,7 +113,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_alignBottom="@id/imgMyProfileImage"
-                        app:srcCompat="@color/sub_grey" />
+                         />
 
                 </RelativeLayout>
 

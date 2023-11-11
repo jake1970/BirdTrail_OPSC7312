@@ -49,7 +49,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginTop="14dp"
-            app:srcCompat="@color/sub_grey"
+
             android:layout_weight="0"
             />
 

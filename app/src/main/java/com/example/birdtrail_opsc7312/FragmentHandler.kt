@@ -10,6 +10,12 @@ class FragmentHandler {
         //begin transition to desired fragment
         val fragmentTransaction = fragmentManager.beginTransaction()
 
+        //add fragment reference and generic tag
+        fragmentTransaction.add(fragment, "genericTag")
+
+        //add backstack reference so back buttons function
+        fragmentTransaction.addToBackStack(null)
+
         //set the desired fragment to be swapped
         fragmentTransaction.replace(fragmentContainerID, fragment)
 

@@ -6,15 +6,19 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.iterator
+import com.example.birdtrail_opsc7312.GlobalClass.Companion.questions
 import com.example.birdtrail_opsc7312.databinding.ActivitySignUpBinding
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SignUp : AppCompatActivity() {
@@ -40,6 +44,27 @@ class SignUp : AppCompatActivity() {
 
         //---------------------------------------------------------------------------------------//
 
+        //populate spinner from database
+        MainScope().launch {
+
+            try {
+                withContext(Dispatchers.Default) {
+
+                    var dataHandler = DatabaseHandler()
+                    dataHandler.getQuestions()
+                }
+            }
+            catch (e :Exception)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
+            }
+
+            //set up spinner
+            val adapter = ArrayAdapter(this@SignUp, android.R.layout.simple_spinner_item, GlobalClass.questions.map { it.question })
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spnSecurityQuestion.adapter = adapter
+        }
+
 
         //when the sign up button is clicked
         binding.btnSignUp.setOnClickListener()
@@ -52,64 +77,109 @@ class SignUp : AppCompatActivity() {
             val container = binding.llFields
 
 
-            //loop through the inputs
-            for (component in container.children)
+            try
             {
-                //check that the current component is a text edit and that it doesn't contain a value
-                if (component is EditText && component.text.isNullOrEmpty())
-                {
-                    //set the components error text
-                    component.error = getString(R.string.missingField)
+                //loop through the inputs
+                for (component in container.children) {
 
-                    //set the filled status to false
-                    allFilled = false
+                    //check that the current component is a text edit and that it doesn't contain a value
+                    if (component is EditText && component.text.isNullOrEmpty()) {
+
+                        //set the components error text
+                        component.error = getString(R.string.missingField)
+
+                        //set the filled status to false
+                        allFilled = false
+                    }
                 }
+            }
+            catch (e :Exception)
+            {
+                GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
             }
 
 
             //if all components are filled in
             if (allFilled == true) {
 
-                //register the user with the given inputs
-                val attemptRegister = UserDataClass().registerUser(
-                    binding.etEmail.text.toString(),
-                    binding.etUsername.text.toString(),
-                    binding.etPassword.text.toString(),
-                    binding.etConfirmPassword.text.toString(),
-                    (binding.spnSecurityQuestion.selectedItemPosition + 1),
-                    binding.etSecurityAnswer.text.toString(),
-                    this
-                )
 
-                //if there are no issues with registration
-                if (attemptRegister == "") {
+                val databaseManager = DatabaseHandler()
 
+                MainScope().launch {
 
-                    //new alert dialog to inform the user that their registration was successful
-                    val alert = AlertDialog.Builder(this)
-                    alert.setTitle(getString(R.string.completedSignUp))
-                    alert.setMessage(getString(R.string.instructToSignIn))
-                    alert.setPositiveButton(getString(R.string.okText)){ dialog, which ->
-
-                        //take the user back to the landing page once the dialog is dismissed
-                        var intent = Intent(this, LandingPage::class.java)
-                        startActivity(intent)
-
+                    try {
+                        withContext(Dispatchers.Default) {
+                            databaseManager.getQuestions()
+                        }
                     }
-                    //show the dialog
-                    alert.show()
+                    catch (e :Exception)
+                    {
+                        GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
+                    }
 
 
 
-                } else {
+                    var selectedQuestionIndex =
+                        GlobalClass.questions.indexOfLast { it.question == binding.spnSecurityQuestion.selectedItem.toString() }
 
-                    //if the registration is invalid
+                    //if question exists
+                    if (selectedQuestionIndex != -1) {
 
-                    //show the user what information is invalid
-                    GlobalClass.InformUser(getString(R.string.failedSignUp), attemptRegister, this)
+                        try {
+
+                        val selectedQuestionID =
+                            GlobalClass.questions[selectedQuestionIndex].questionID
+
+
+                            //register the user with the given inputs
+                            val attemptRegister = UserDataClass().registerUser(
+                                binding.etEmail.text.toString(),
+                                binding.etUsername.text.toString(),
+                                binding.etPassword.text.toString(),
+                                binding.etConfirmPassword.text.toString(),
+                                (selectedQuestionID),
+                                binding.etSecurityAnswer.text.toString(),
+                                this@SignUp
+                            )
+
+
+                            //if there are no issues with registration
+                            if (attemptRegister == "") {
+
+                                //new alert dialog to inform the user that their registration was successful
+                                val alert = AlertDialog.Builder(this@SignUp)
+                                alert.setTitle(getString(R.string.completedSignUp))
+                                alert.setMessage(getString(R.string.instructToSignIn))
+                                alert.setPositiveButton(getString(R.string.okText)) { dialog, which ->
+
+                                    //take the user back to the landing page once the dialog is dismissed
+                                    var intent = Intent(this@SignUp, LandingPage::class.java)
+                                    startActivity(intent)
+
+                                }
+                                //show the dialog
+                                alert.show()
+
+
+                            } else {
+
+                                //if the registration is invalid
+
+                                //show the user what information is invalid
+                                GlobalClass.InformUser(
+                                    getString(R.string.failedSignUp),
+                                    attemptRegister,
+                                    this@SignUp
+                                )
+                            }
+                        }
+                        catch (e :Exception)
+                        {
+                            GlobalClass.InformUser(getString(R.string.errorText),"$e", this@SignUp)
+                        }
+                    }
                 }
             }
-
         }
 
 

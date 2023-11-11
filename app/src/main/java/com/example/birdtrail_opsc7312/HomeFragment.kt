@@ -1,5 +1,6 @@
 package com.example.birdtrail_opsc7312
 
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +13,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.birdtrail_opsc7312.databinding.FragmentHomeBinding
-
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -22,6 +27,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val spacerSize = 20
     private lateinit var fullMapView: FullMapFragment
+
+    private lateinit var loadingProgressBar : ViewGroup
 
     //---------------------------------------------------------------------------------------------
 
@@ -34,8 +41,41 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        MainScope().launch {
+            loadingProgressBar = layoutInflater.inflate(R.layout.loading_cover, null) as ViewGroup
+            view.addView(loadingProgressBar)
+
+            if (GlobalClass.UpdateDataBase == true) {
+
+                try
+                {
+                    withContext(Dispatchers.Default) {
+                        val databaseManager = DatabaseHandler()
+                        databaseManager.updateLocalData()
+                    }
+                }
+                catch (e: Exception)
+                {
+                    GlobalClass.InformUser(getString(R.string.errorText),"$e", requireContext())
+                }
+            }
+
+            updateUI()
+        }
+        return view
+    }
+
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateUI()
+    {
         try
         {
+
+
+
             //show user info
             binding.tvUsername.text = GlobalClass.currentUser.username
             binding.imgMyProfileImage.setImageBitmap(GlobalClass.currentUser.profilepicture)
@@ -81,18 +121,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 {
                     //if the user has this achievement
                 }
-                else
-                {
-                    //if the user doesnt have this achievement
-                    nextAchievement.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[achievement.badgeIndex])
-                    nextAchievement.binding.tvAchievementName.text = achievement.name
-                    nextAchievement.binding.tvDate.visibility = EditText.GONE
-                    nextAchievement.binding.tvRequirements.text = achievement.requirements
-                    nextAchievement.binding.tvSelectorText.text = "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
-                    nextAchievement.binding.tvSelectorText.setCompoundDrawables(null,null,null,null);
-                    nextAchievement.binding.tvSelectorText.setPadding(0,0,0,0)
-                    nextAchievement.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.medium_blue), android.graphics.PorterDuff.Mode.SRC_IN)
-                    break
+                else {
+
+                    //check that the achievement is not the initial starter achievement
+                    if (achievement.achID != 0) {
+
+                        //if the user doesnt have this achievement
+                        nextAchievement.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[achievement.badgeIndex])
+                        nextAchievement.binding.tvAchievementName.text = achievement.name
+                        nextAchievement.binding.tvDate.visibility = EditText.GONE
+                        nextAchievement.binding.tvRequirements.text = achievement.requirements
+                        nextAchievement.binding.tvSelectorText.text =
+                            "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
+                        nextAchievement.binding.tvSelectorText.setCompoundDrawables(
+                            null,
+                            null,
+                            null,
+                            null
+                        );
+                        nextAchievement.binding.tvSelectorText.setPadding(0, 0, 0, 0)
+                        nextAchievement.binding.rlSelector.background.setColorFilter(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.medium_blue
+                            ), android.graphics.PorterDuff.Mode.SRC_IN
+                        )
+                        break
+                    }
                 }
             }
 
@@ -114,15 +169,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             //---------------------------------------------------------------------------------------------
             //show latest user observation
 
-            //lastest user sighting
+            //latest user sighting
             val latestUserSighting = Card_Observations_Species(activity)
 
             var observationlist = arrayListOf<UserObservationDataClass>()
             //get latest sighting
 
-            for (i in 1..GlobalClass.userObservations.size) {
-                if (GlobalClass.userObservations[i - 1].userID == GlobalClass.currentUser.userID) {
-                    observationlist.add(GlobalClass.userObservations[i - 1])
+            for (userObservation in GlobalClass.userObservations)
+            {
+                if (userObservation.userID == GlobalClass.currentUser.userID)
+                {
+                    observationlist.add(userObservation)
                 }
             }
 
@@ -135,24 +192,89 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
             else
             {
-                var userSighting = observationlist.last()
+                var userSighting = GlobalClass.getLastestObservation()
 
-                latestUserSighting.binding.tvSpecies.text = userSighting.birdName
-                latestUserSighting.binding.tvSighted.text = userSighting.date.toString()
+                if (userSighting != null)
+                {
+                    latestUserSighting.binding.tvSpecies.text = userSighting.birdName
+                    latestUserSighting.binding.tvSighted.text = userSighting.date.toString()
 
-                // Create a TextView
-                val latestObservationText = TextView(requireContext()).apply {
-                    text = "Your Latest Observation" // replace with actual username
-                    textSize = 18f // this is in SP (scale-independent pixels), not DP
-                    setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
-                    setPadding(8, 0, 0, 12) // assuming you want the left margin to be padding here
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
+                    // Create a TextView
+                    val latestObservationText = TextView(requireContext()).apply {
+                        text = R.string.LatestObservationLabel.toString()// replace with actual username
+                        textSize = 18f // this is in SP (scale-independent pixels), not DP
+                        setTextColor(ContextCompat.getColor(context, R.color.white)) // replace with actual color resource
+                        setPadding(8, 0, 0, 12) // assuming you want the left margin to be padding here
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                    }
+                    activityLayout.addView(latestObservationText)
+                    activityLayout.addView(latestUserSighting)
+
+
+                    //88
+
+                    //the users current location
+                    var userLocation: Location? = null
+
+                    //new location client
+                    var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+                    //get the last known user location
+                    mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+
+                        //set the location
+                        userLocation = task.result
+
+                        //if the location is actually set
+                        if (userLocation != null) {
+
+                            //when the dynamic compoenent is clicked
+                            latestUserSighting.setOnClickListener(){
+
+                                //get the index of the associated observation
+                                val index = GlobalClass.userObservations.indexOfFirst { it.observationID == userSighting.observationID }
+
+                                //new map hotspot fragment instance
+                                val mapHotspotView = MapHotspot()
+
+                                //new arguments
+                                val args = Bundle()
+
+                                //calculate the distance to the point
+                                val distanceInKm = calculateDistance(
+                                    userLocation!!.latitude,
+                                    userLocation!!.longitude,
+                                    userSighting.lat,
+                                    userSighting.long
+                                )
+
+                                //set the fragment arguments
+                                args.putInt("observationIndex", index)
+                                args.putDouble("distance", distanceInKm)
+                                args.putBoolean("isHotspot", false)
+
+                                //set the arguments to the fragment instance
+                                mapHotspotView.arguments = args
+
+
+                                //open the fragment
+                                val transaction = parentFragmentManager.beginTransaction()
+                                transaction.replace(R.id.flContent, mapHotspotView)
+                                transaction.addToBackStack(null)
+                                transaction.commit()
+
+                            }
+                        }
+                    }
+
+                    //88
                 }
-                activityLayout.addView(latestObservationText)
-                activityLayout.addView(latestUserSighting)
+
+
+
             }
 
             //call method to generate a space under the dynamic component
@@ -162,6 +284,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         {
             GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
         }
-        return view
+
+        loadingProgressBar.visibility = View.GONE
     }
+
+    //---------------------------------------------------------------------------------------------
+    //Method to get the distance between two points
+    //---------------------------------------------------------------------------------------------
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val earthRadiusKm = 6371.0
+
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        var measurement = earthRadiusKm * c
+        return measurement
+    }
+    //---------------------------------------------------------------------------------------------
 }

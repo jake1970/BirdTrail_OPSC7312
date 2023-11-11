@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
@@ -37,6 +36,7 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.plugin.scalebar.scalebar
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -45,6 +45,7 @@ import java.util.*
 
 class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
+    //location permission helper
     private lateinit var locationPermissionHelper: LocationPermissionHelper
 
     private val onIndicatorBearingChangedListener = OnIndicatorBearingChangedListener {
@@ -97,6 +98,8 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
             mapView = MapView(requireContext())
             view.addView(mapView) // Add the MapView to your layout
 
+            mapView.scalebar.isMetricUnits = GlobalClass.currentUser.isMetric
+
             //Hide the compass
             mapView.compass.enabled = false
 
@@ -127,7 +130,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
         {
             if (centerOnHotspot == true)
             {
-
                 val hotspotLong = arguments?.getDouble("hotspotLong")
                 val hotspotLat = arguments?.getDouble("hotspotLat")
 
@@ -140,7 +142,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
 
                 // set camera position
                 mapView.getMapboxMap().setCamera(cameraPosition)
-
             }
             else
             {
@@ -151,7 +152,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                 )
             }
             loadMap()
-
         }catch (e: Exception)
         {
             GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
@@ -217,7 +217,6 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                     val fragmentControl = FragmentHandler()
                     fragmentControl.replaceFragment(UserFullMapView(), R.id.flContent, parentFragmentManager)
                 }
-
                 true
             }
 
@@ -363,21 +362,49 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                 if (daysBetween <= (filterTimeFrame * 7)) {
                                     if (distanceInKm <= filterDistance) { //200
 
+                                        //set colour of pin based on distance
                                         var tintColor = when {
-                                            distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green) //red
+                                            distanceInKm <= filterDistance/3 -> resources.getColor(R.color.confirmation_green)
                                             distanceInKm <= filterDistance/2 -> resources.getColor(R.color.mediumOrange)
-                                            //distanceInKm <= filterDistance -> resources.getColor(R.color.farRed)
                                             else -> {resources.getColor(R.color.farRed)}
                                         }
 
+                                        // Create a bitmap for the colored pin
+                                        val bitmapColored = bitmapFromDrawableRes(requireContext(),R.drawable.imglocation_pin)
+
+                                        // Create a bitmap for the pin
+                                        val bitmapPin = bitmapFromDrawableRes(requireContext(), R.drawable.imglocation_pin)
+
+                                        // Create a paint object
                                         val paint = Paint()
-                                        val colorFilter: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
-                                        paint.colorFilter = colorFilter
 
-                                        val tintedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-                                        val canvas = Canvas(tintedBitmap)
-                                        canvas.drawBitmap(bitmap, 0f, 0f, paint)
+                                        // Create a canvas for the colored pin
+                                        val tintedBitmapColored = Bitmap.createBitmap(bitmapPin!!.width, bitmapPin.height, Bitmap.Config.ARGB_8888)
+                                        val canvasColored = Canvas(tintedBitmapColored)
 
+                                        // Apply the color filter to the paint object
+                                        val colorFilterColored: ColorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP)
+                                        paint.colorFilter = colorFilterColored
+
+                                        // Draw the colored pin
+                                        canvasColored.drawBitmap(bitmapPin, 0f, 0f, paint)
+
+                                        // Create a canvas for the black outline
+                                        val tintedBitmapOutline = Bitmap.createScaledBitmap(bitmapPin, bitmapPin.width + 2, bitmapPin.height + 2, false)
+                                        val canvasOutline = Canvas(tintedBitmapOutline)
+
+                                        // Apply the color filter to the paint object
+                                        val colorFilterOutline: ColorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+                                        paint.colorFilter = colorFilterOutline
+
+                                        // Draw the black outline
+                                        canvasOutline.drawBitmap(bitmapPin, 0f, 0f, paint)
+
+                                        // Draw the outline bitmap first, then the colored bitmap
+                                        val combinedBitmap = Bitmap.createBitmap(tintedBitmapOutline.width, tintedBitmapOutline.height, Bitmap.Config.ARGB_8888)
+                                        val canvasCombined = Canvas(combinedBitmap)
+                                        canvasCombined.drawBitmap(tintedBitmapOutline, 0f, 0f, null)
+                                        canvasCombined.drawBitmap(tintedBitmapColored, 1.5f, 1.5f, null)
 
                                         // Set options for the resulting symbol layer.
                                         val pointAnnotationOptions: PointAnnotationOptions =
@@ -391,7 +418,7 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                                 )
                                                 // Specify the bitmap you assigned to the point annotation
                                                 // The bitmap will be added to map style automatically.
-                                                .withIconImage(tintedBitmap/*bitmap*/)
+                                                .withIconImage(combinedBitmap/*bitmap*/)
                                         // Add the resulting pointAnnotation to the map.
                                         pointAnnotationManager?.create(pointAnnotationOptions)
                                     }
@@ -413,10 +440,11 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                 )
                                 args.putInt("hotspotIndex", clickedHotspotIndex)
                                 args.putDouble("distance", distanceInKm)
+                                args.putBoolean("isHotspot", true)
 
                                 mapHotspotView.arguments = args
 
-
+                                //display hotspot view
                                 val transaction = parentFragmentManager.beginTransaction()
                                 transaction.replace(R.id.flContent, mapHotspotView)
                                 transaction.addToBackStack(null)
@@ -440,11 +468,9 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
     //method to add user sightings to map
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission", "SetTextI18n")
-    private fun addSightingAnnotationsToMap() {
-        try
-        {
-            if (checkPermissions())
-            {
+    public fun addSightingAnnotationsToMap() {
+        try {
+            if (checkPermissions()) {
                 // Create an instance of the Annotation API and get the PointAnnotationManager.
                 bitmapFromDrawableRes(
                     requireContext(),
@@ -458,10 +484,45 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                     mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                         userLocation = task.result
                         if (userLocation != null) {
+                            // Create a bitmap for the bird
+                            val bitmapPin = bitmapFromDrawableRes(requireContext(), R.drawable.imgbird)
+
+                            // Create a paint object
+                            val paint = Paint()
+
+                            // Create a canvas for the black base
+                            val tintedBitmapBase = Bitmap.createBitmap(bitmapPin!!.width, bitmapPin.height, Bitmap.Config.ARGB_8888)
+                            val canvasBase = Canvas(tintedBitmapBase)
+
+                            // Apply the color filter to the paint object for the black base
+                            val colorFilterBase: ColorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                            paint.colorFilter = colorFilterBase
+
+                            // Draw the black base
+                            canvasBase.drawBitmap(bitmapPin, 0f, 0f, paint)
+
+                            // Create a canvas for the white overlay
+                            val tintedBitmapOverlay = Bitmap.createScaledBitmap(bitmapPin, bitmapPin.width + 2, bitmapPin.height + 2, false)
+                            val canvasOverlay = Canvas(tintedBitmapOverlay)
+
+                            // Apply the color filter to the paint object for the white overlay
+                            val colorFilterOverlay: ColorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+                            paint.colorFilter = colorFilterOverlay
+
+                            // Draw the white overlay
+                            canvasOverlay.drawBitmap(bitmapPin, 0f, 0f, paint)
+
+                            // Draw the base bitmap first, then the overlay bitmap
+                            val combinedBitmap = Bitmap.createBitmap(tintedBitmapBase.width, tintedBitmapBase.height, Bitmap.Config.ARGB_8888)
+                            val canvasCombined = Canvas(combinedBitmap)
+                            canvasCombined.drawBitmap(tintedBitmapBase, 0f, 0f, null)
+                            canvasCombined.drawBitmap(tintedBitmapOverlay, 1.5f, 1.5f, null)
+
                             // Iterate over each hotspot in the global list
                             for (sighting in GlobalClass.userObservations) {
                                 if (sighting.userID == GlobalClass.currentUser.userID) {
                                     // Calculate the distance between the user's location and the hotspot.
+
                                     val pointAnnotationOptions: PointAnnotationOptions =
                                         PointAnnotationOptions()
                                             // Define a geographic coordinate from the hotspot's lat and lng.
@@ -473,18 +534,44 @@ class FullMapFragment : Fragment(R.layout.fragment_full_map) {
                                             )
                                             // Specify the bitmap you assigned to the point annotation
                                             // The bitmap will be added to map style automatically.
-                                            .withIconImage(bitmap)
+                                            .withIconImage(combinedBitmap)
                                     // Add the resulting pointAnnotation to the map.
                                     pointAnnotationManager?.create(pointAnnotationOptions)
                                 }
+                            }
+                            pointAnnotationManager?.addClickListener { pointAnnotation ->
+
+                                val clickedobservationIndex = GlobalClass.userObservations.indexOfFirst { it.long == pointAnnotation.point.longitude() && it.lat == pointAnnotation.point.latitude() }
+
+                                val mapHotspotView = MapHotspot()
+                                val args = Bundle()
+
+                                val distanceInKm = calculateDistance(
+                                    userLocation!!.latitude,
+                                    userLocation!!.longitude,
+                                    pointAnnotation.point.latitude(),
+                                    pointAnnotation.point.longitude()
+                                )
+                                args.putInt("observationIndex", clickedobservationIndex)
+                                args.putDouble("distance", distanceInKm)
+                                args.putBoolean("isHotspot", false)
+
+                                mapHotspotView.arguments = args
+
+                                //display observation
+                                val transaction = parentFragmentManager.beginTransaction()
+                                transaction.replace(R.id.flContent, mapHotspotView)
+                                transaction.addToBackStack(null)
+                                transaction.commit()
+
+                                false
                             }
                         }
                     }
                 }
             }
-        }catch (e: Exception)
-        {
-            GlobalClass.InformUser(getString(R.string.errorText),"${e.toString()}", requireContext())
+        } catch (e: Exception) {
+            GlobalClass.InformUser(getString(R.string.errorText), "${e.toString()}", requireContext())
         }
     }
 
