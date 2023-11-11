@@ -9,10 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.birdtrail_opsc7312.databinding.ActivityHomepageBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class Homepage : AppCompatActivity() {
 
@@ -64,9 +61,11 @@ class Homepage : AppCompatActivity() {
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initUI()
     {
+
         //add the default start achievement
         GlobalClass.initStarterAchievement(this)
 

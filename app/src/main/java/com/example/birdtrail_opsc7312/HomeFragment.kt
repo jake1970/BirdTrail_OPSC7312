@@ -57,16 +57,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     GlobalClass.InformUser(getString(R.string.errorText),"$e", requireContext())
                 }
             }
+
             updateUI()
         }
         return view
     }
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUI()
     {
         try
         {
+
+
+
             //show user info
             binding.tvUsername.text = GlobalClass.currentUser.username
             binding.imgMyProfileImage.setImageBitmap(GlobalClass.currentUser.profilepicture)
@@ -112,18 +119,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 {
                     //if the user has this achievement
                 }
-                else
-                {
-                    //if the user doesnt have this achievement
-                    nextAchievement.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[achievement.badgeIndex])
-                    nextAchievement.binding.tvAchievementName.text = achievement.name
-                    nextAchievement.binding.tvDate.visibility = EditText.GONE
-                    nextAchievement.binding.tvRequirements.text = achievement.requirements
-                    nextAchievement.binding.tvSelectorText.text = "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
-                    nextAchievement.binding.tvSelectorText.setCompoundDrawables(null,null,null,null);
-                    nextAchievement.binding.tvSelectorText.setPadding(0,0,0,0)
-                    nextAchievement.binding.rlSelector.background.setColorFilter(ContextCompat.getColor(requireContext(), R.color.medium_blue), android.graphics.PorterDuff.Mode.SRC_IN)
-                    break
+                else {
+
+                    //check that the achievement is not the initial starter achievement
+                    if (achievement.achID != 0) {
+
+                        //if the user doesnt have this achievement
+                        nextAchievement.binding.imgBadge.setImageBitmap(GlobalClass.badgeImages[achievement.badgeIndex])
+                        nextAchievement.binding.tvAchievementName.text = achievement.name
+                        nextAchievement.binding.tvDate.visibility = EditText.GONE
+                        nextAchievement.binding.tvRequirements.text = achievement.requirements
+                        nextAchievement.binding.tvSelectorText.text =
+                            "${GlobalClass.totalObservations} / ${achievement.observationsRequired}"
+                        nextAchievement.binding.tvSelectorText.setCompoundDrawables(
+                            null,
+                            null,
+                            null,
+                            null
+                        );
+                        nextAchievement.binding.tvSelectorText.setPadding(0, 0, 0, 0)
+                        nextAchievement.binding.rlSelector.background.setColorFilter(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.medium_blue
+                            ), android.graphics.PorterDuff.Mode.SRC_IN
+                        )
+                        break
+                    }
                 }
             }
 
@@ -145,7 +167,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             //---------------------------------------------------------------------------------------------
             //show latest user observation
 
-            //lastest user sighting
+            //latest user sighting
             val latestUserSighting = Card_Observations_Species(activity)
 
             var observationlist = arrayListOf<UserObservationDataClass>()

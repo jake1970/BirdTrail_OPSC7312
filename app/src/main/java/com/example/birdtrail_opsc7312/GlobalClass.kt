@@ -140,8 +140,6 @@ class GlobalClass: Application()
             if (containsInitial == false)
             {
 
-                Toast.makeText(context, "run", Toast.LENGTH_SHORT).show()
-
                 //add the starter achievement
                    val initialAchievement = UserAchievementsDataClass(
                         userID = currentUser.userID,
