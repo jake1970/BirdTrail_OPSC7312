@@ -300,7 +300,7 @@ class MapHotspot : Fragment() {
         fragmentControl.replaceFragment(fullMapView, R.id.cvHotspotMapFragmentContainer, requireActivity().supportFragmentManager)
 
         //configure UI text
-        binding.tvHotspot.text = R.string.Observation.toString()
+        binding.tvHotspot.text = getString(R.string.observationsText)
         binding.tvHotspotDate.text = " " + observation.date.toString()
         binding.tvHotspotLocation.text = "${observation.lat},  ${observation.long}"
 
