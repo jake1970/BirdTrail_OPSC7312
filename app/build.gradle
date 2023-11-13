@@ -22,8 +22,8 @@ android {
         applicationId "com.example.birdtrail_opsc7312"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         buildConfigField("String", "EBIRD_TOKEN",apikeyProperties['EBIRD_TOKEN'])
         buildConfigField("String", "IMAGE_API_TOKEN",apikeyProperties['IMAGE_API_TOKEN'])
