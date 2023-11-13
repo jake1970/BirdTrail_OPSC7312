@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.birdtrail_opsc7312"
+        applicationId "com.birdtrail.birdtrail_opsc7312"
         minSdk 24
         targetSdk 33
         versionCode 2
