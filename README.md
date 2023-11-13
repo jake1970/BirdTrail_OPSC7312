@@ -102,6 +102,8 @@ Leaderboard - leaderboard will show a ranking of the application users based on 
 UserAchievements/Badges - Reward system with badges based on the current number of points or the number of observations the user has made.
                         - Each badge will also reward the user with a certain number of points.
                         - The user will be able to select one badge to display next to their profile picture.
+Profile Picture - The user will be able to set a custom image chosen from their camera roll or gallery.
+Animations - Switching between screens are animated.
 
 
 
